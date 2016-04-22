@@ -1,0 +1,8 @@
+<h1>Greeting</h1>
+<div ng-show="authenticated">
+    <p>Логин{{controller.user.username}}</p>
+    <p>Пароль{{controller.user.password}}</p>
+</div>
+<div  ng-show="!authenticated">
+    <p>Войдите в систему, чтобы увидеть данные</p>
+</div>

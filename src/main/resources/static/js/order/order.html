@@ -1,0 +1,59 @@
+<h1>Заявка</h1>
+<div>Дата: <a href="#" editable-date="date" onaftersave="loadOrder()">
+	{{ date | date:'dd.MM.yyyy' || 'empty' }}</a></div>
+<div>Группа продукции: <a href="#" editable-select="group" buttons="no" e-ng-options="g.id as g.groupName for g in groups" onaftersave="loadOrder()">
+	{{ showGroup() }}</a>
+</div>
+<br>
+<div>
+	<table class="table table-bordered table-hover table-condensed">
+		<tr style="font-weight: bold; white-space: nowrap">
+
+			<td style="width:70%">
+				Продукция
+			</td>
+			<td style="width:15%">
+				Первый завоз
+				<br>
+				<form editable-form name="countform" onaftersave="saveColumn('itemCount')" ng-show="countform.$visible">
+					<button type="submit" ng-disabled="countform.$waiting" class="btn btn-primary">
+						сохранить
+					</button>
+					<button type="button" ng-disabled="countform.$waiting" ng-click="countform.$cancel()" class="btn btn-default">
+						отмена
+					</button>
+				</form>
+				<button class="btn btn-default" ng-show="!countform.$visible" ng-click="countform.$show()">
+					редактировать
+				</button>
+			</td>
+			<td style="width:15%">
+				Второй завоз
+				<br>
+				<form editable-form name="count2form" onaftersave="saveColumn('item2Count')" ng-show="count2form.$visible">
+					<button type="submit" ng-disabled="count2form.$waiting" class="btn btn-primary">
+						сохранить
+					</button>
+					<button type="button" ng-disabled="count2form.$waiting" ng-click="count2form.$cancel()" class="btn btn-default">
+						отмена
+					</button>
+				</form>
+				<button class="btn btn-default" ng-show="!count2form.$visible" ng-click="count2form.$show()">
+					редактировать
+				</button>
+			</td>
+		</tr>
+		<tr ng-repeat="item in fullOrderItems">
+			<td>{{getItemName(item.idItem)}}</td>
+			<td editable-text="item.itemCount" e-form="countform">{{item.itemCount}}</td>
+			<td editable-text="item.itemCount2" e-form="count2form">{{item.itemCount2}}</td>
+		</tr>
+	</table>
+	<br>
+	<details>
+		<summary>Группы</summary>
+		<pre>{{groups | json}}</pre>
+	</details>
+	<details><summary>Заявка</summary> <pre>{{fullOrderItems | json}}</pre> </details>
+	<details><summary>Позиции</summary> <pre>{{items | json}}</pre></details>
+</div>

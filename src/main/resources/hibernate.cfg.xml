@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:oracle:thin:@192.168.96.106:1521:ORATEST1</property>
+        <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+
+        <property name="connection.username">orders</property>
+        <property name="connection.password">orders</property>
+        <property name="connection.default_schema">orders</property>
+
+        <mapping class="biz.bsoft.orders.model.Item"/>
+        <mapping class="biz.bsoft.orders.model.ClientPOS"/>
+        <mapping class="biz.bsoft.orders.model.Order"/>
+        <mapping class="biz.bsoft.orders.model.OrderItem"/>
+        <mapping class="biz.bsoft.orders.model.ItemGroup"/>
+
+    </session-factory>
+</hibernate-configuration>

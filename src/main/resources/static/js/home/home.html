@@ -1,0 +1,11 @@
+<h1>Добро пожаловать, {{controller.userSettings.userGreeting}}</h1>
+<div>
+	<h2>Ваши данные:</h2>
+	<h3>Торговая точка</h3>
+	<p>Название: <a href="#" editable-text="controller.userSettings.clientPOS.posName" onaftersave="updateSettings()">{{ controller.userSettings.clientPOS.posName || "не известно" }}</a></p>
+	<p>Адрес: <a href="#" editable-text="controller.userSettings.clientPOS.posAddress" onaftersave="updateSettings()">{{ controller.userSettings.clientPOS.posAddress || "не известно" }}</a></p>
+	<p>Телефон: <a href="#" editable-text="controller.userSettings.clientPOS.posPhone" onaftersave="updateSettings()">{{ controller.userSettings.clientPOS.posPhone || "не известно" }}</a></p>
+	<h3>Ваш менеджер:</h3>
+	<p>Имя: <a href="#" editable-text="controller.userSettings.clientPOS.managerName" onaftersave="updateSettings()">{{ controller.userSettings.clientPOS.managerName || "не известно" }}</a></p>
+	<p>Телефон: <a href="#" editable-text="controller.userSettings.clientPOS.managerPhone" onaftersave="updateSettings()">{{ controller.userSettings.clientPOS.managerPhone || "не известно" }}</a></p>
+</div>
