@@ -1,9 +1,6 @@
 package biz.bsoft.orders.dao;
 
-import biz.bsoft.orders.model.FullOrderItem;
-import biz.bsoft.orders.model.Item;
-import biz.bsoft.orders.model.ItemGroup;
-import biz.bsoft.orders.model.Order;
+import biz.bsoft.orders.model.*;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -23,4 +20,6 @@ public interface OrderDao {
     List<FullOrderItem> getFullOrderItems(Integer clientPosId, LocalDate date, Integer groupId);
     void addItemsToOrder(List<FullOrderItem> fullOrderItems, Integer clientPosId, LocalDate date, Integer groupIdInteger);
     void deleteItemsFromOrder(Integer clientPosId, LocalDate date, Integer groupId);
+
+    List<ItemPhoto> getItemPhotos(Integer ItemId);
 }

@@ -153,4 +153,26 @@ public class OrdersRestController {
         return result;
     }
 
+    @RequestMapping(value = "/item_photos")
+    public List<ItemPhoto> getItemPhotos(@RequestParam("item_id") Integer itemId) {
+        List<ItemPhoto> itemPhotos = null;
+        try {
+            itemPhotos = orderDao.getItemPhotos(itemId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return itemPhotos;
+    }
+
+    @RequestMapping(value = "/items/{item_id}/photos", method = RequestMethod.GET)
+    public List<ItemPhoto> getItemPhotosPath(@PathVariable("item_id") Integer itemId) {
+        List<ItemPhoto> itemPhotos = null;
+        try {
+            itemPhotos = orderDao.getItemPhotos(itemId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return itemPhotos;
+    }
+
 }
