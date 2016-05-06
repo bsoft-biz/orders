@@ -148,9 +148,19 @@ public class OrderDaoImpl implements OrderDao {
         List<ItemPhoto> itemPhotos;
         Session session = sessionFactory.getCurrentSession();
         Query query = session.getNamedQuery(ItemPhoto.GET_ITEM_PHOTOS);
-        query.setParameter("p_item_id",ItemId);
+        query.setParameter("p_item_id", ItemId);
         itemPhotos = query.list();
         return itemPhotos;
+    }
+
+    @Override
+    public ItemInfo getItemInfo(Integer ItemId) {
+        List<ItemInfo> itemInfos;
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.getNamedQuery(ItemInfo.GET_ITEM_INFO);
+        query.setParameter("p_item_id", ItemId);
+        itemInfos = query.list();
+        return itemInfos.get(0);
     }
 
 }

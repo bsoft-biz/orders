@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -175,4 +176,26 @@ public class OrdersRestController {
         return itemPhotos;
     }
 
+
+    @RequestMapping(value = "/items/{item_id}/thumb", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getItemThumbPhoto(@PathVariable("item_id") Integer itemId) {
+        List<ItemPhoto> itemPhotos = null;
+        try {
+            itemPhotos = orderDao.getItemPhotos(itemId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return itemPhotos.get(0).getPhotoSmall();
+    }
+
+    @RequestMapping(value = "/items/{item_id}/info", method = RequestMethod.GET)
+    public ItemInfo getItemInfo(@PathVariable("item_id") Integer itemId) {
+        ItemInfo itemInfo = null;
+        try {
+            itemInfo = orderDao.getItemInfo(itemId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return itemInfo;
+    }
 }

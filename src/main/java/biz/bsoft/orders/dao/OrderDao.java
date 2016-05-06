@@ -22,4 +22,5 @@ public interface OrderDao {
     void deleteItemsFromOrder(Integer clientPosId, LocalDate date, Integer groupId);
 
     List<ItemPhoto> getItemPhotos(Integer ItemId);
+    ItemInfo getItemInfo(Integer ItemId);
 }
