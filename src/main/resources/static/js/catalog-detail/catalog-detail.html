@@ -1,0 +1,38 @@
+<div>
+    <div><img ng-src="/orders/items/{{itemInfo.item.id}}/thumb" alt="{{itemInfo.item.itemName}}" class="preview"></div>
+    <div>
+        <h1 class="specs">{{itemInfo.item.itemName}}</h1>
+        <p>{{itemInfo.description}}</p>
+    </div>
+    <ul class="specs">
+        <li><span>Состав</span>
+            <dl>
+                <dd>{{itemInfo.ingredients}}<dd>
+            </dl>
+        </li>
+        <li><span>В 100г продукта:</span>
+            <dl>
+                <dt>Белки</dt><dd>{{itemInfo.protein}}</dd>
+                <dt>Жиры</dt><dd>{{itemInfo.fat}}</dd>
+                <dt>Углеводы</dt><dd>{{itemInfo.carbohydrate}}</dd>
+                <dt>Энергетическая ценность</dt><dd>{{itemInfo.calories}}</dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>Вес/объем</dt><dd>{{itemInfo.volume}}</dd>
+                <dt>Срок годности</dt><dd>{{itemInfo.termOfUse}}</dd>
+                <dt>ГОСТ</dt><dd>{{itemInfo.iso}}</dd>
+                <dt>Сертификат</dt><dd>{{itemInfo.sert}}</dd>
+                <dt>Штрих код</dt><dd>{{itemInfo.barcode}}</dd>
+
+                <dt>Еденица измерения</dt><dd>{{itemInfo.unit}}</dd>
+            </dl>
+        </li>
+    </ul>
+
+    <details>
+        <summary>Описание</summary>
+        <pre>{{itemInfo | json}}</pre>
+    </details>
+</div>

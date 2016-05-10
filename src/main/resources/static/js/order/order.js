@@ -1,16 +1,18 @@
-angular.module('order', ['ngResource']).
-	controller('order',['$resource', '$scope', '$q', '$http', '$filter', function($resource, $scope, $q, $http,  $filter) {
+angular.module('order', ['ngResource','data']).
+	controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', function($resource, $scope, $q, $http,  $filter, data) {
 		$scope.date = new Date();
         $scope.date.setDate($scope.date.getDate()+1);
 
-        $scope.groups={};
-        var Groups = $resource('orders/item_groups');
-        $scope.groups = Groups.query();
+        $scope.groups=data.getGroups();
+        //{};
+        //var Groups = $resource('orders/item_groups');
+        //$scope.groups = Groups.query();
         $scope.group = 43;//= groups[0].id;
 
-        $scope.items={};
-        var Items = $resource('orders/items');
-        $scope.items = Items.query();
+        $scope.items=data.getItems();
+        //{};
+        //var Items = $resource('orders/items');
+        //$scope.items = Items.query();
 
         $scope.fullOrderItems = {};
 

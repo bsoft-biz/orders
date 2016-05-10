@@ -1,0 +1,32 @@
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Каталог продукции</h1>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" ng-repeat="item in items">
+            <a class="thumbnail" href="#/catalog/{{item.id}}">
+                <img class="img-responsive" lazy-src="/orders/items/{{item.id}}/thumb" alt="{{item.itemName}}">
+                {{item.itemName}}
+            </a>
+
+            <!--p>{{item.itemName}}</p-->
+        </div>
+    </div>
+
+    <!--ul class="items">
+        <li ng-repeat="item in items  | limitTo:28"
+            class="thumbnail item-listing">
+            <a href="#/catalog/{{item.id}}" class="thumb"><img ng-src="/orders/items/{{item.id}}/thumb" alt="{{item.itemName}}"></a>
+            <a href="#/catalog/{{item.id}}">{{item.itemName}}</a>
+            <p>{{item.itemName}}</p>
+        </li>
+    </ul-->
+</div>
+<div>
+    <details>
+        <summary>Группы</summary>
+        <pre>{{groups | json}}</pre>
+    </details>
+    <details><summary>Позиции</summary> <pre>{{items | json}}</pre></details>
+</div>

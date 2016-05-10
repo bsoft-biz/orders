@@ -1,5 +1,5 @@
 angular
-		.module('hello', [ 'ngRoute', 'auth', 'home', 'order', 'navigation',
+		.module('orderApp', [ 'ngRoute', 'auth', 'home', 'order', 'navigation', 'catalog', 'catalog-detail',
 		"xeditable" ])
 		.config(
 
@@ -14,6 +14,14 @@ angular
 					}).when('/order', {
 						templateUrl : 'js/order/order.html',
 						controller : 'order',
+						controllerAs : 'controller'
+					}).when('/catalog', {
+						templateUrl : 'js/catalog/catalog.html',
+						controller : 'catalog',
+						controllerAs : 'controller'
+					}).when('/catalog/:itemId', {
+						templateUrl : 'js/catalog-detail/catalog-detail.html',
+						controller : 'catalog-detail',
 						controllerAs : 'controller'
 					}).when('/login', {
 						templateUrl : 'js/navigation/login.html',
