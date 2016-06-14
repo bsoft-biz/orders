@@ -17,8 +17,11 @@ public interface OrderDao {
     List<Item> getAllItems();
     List<ItemGroup> getAllGroups();
 
+    List<OrderItem> getOrderItems(Integer clientPosId, LocalDate date, Integer groupId);
+    void addItemsToOrder(List<OrderItem> orderItems, Integer clientPosId, LocalDate date, Integer groupIdInteger);
+
     List<FullOrderItem> getFullOrderItems(Integer clientPosId, LocalDate date, Integer groupId);
-    void addItemsToOrder(List<FullOrderItem> fullOrderItems, Integer clientPosId, LocalDate date, Integer groupIdInteger);
+    void addFullItemsToOrder(List<FullOrderItem> fullOrderItems, Integer clientPosId, LocalDate date, Integer groupIdInteger);
     void deleteItemsFromOrder(Integer clientPosId, LocalDate date, Integer groupId);
 
     List<ItemPhoto> getItemPhotos(Integer ItemId);

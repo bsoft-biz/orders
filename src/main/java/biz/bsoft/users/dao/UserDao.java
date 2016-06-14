@@ -11,4 +11,5 @@ public interface UserDao {
     User add(String username);
     UserSettings getCurrentUserSettings();
     void setCurrentUserSettings(UserSettings userSettings);
+    void setUserPassword(String oldPassword, String newPassword);
 }

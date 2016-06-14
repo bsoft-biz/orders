@@ -1,5 +1,7 @@
 package biz.bsoft.orders.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
@@ -14,6 +16,7 @@ import javax.persistence.Table;
 public class ItemGroup {
     public static final String FIND_ALL="GET_ALL_ITEMGROUPS";
     @Id
+    @JsonView(View.GroupsId.class)
     private int id;
     private String groupName;
 

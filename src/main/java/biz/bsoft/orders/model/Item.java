@@ -1,9 +1,12 @@
 package biz.bsoft.orders.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by vbabin on 28.11.2015.
@@ -14,16 +17,24 @@ import java.io.Serializable;
 public class Item implements Serializable {
     @GeneratedValue
     @Id
+    @JsonView(View.ItemsId.class)
     private Integer id;
     @Basic
+    @JsonView(View.ItemsAll.class)
     private String itemName;
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne
     @JoinColumn(name="group_id")
+    @JsonView(View.ItemsAll.class)
     private ItemGroup itemGroup;
     @JsonIgnore
     @Basic
     private Integer extid;
+    /*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
+    @JsonManagedReference
+    @JsonIgnore
+    //@JsonView(View.Summary.class)
+    private List<ItemPhoto> itemPhotos;*/
 
     public Integer getId() {
         return id;
@@ -56,6 +67,14 @@ public class Item implements Serializable {
     public void setItemGroup(ItemGroup itemGroup) {
         this.itemGroup = itemGroup;
     }
+
+//    public List<ItemPhoto> getItemPhotos() {
+//        return itemPhotos;
+//    }
+//
+//    public void setItemPhotos(List<ItemPhoto> itemPhotos) {
+//        this.itemPhotos = itemPhotos;
+//    }
 
     @Override
     public String toString() {

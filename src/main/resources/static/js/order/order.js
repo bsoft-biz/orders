@@ -18,7 +18,8 @@ angular.module('order', ['ngResource','data']).
 
         $scope.loadOrder = function() {
             var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
-            $scope.url="orders/fullorderitems?date="+frmtDate+"&group_id="+$scope.group;//client_pos_id=2&
+            $scope.url="orders/orderitems?date="+frmtDate+"&group_id="+$scope.group;//client_pos_id=2&
+            $scope.url_old="orders/fullorderitems?date="+frmtDate+"&group_id="+$scope.group;//client_pos_id=2&
             console.log($scope.url);
             //-----
             var FullOrderItems = $resource($scope.url);
@@ -29,6 +30,19 @@ angular.module('order', ['ngResource','data']).
         $scope.getItemName = function(idItem){
             var item = $filter('filter')($scope.items, {id: idItem})
             return (item.length) ? item[0].itemName : "Не известно";
+        }
+
+        $scope.getOrderItem = function(idItem){
+            var orderItems = $filter('filter')($scope.fullOrderItems, {item: {id: idItem}})
+            if (orderItems.length === 0){
+                //console.log("create empty orderItem");
+                orderItem = {item: {id: idItem}};
+                $scope.fullOrderItems.push(orderItem);
+            }
+            else
+                orderItem = orderItems[0];
+            return orderItem;
+            //return (orderItem.length) ? orderItem[0] : {};
         }
 
         $scope.showGroup = function() {

@@ -3,6 +3,7 @@ package biz.bsoft.web.controller;
 import biz.bsoft.orders.dao.OrderDao;
 import biz.bsoft.orders.model.*;
 import biz.bsoft.users.dao.UserDao;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -98,6 +97,7 @@ public class OrdersRestController {
         return result;
     }
 
+    @JsonView(View.ItemsAll.class)
     @RequestMapping(value = "/items")
     public List<Item> getAllItems() {
         List<Item> items = null;
@@ -118,6 +118,37 @@ public class OrdersRestController {
             e.printStackTrace();
         }
         return itemGroups;
+    }
+
+    @JsonView(View.ItemsId.class)
+    @RequestMapping(value = "/orderitems")
+    public List<OrderItem> getOrderItems(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
+                                         @RequestParam("group_id") Integer groupId){
+        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
+        List<OrderItem> items = null;
+        try {
+            items = orderDao.getOrderItems(clientPosId, date, groupId);
+            /*for(FullOrderItem item : items)
+            {
+                logger.info(item.toString());
+            }*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    @RequestMapping(value = "/orderitems", method = RequestMethod.POST)
+    public void setOrderItems(@RequestBody List<OrderItem> orderItems,
+                              @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
+                              @RequestParam("group_id") Integer groupId){
+        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
+        String result = null;
+        //logger.info(fullOrderItems.toString());
+        // удалить старые позици в ордерс
+        orderDao.deleteItemsFromOrder(clientPosId, date, groupId);
+        //добавляем полученные позици
+        orderDao.addItemsToOrder(orderItems, clientPosId, date, groupId);
     }
 
     @RequestMapping(value = "/fullorderitems")
@@ -149,7 +180,7 @@ public class OrdersRestController {
         // удалить старые позици в ордерс
         orderDao.deleteItemsFromOrder(clientPosId, date, groupId);
         //добавляем полученные позици
-        orderDao.addItemsToOrder(fullOrderItems, clientPosId, date, groupId);
+        orderDao.addFullItemsToOrder(fullOrderItems, clientPosId, date, groupId);
         //
         return result;
     }

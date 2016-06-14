@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -69,12 +71,24 @@ public class UserDaoImpl implements UserDao {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.getNamedQuery(UserSettings.GET_USER_SETTINGS);
         query.setParameter("p_username", user.getUsername());
-        UserSettings userSettings= (UserSettings) query.list().get(0);
+        UserSettings userSettings = (UserSettings) query.list().get(0);
         return userSettings;
     }
 
     @Override
     public void setCurrentUserSettings(UserSettings userSettings) {
         sessionFactory.getCurrentSession().update(userSettings);
+    }
+
+    @Override
+    public void setUserPassword(String oldPassword, String newPassword) {
+        UserSettings userSettings = getCurrentUserSettings();
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        if(encoder.matches(oldPassword,userSettings.getUser().getPassword())){
+            getCurrentUserSettings().getUser().setPassword(encoder.encode(newPassword));
+        }
+        else
+            throw new RuntimeException("Неверный старый пароль");
+
     }
 }

@@ -86,6 +86,51 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public List<OrderItem> getOrderItems(Integer clientPosId, LocalDate date, Integer groupId) {
+        List<OrderItem> orderItems;
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.getNamedQuery(OrderItem.GET_GROUP_ITEMS);
+        query.setParameter("p_client_pos_id",clientPosId).setParameter("p_date", date).setParameter("p_group_id",groupId);
+        orderItems = query.list();
+        return orderItems;
+    }
+
+    @Override
+    public void addItemsToOrder(List<OrderItem> orderItems, Integer clientPosId, LocalDate date, Integer groupIdInteger) {
+        logger.info("**********");
+        logger.info(orderItems.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Order order = findOrder(clientPosId, date);
+        if (order==null)
+        {
+            order = new Order();
+            order.setOrderDate(date);
+            order.setClientPOS((ClientPOS) session.load(ClientPOS.class, clientPosId));
+            session.save(order);
+            //session.flush();
+        }
+        logger.info(order.toString());
+        List<OrderItem> vOrderItems = order.getOrderItems();
+        if (vOrderItems == null){
+            logger.info("new orderItems");
+            vOrderItems = new ArrayList<OrderItem>();
+            order.setOrderItems(vOrderItems);
+        }
+        logger.info(vOrderItems.toString());
+        for(OrderItem orderItem:orderItems){
+            logger.info(orderItem.toString());
+            if (((orderItem.getItemCount()==null)?0:orderItem.getItemCount())
+                            +((orderItem.getItemCount2()==null)?0:orderItem.getItemCount2())>0) {
+                orderItem.setOrder(order);
+                vOrderItems.add(orderItem);
+                logger.info("aded");
+            }
+        }
+        //order.getOrderItems().addAll(orderItems);
+        session.save(order);
+    }
+
+    @Override
     public List<FullOrderItem> getFullOrderItems(Integer clientPosId, LocalDate date, Integer groupId) {
         List<FullOrderItem> fullOrderItems;
         Session session = sessionFactory.getCurrentSession();
@@ -96,7 +141,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void addItemsToOrder(List<FullOrderItem> fullOrderItems, Integer clientPosId, LocalDate date, Integer groupIdInteger) {
+    public void addFullItemsToOrder(List<FullOrderItem> fullOrderItems, Integer clientPosId, LocalDate date, Integer groupIdInteger) {
         Session session = sessionFactory.getCurrentSession();
         Order order = findOrder(clientPosId, date);
         if (order==null)

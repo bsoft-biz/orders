@@ -1,6 +1,8 @@
 package biz.bsoft.orders.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 
@@ -14,11 +16,14 @@ public class ItemPhoto {
     public static final String GET_ITEM_PHOTOS ="GET_ITEM_PHOTOS";
     @Id
     @GeneratedValue
+    @JsonView(View.Summary.class)
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "item_id")//, nullable = false
     @JsonIgnore
+    @JsonBackReference
     private Item item;
+    @JsonView(View.Summary.class)
     private String isDef;
     @Column(name = "photo_name")
     private String photoName;

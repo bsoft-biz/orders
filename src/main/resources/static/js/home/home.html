@@ -8,4 +8,37 @@
 	<h3>Ваш менеджер:</h3>
 	<p>Имя: <a href="#" editable-text="controller.userSettings.clientPOS.managerName" onaftersave="updateSettings()">{{ controller.userSettings.clientPOS.managerName || "не известно" }}</a></p>
 	<p>Телефон: <a href="#" editable-text="controller.userSettings.clientPOS.managerPhone" onaftersave="updateSettings()">{{ controller.userSettings.clientPOS.managerPhone || "не известно" }}</a></p>
+	<br>
+	<form editable-form name="editableForm" onaftersave="changePassword()">
+		<div ng-show="editableForm.$visible">
+			<p>Изменение пароля:</p>
+			<div>
+				<div class="title">Старый пароль:</div>
+				<div editable-password="userPassword.old" e-name="old" e-required></div>
+			</div>
+			<div>
+				<div class="title">Новый пароль:</div>
+				<div editable-password="userPassword.new1" e-name="new1" e-required></div>
+			</div>
+			<div>
+				<div class="title">Повторите новый пароль:</div>
+				<div editable-password="userPassword.new2" e-name="new2" onbeforesave="checkPassword($data)"e-required></div>
+			</div>
+		</div>
+		<div class="buttons">
+			<!-- button to show form -->
+			<button type="button" class="btn btn-default" ng-click="editableForm.$show()" ng-show="!editableForm.$visible">
+				Изменить пароль
+			</button>
+			<!-- buttons to submit / cancel form -->
+      		<span ng-show="editableForm.$visible">
+				<button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">
+				Сохранить
+				</button>
+				<button type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
+				Отмена
+				</button>
+      		</span>
+		</div>
+	</form>
 </div>

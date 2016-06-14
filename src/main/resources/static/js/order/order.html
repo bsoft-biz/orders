@@ -43,10 +43,10 @@
 				</button>
 			</td>
 		</tr>
-		<tr ng-repeat="item in fullOrderItems">
-			<td>{{getItemName(item.idItem)}}</td>
-			<td editable-text="item.itemCount" e-form="countform">{{item.itemCount}}</td>
-			<td editable-text="item.itemCount2" e-form="count2form">{{item.itemCount2}}</td>
+		<tr ng-repeat="item in items | filter: {itemGroup: {id: group}}">
+			<td>{{item.itemName}}</td>
+			<td editable-text="getOrderItem(item.id).itemCount" e-form="countform">{{getOrderItem(item.id).itemCount}}</td>
+			<td editable-text="getOrderItem(item.id).itemCount2" e-form="count2form">{{getOrderItem(item.id).itemCount2}}</td>
 		</tr>
 	</table>
 	<br>
