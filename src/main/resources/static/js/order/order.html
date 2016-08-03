@@ -6,7 +6,7 @@
 </div>
 <div>Сатус заказа: {{orderStatus.status}}</div>
 <div>Комментарий: {{orderStatus.commentText}}</div>
-<button class="btn btn-primary" ng-show="1=1||orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'" ng-click="confirmOrder()">Подать заявку</button>
+<button class="btn btn-primary" ng-show="orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'" ng-click="confirmOrder()">Подать заявку</button>
 <br>
 <br>
 <div>

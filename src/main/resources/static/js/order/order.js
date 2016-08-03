@@ -26,12 +26,8 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', fun
         var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
         $http.post("orders/confirmorder?date="+frmtDate).then(
             function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
                 $scope.orderStatus = response.data;
             }, function errorCallback(err) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
                 // unknown error
                 alert(err.data.message);
         });
@@ -58,23 +54,27 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', fun
         console.log("----------FullOrderItems--------");
         console.log($scope.FullOrderItems);
         //here we can filter only not null rows or with id
-        return $http.post($scope.url, $scope.fullOrderItems).error(function(err) {
-            errCount = err.length;
-            if(Array.isArray(err) && errCount>0) {
-                // err like {id: "id", msg: "Server-side error for this production!"}
-                var formNumber ='';
-                if (formName === 'count2form')
-                    formNumber = 2;
-                if (err[0].id===0){
-                    $scope[formName].$editables[0].setError(err[0].msg);
+        return $http.post($scope.url, $scope.fullOrderItems).then(
+            function successCallback(response) {
+                var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
+                $scope.orderStatus = $resource("orders/orderstatus?date="+frmtDate).get();
+            }, function errorCallback(err) {
+                errCount = err.length;
+                if(Array.isArray(err) && errCount>0) {
+                    // err like {id: "id", msg: "Server-side error for this production!"}
+                    var formNumber ='';
+                    if (formName === 'count2form')
+                        formNumber = 2;
+                    if (err[0].id===0){
+                        $scope[formName].$editables[0].setError(err[0].msg);
+                    }
+                    for (var i=0; i < errCount; i++){
+                        $scope[formName].$setError('id'+err[i].id+'count'+formNumber, err[i].msg);
+                    }
+                } else {
+                    // unknown error
+                    $scope[formName].$editables[0].setError('Ошибка сохранения заказа!');
                 }
-                for (var i=0; i < errCount; i++){
-                    $scope[formName].$setError('id'+err[i].id+'count'+formNumber, err[i].msg);
-                }
-            } else {
-                // unknown error
-                $scope[formName].$editables[0].setError('Ошибка сохранения заказа!');
-            }
-        });
+            });
     };
 }]);
