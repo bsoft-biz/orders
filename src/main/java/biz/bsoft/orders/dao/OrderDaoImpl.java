@@ -1,7 +1,6 @@
 package biz.bsoft.orders.dao;
 
 import biz.bsoft.orders.model.*;
-import javafx.application.Application;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,8 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,6 +57,28 @@ public class OrderDaoImpl implements OrderDao {
         order.setClientPOS(clientPOS);
         order.setOrderDate(date);
         session.save(order);
+        return order;
+    }
+
+    @Override
+    public Order confirmOrder(Integer clientPosId, LocalDate date) {
+        //checking the day - it is allowed to make orders omly on next days
+        if (date.compareTo(LocalDateTime.now().toLocalDate())<=0)
+            throw new RuntimeException("Заявку можно давать только на следующие дни!");
+        Order order = null;
+        try {
+            order = findOrder(clientPosId, date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // you can confirm only from INPUT and DECLINED
+        if (order.getStatus()==OrderStatus.INPUT || order.getStatus()==OrderStatus.DECLINED){
+            Session session = sessionFactory.getCurrentSession();
+            order.setStatus(OrderStatus.CONFIRM);
+            session.save(order);
+        }
+        else
+            throw new RuntimeException("Редактировать можно только новую заявку или в статусах ввод и отклонена!");
         return order;
     }
 
@@ -128,6 +149,82 @@ public class OrderDaoImpl implements OrderDao {
         }
         //order.getOrderItems().addAll(orderItems);
         session.save(order);
+    }
+
+    @Override
+    public List<OrderItemError> validateItems(List<OrderItem> orderItems, Integer clientPosId, LocalDate date) {
+        List<OrderItemError> orderItemErrors = new ArrayList<>();
+        Session session = sessionFactory.getCurrentSession();
+        ClientPOS clientPOS = (ClientPOS) session.load(ClientPOS.class, clientPosId);
+        OrderItemError orderItemError;
+        // you can confirm only from INPUT and DECLINED
+        Order order = null;
+        try {
+            order = findOrder(clientPosId, date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (order!=null && !(order.getStatus()==OrderStatus.INPUT || order.getStatus()==OrderStatus.DECLINED)){
+            orderItemError = new OrderItemError();
+            orderItemError.setId(0);
+            orderItemError.setMessage("Редактировать можно только новую заявку или в статусах ввод и отклонена!");
+            orderItemErrors.add(orderItemError);
+            return orderItemErrors;
+        }
+        //checking the day - it is allowed to make orders omly on next days
+        if (date.compareTo(LocalDateTime.now().toLocalDate())<=0){
+            orderItemError = new OrderItemError();
+            orderItemError.setId(0);
+            orderItemError.setMessage("Заказ можно делать только на следующие дни!");
+            orderItemErrors.add(orderItemError);
+            return orderItemErrors;
+        }
+        for (OrderItem  orderItem : orderItems) {
+            String errMsg="";
+            Integer count, count2;
+            count = (orderItem.getItemCount()==null)?0:orderItem.getItemCount();
+            count2 = (orderItem.getItemCount2()==null)?0:orderItem.getItemCount2();
+            Item item = (Item) session.load(Item.class, orderItem.getItem().getId());
+            ItemInfo itemInfo = getItemInfo(item.getId());
+            //checking if count2 is denied for the client
+            if (clientPOS.getDenyCount2() != null && clientPOS.getDenyCount2() == 1 && count2 > 0)
+                errMsg += "Для данного клиента запрещен второй завоз!";
+            if (itemInfo !=null) {
+                //checking time for group
+                Query query = session.getNamedQuery(ProductionTime.GET_PROD_TIME);
+                query.setParameter("p_group", item.getItemGroup()).setParameter("p_rye",itemInfo.getRye());
+                List<ProductionTime> productionTimes = query.list();
+                if (productionTimes.size()>0) {
+                    ProductionTime productionTime = productionTimes.get(0);
+                    if (productionTime.getProdTime().toLocalTime().compareTo(LocalDateTime.now().toLocalTime()) < 0)
+                        errMsg += "Эта продукция принимается только до " + productionTime.getProdTime().toLocalTime().toString();
+                }
+                //checking if counts is less then minimal
+                if (itemInfo.getMinCount() != null && ((count > 0 && count < itemInfo.getMinCount()) || (count2 > 0 && count2 < itemInfo.getMinCount())))
+                    errMsg += "Для этой позиции мнимальное количество для заказа = " + itemInfo.getMinCount();
+                //checking if you need exact count for box
+                if ((itemInfo.getCapacity() != null) && (itemInfo.getCapacity() != 0) && (count % itemInfo.getCapacity() > 0 || count2 % itemInfo.getCapacity() > 0))
+                    errMsg += "Для этой позиции задана кратность = " + itemInfo.getCapacity();
+                //checking if product is produced in this day
+                if ((count + count2 > 0) && itemInfo.getProdDays() != null && itemInfo.getProdDays().length() > 0 &&
+                        !(itemInfo.getProdDays().contains(Integer.toString(date.getDayOfWeek().getValue()))))
+                    errMsg += "У этой позиции есть дни принятия заявки = " + itemInfo.getProdDays();
+            }
+
+            // if there are some errors for count then add them
+            if (errMsg.length()>0)
+            {
+                orderItemError = new OrderItemError();
+                orderItemError.setId(item.getId());
+                orderItemError.setMessage(errMsg);
+                orderItemErrors.add(orderItemError);
+            }
+        }
+//        OrderItemError orderItemError = new OrderItemError();
+//        orderItemError.setId("id58422count");
+//        orderItemError.setMessage("Server-side error for this id58422count!");
+//        orderItemErrors.add(orderItemError);
+        return orderItemErrors;
     }
 
     @Override
@@ -205,7 +302,10 @@ public class OrderDaoImpl implements OrderDao {
         Query query = session.getNamedQuery(ItemInfo.GET_ITEM_INFO);
         query.setParameter("p_item_id", ItemId);
         itemInfos = query.list();
-        return itemInfos.get(0);
+        if (itemInfos.size() >0)
+            return itemInfos.get(0);
+        else
+            return null;
     }
 
 }

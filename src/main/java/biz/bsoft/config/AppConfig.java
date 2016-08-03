@@ -1,11 +1,14 @@
 package biz.bsoft.config;
 
+import biz.bsoft.OrdersApplication;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +33,12 @@ import java.util.Properties;
 @ComponentScan({ "biz.bsoft.*" })
 @EnableTransactionManagement
 @Import({ SecurityConfig.class})//, ResourceConfig.class
-public class AppConfig {
+public class AppConfig  extends SpringBootServletInitializer {
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(OrdersApplication.class);
+    }
 
     @Bean
     public SessionFactory sessionFactory() {

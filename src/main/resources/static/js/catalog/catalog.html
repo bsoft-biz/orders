@@ -8,9 +8,9 @@
             <br>
         </div>
 
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" ng-repeat="item in items | filter: {itemGroup: {id: group}}">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" ng-repeat="item in items | filter: {itemGroup: {id: group}} | orderBy:'ord'">
             <a class="thumbnail" href="#/catalog/{{item.id}}">
-                <img class="img-responsive" lazy-src="/orders/items/{{item.id}}/thumb" alt="{{item.itemName}}">
+                <img class="img-responsive" lazy-src="orders/items/{{item.id}}/thumb" alt="{{item.itemName}}">
                 {{item.itemName}}
             </a>
 

@@ -3,7 +3,6 @@ package biz.bsoft.orders.dao;
 import biz.bsoft.orders.model.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,12 +12,14 @@ public interface OrderDao {
     Order findOrder(Integer clientPosId, LocalDate date);
     void saveOrder(Order order);
     Order add(Integer clientId, LocalDate date);
+    Order confirmOrder(Integer clientPosId, LocalDate date);
 
     List<Item> getAllItems();
     List<ItemGroup> getAllGroups();
 
     List<OrderItem> getOrderItems(Integer clientPosId, LocalDate date, Integer groupId);
     void addItemsToOrder(List<OrderItem> orderItems, Integer clientPosId, LocalDate date, Integer groupIdInteger);
+    List<OrderItemError> validateItems(List<OrderItem> orderItems, Integer clientPosId, LocalDate date);
 
     List<FullOrderItem> getFullOrderItems(Integer clientPosId, LocalDate date, Integer groupId);
     void addFullItemsToOrder(List<FullOrderItem> fullOrderItems, Integer clientPosId, LocalDate date, Integer groupIdInteger);

@@ -22,10 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="Orders" />
         <module name="startSpringHibernate" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Orders" target="1.8" />
       <module name="startSpringHibernate" target="1.8" />
     </bytecodeTargetLevel>
   </component>

@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>biz.bsoft</groupId>
-    <artifactId>startSpringHibernate</artifactId>
+    <artifactId>orders</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>startSpringHibernate</name>
-    <description>Demo project for Spring Boot</description>
+    <name>orders</name>
+    <description>Orders project</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -81,6 +81,11 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>2.7.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <!--scope>provided</scope-->
         </dependency>
     </dependencies>
 

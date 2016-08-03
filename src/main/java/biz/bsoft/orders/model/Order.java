@@ -1,7 +1,9 @@
 package biz.bsoft.orders.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,7 +31,6 @@ public class Order implements Serializable {
     @Id
     private Integer id;
 
-    //@Temporal(TemporalType.DATE)
     @Convert(converter = LocalDateAttributeConverter.class)
     @JsonFormat(pattern="dd.MM.yyyy")
     private LocalDate orderDate;
@@ -39,8 +40,19 @@ public class Order implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "order")
     @JsonManagedReference
-    //@JoinColumn(name = "oder_id")
     private List<OrderItem> orderItems;
+
+    @JsonView(View.OrderSummary.class)
+    private String commentText;
+
+    @Column(name = "status_id")
+    @Enumerated()
+    @JsonView(View.OrderSummary.class)
+    private OrderStatus status;
+
+    public Order() {
+        this.status = OrderStatus.INPUT;
+    }
 
     public LocalDate getOrderDate() {
         return orderDate;
@@ -74,4 +86,19 @@ public class Order implements Serializable {
         this.orderItems = orderItems;
     }
 
+    public String getCommentText() {
+        return commentText;
+    }
+
+    public void setCommentText(String commentText) {
+        this.commentText = commentText;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 }

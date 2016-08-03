@@ -32,7 +32,7 @@ angular.module('data', ['ngResource']).factory(
 
             getItemInfo : function() {
                 console.log('some itemInfo loaded');
-                return $resource('/orders/items/:itemId/info');
+                return $resource('orders/items/:itemId/info');
             }
 
             };

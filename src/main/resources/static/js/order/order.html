@@ -4,6 +4,10 @@
 <div>Группа продукции: <a href="#" editable-select="group" buttons="no" e-ng-options="g.id as g.groupName for g in groups" onaftersave="loadOrder()">
 	{{ showGroup() }}</a>
 </div>
+<div>Сатус заказа: {{orderStatus.status}}</div>
+<div>Комментарий: {{orderStatus.commentText}}</div>
+<button class="btn btn-primary" ng-show="1=1||orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'" ng-click="confirmOrder()">Подать заявку</button>
+<br>
 <br>
 <div>
 	<table class="table table-bordered table-hover table-condensed">
@@ -15,7 +19,7 @@
 			<td style="width:15%">
 				Первый завоз
 				<br>
-				<form editable-form name="countform" onaftersave="saveColumn('itemCount')" ng-show="countform.$visible">
+				<form editable-form name="countform" onaftersave="saveColumn('countform')" ng-show="countform.$visible">
 					<button type="submit" ng-disabled="countform.$waiting" class="btn btn-primary">
 						сохранить
 					</button>
@@ -30,7 +34,7 @@
 			<td style="width:15%">
 				Второй завоз
 				<br>
-				<form editable-form name="count2form" onaftersave="saveColumn('item2Count')" ng-show="count2form.$visible">
+				<form editable-form name="count2form" onaftersave="saveColumn('count2form')" ng-show="count2form.$visible">
 					<button type="submit" ng-disabled="count2form.$waiting" class="btn btn-primary">
 						сохранить
 					</button>
@@ -43,10 +47,10 @@
 				</button>
 			</td>
 		</tr>
-		<tr ng-repeat="item in items | filter: {itemGroup: {id: group}}">
+		<tr ng-repeat="item in items | filter: {itemGroup: {id: group}} | orderBy:'ord'">
 			<td>{{item.itemName}}</td>
-			<td editable-text="getOrderItem(item.id).itemCount" e-form="countform">{{getOrderItem(item.id).itemCount}}</td>
-			<td editable-text="getOrderItem(item.id).itemCount2" e-form="count2form">{{getOrderItem(item.id).itemCount2}}</td>
+			<td editable-text="getOrderItem(item.id).itemCount" e-form="countform" e-name="id{{item.id}}count">{{getOrderItem(item.id).itemCount}}</td>
+			<td editable-text="getOrderItem(item.id).itemCount2" e-form="count2form" e-name="id{{item.id}}count2">{{getOrderItem(item.id).itemCount2}}</td>
 		</tr>
 	</table>
 	<br>

@@ -8,4 +8,5 @@ public class View {
     public interface ItemsId extends GroupsId {}
     public interface ItemsAll extends ItemsId {}
     public interface Summary extends ItemsId {}
+    public interface OrderSummary {}
 }

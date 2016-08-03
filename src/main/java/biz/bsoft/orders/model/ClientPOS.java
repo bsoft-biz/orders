@@ -29,6 +29,9 @@ public class ClientPOS {
 
     private String managerPhone;
 
+    @Column(name = "deny_count2")
+    private Integer denyCount2;
+
     @Override
     public String toString() {
         return "ClientPOS{" +
@@ -39,6 +42,7 @@ public class ClientPOS {
                 ", posPhone='" + posPhone + '\'' +
                 ", managerName='" + managerName + '\'' +
                 ", managerPhone='" + managerPhone + '\'' +
+                ", denyCount2='" + denyCount2 + '\'' +
                 '}';
     }
 
@@ -96,5 +100,13 @@ public class ClientPOS {
 
     public void setManagerPhone(String managerPhone) {
         this.managerPhone = managerPhone;
+    }
+
+    public Integer getDenyCount2() {
+        return denyCount2;
+    }
+
+    public void setDenyCount2(Integer denyCount2) {
+        this.denyCount2 = denyCount2;
     }
 }

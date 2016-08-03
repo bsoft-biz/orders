@@ -3,6 +3,7 @@ package biz.bsoft.orders.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,6 +31,9 @@ public class Item implements Serializable {
     @JsonIgnore
     @Basic
     private Integer extid;
+    @Basic
+    @JsonView(View.ItemsAll.class)
+    private Integer ord;
     /*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
     @JsonManagedReference
     @JsonIgnore
@@ -68,6 +72,14 @@ public class Item implements Serializable {
         this.itemGroup = itemGroup;
     }
 
+    public Integer getOrd() {
+        return ord;
+    }
+
+    public void setOrd(Integer ord) {
+        this.ord = ord;
+    }
+
 //    public List<ItemPhoto> getItemPhotos() {
 //        return itemPhotos;
 //    }
@@ -82,6 +94,7 @@ public class Item implements Serializable {
                 "id=" + id +
                 ", itemName='" + itemName + '\'' +
                 ", extid=" + extid +
+                ", ord=" + ord +
                 '}';
     }
 }

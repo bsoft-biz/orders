@@ -29,6 +29,12 @@ public class ItemInfo {
     private Float carbohydrate;
     private String calories;
     private String description;
+    @Column(name = "min_count")
+    private Integer minCount;
+    private Integer capacity;
+    private Integer rye;
+    @Column(name = "prod_days")
+    private String prodDays;
 
     public Integer getId() {
         return id;
@@ -140,5 +146,37 @@ public class ItemInfo {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getMinCount() {
+        return minCount;
+    }
+
+    public void setMinCount(Integer minCount) {
+        this.minCount = minCount;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
+
+    public Integer getRye() {
+        return rye;
+    }
+
+    public void setRye(Integer rye) {
+        this.rye = rye;
+    }
+
+    public String getProdDays() {
+        return prodDays;
+    }
+
+    public void setProdDays(String prodDays) {
+        this.prodDays = prodDays;
     }
 }

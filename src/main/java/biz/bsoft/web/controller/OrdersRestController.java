@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,51 +50,51 @@ public class OrdersRestController {
         return order;
     }
 
-    @RequestMapping(value = "/order")//, params = { "client_pos_id", "date" })//
-    public Order getOrder(//@RequestParam("client_pos_id") Integer clientPosId,
-                          @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date) {
+    @RequestMapping(value = "/order")
+    public Order getOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date) {
         Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
         Order order = null;
         try {
-            //logger.info("Date = "+date.toString()+" id="+clientPosId);
             order = orderDao.findOrder(clientPosId, date);
-            /*if (order!=null) {
-                logger.info("REST order = " + order.toString());
-                logger.info("REST order.OrderItems = " + order.getOrderItems().toString());
-            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }
         return order;
     }
 
-    @RequestMapping(value = "/order", method = RequestMethod.POST)//iso = DateTimeFormat.ISO.DATE //, params = { "client_pos_id", "date" }
+    @JsonView(View.OrderSummary.class)
+    @RequestMapping(value = "/orderstatus")
+    public Order getOrderStatus(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date) {
+        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
+        Order order = null;
+        try {
+            order = orderDao.findOrder(clientPosId, date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return order;
+    }
+
+    @JsonView(View.OrderSummary.class)
+    @RequestMapping(value = "/confirmorder", method = RequestMethod.POST)
+    public Order confirmOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
+                              HttpServletResponse response) {
+        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
+        Order order = orderDao.confirmOrder(clientPosId,date);
+        return order;
+    }
+
+    //@RequestMapping(value = "/order", method = RequestMethod.POST)
     public String setOrder(@RequestBody Order order,
-                           //@RequestParam("client_pos_id") Integer clientPosId,
                            @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date) {
         Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
         String result = null;
-        //logger.info("order = "+order+ "order id ="+order.getId());
-        //logger.info("order.getOrderItems().get(0).getItemCount() = " + order.getOrderItems().get(0).getItemCount());
         try {
             orderDao.saveOrder(order);
         } catch (Exception e) {
             result = e.getMessage();
             e.printStackTrace();
         }
-
-
-//        Order order = null;
-//        try {
-//            logger.info("Date = "+date.toString()+" id="+clientPosId);
-//            order = orderDao.findOrder(clientPosId, date);
-//            if (order!=null) {
-//                logger.info("REST order = " + order.toString());
-//                logger.info("REST order.OrderItems = " + order.getOrderItems().toString());
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         return result;
     }
 
@@ -128,10 +129,6 @@ public class OrdersRestController {
         List<OrderItem> items = null;
         try {
             items = orderDao.getOrderItems(clientPosId, date, groupId);
-            /*for(FullOrderItem item : items)
-            {
-                logger.info(item.toString());
-            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,50 +136,22 @@ public class OrdersRestController {
     }
 
     @RequestMapping(value = "/orderitems", method = RequestMethod.POST)
-    public void setOrderItems(@RequestBody List<OrderItem> orderItems,
-                              @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
-                              @RequestParam("group_id") Integer groupId){
+    public List<OrderItemError> setOrderItems(@RequestBody List<OrderItem> orderItems,
+                                              @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
+                                              @RequestParam("group_id") Integer groupId,
+                                              HttpServletResponse response){
         Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
-        String result = null;
-        //logger.info(fullOrderItems.toString());
-        // удалить старые позици в ордерс
-        orderDao.deleteItemsFromOrder(clientPosId, date, groupId);
-        //добавляем полученные позици
-        orderDao.addItemsToOrder(orderItems, clientPosId, date, groupId);
-    }
-
-    @RequestMapping(value = "/fullorderitems")
-    public List<FullOrderItem> getFullOrderItems(//@RequestParam("client_pos_id") Integer clientPosId,
-                                                 @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
-                                                 @RequestParam("group_id") Integer groupId){
-        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
-        List<FullOrderItem> items = null;
-        try {
-            items = orderDao.getFullOrderItems(clientPosId, date, groupId);
-            /*for(FullOrderItem item : items)
-            {
-                logger.info(item.toString());
-            }*/
-        } catch (Exception e) {
-            e.printStackTrace();
+        //TODO need to check if all items a from the group because you can delete all items from group and insert from other group
+        List<OrderItemError> orderItemErrors = orderDao.validateItems(orderItems, clientPosId, date);
+        if (orderItemErrors.size()>0) {
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+            return orderItemErrors;
         }
-        return items;
-    }
-
-    @RequestMapping(value = "/fullorderitems", method = RequestMethod.POST)
-    public String setFullOrderItems(@RequestBody List<FullOrderItem> fullOrderItems,
-                                                 //@RequestParam("client_pos_id") Integer clientPosId,
-                                                 @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
-                                                 @RequestParam("group_id") Integer groupId){
-        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
-        String result = null;
-        //logger.info(fullOrderItems.toString());
-        // удалить старые позици в ордерс
+        // delete old items in orders
         orderDao.deleteItemsFromOrder(clientPosId, date, groupId);
-        //добавляем полученные позици
-        orderDao.addFullItemsToOrder(fullOrderItems, clientPosId, date, groupId);
-        //
-        return result;
+        // add recived items in orders
+        orderDao.addItemsToOrder(orderItems, clientPosId, date, groupId);
+        return null;
     }
 
     @RequestMapping(value = "/item_photos")
