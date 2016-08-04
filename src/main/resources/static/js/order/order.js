@@ -18,7 +18,7 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', fun
     $scope.loadOrder();
 
     $scope.getItemName = function(idItem){
-        var item = $filter('filter')($scope.items, {id: idItem})
+        var item = $filter('filter')($scope.items, {id: idItem});
         return (item.length) ? item[0].itemName : "Не известно";
     };
 
@@ -34,7 +34,7 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', fun
     };
 
     $scope.getOrderItem = function(idItem){
-        var orderItems = $filter('filter')($scope.fullOrderItems, {item: {id: idItem}})
+        var orderItems = $filter('filter')($scope.fullOrderItems, {item: {id: idItem}});
         if (orderItems.length === 0){
             //console.log("create empty orderItem");
             orderItem = {item: {id: idItem}};
@@ -51,14 +51,14 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', fun
     };
 
     $scope.saveColumn = function(formName) {
-        console.log("----------FullOrderItems--------");
-        console.log($scope.FullOrderItems);
+        //console.log($scope.FullOrderItems);
         //here we can filter only not null rows or with id
         return $http.post($scope.url, $scope.fullOrderItems).then(
             function successCallback(response) {
                 var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
                 $scope.orderStatus = $resource("orders/orderstatus?date="+frmtDate).get();
-            }, function errorCallback(err) {
+            }, function errorCallback(response) {
+                var err=response.data;
                 errCount = err.length;
                 if(Array.isArray(err) && errCount>0) {
                     // err like {id: "id", msg: "Server-side error for this production!"}
@@ -75,6 +75,7 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', fun
                     // unknown error
                     $scope[formName].$editables[0].setError('Ошибка сохранения заказа!');
                 }
+                return "error";
             });
     };
 }]);
