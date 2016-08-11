@@ -2,7 +2,7 @@ angular.module('catalog', ['data','me-lazyload'])
     .controller('catalog',['data','$scope','$filter', function(data,$scope,$filter) {
         $scope.items=data.getItems();
         $scope.groups=data.getGroups();
-        $scope.group = 43;//= groups[0].id;
+        $scope.group = 42;//= groups[0].id;
 
         $scope.showGroup = function() {
             var selected = $filter('filter')($scope.groups, {id: $scope.group});

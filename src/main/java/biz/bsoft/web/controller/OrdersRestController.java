@@ -7,14 +7,20 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by vbabin on 08.04.2016.
@@ -26,6 +32,8 @@ public class OrdersRestController {
     OrderDao orderDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    private MessageSource messages;
 
     private static final Logger logger =
             LoggerFactory.getLogger(OrdersRestController.class);
@@ -62,26 +70,21 @@ public class OrdersRestController {
         return order;
     }
 
-    @JsonView(View.OrderSummary.class)
     @RequestMapping(value = "/orderstatus")
-    public Order getOrderStatus(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date) {
+    public OrderGroupStatus getOrderStatus(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
+                                           @RequestParam("group_id") Integer groupId) {
         Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
-        Order order = null;
-        try {
-            order = orderDao.findOrder(clientPosId, date);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return order;
+        OrderGroupStatus orderGroupStatus = orderDao.getOrderGroupStatus(clientPosId,date,groupId);
+        return orderGroupStatus;
     }
 
-    @JsonView(View.OrderSummary.class)
     @RequestMapping(value = "/confirmorder", method = RequestMethod.POST)
-    public Order confirmOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
-                              HttpServletResponse response) {
+    public OrderGroupStatus confirmOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
+                                         @RequestParam("group_id") Integer groupId,
+                                         HttpServletResponse response) {
         Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
-        Order order = orderDao.confirmOrder(clientPosId,date);
-        return order;
+        OrderGroupStatus orderGroupStatus = orderDao.confirmOrder(clientPosId,date,groupId);
+        return orderGroupStatus;
     }
 
     //@RequestMapping(value = "/order", method = RequestMethod.POST)
@@ -141,8 +144,8 @@ public class OrdersRestController {
                                               @RequestParam("group_id") Integer groupId,
                                               HttpServletResponse response){
         Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
-        //TODO need to check if all items a from the group because you can delete all items from group and insert from other group
-        List<OrderItemError> orderItemErrors = orderDao.validateItems(orderItems, clientPosId, date);
+        //TODO need to check if all items from the group because you can delete all items from group and insert from other group
+        List<OrderItemError> orderItemErrors = orderDao.validateItems(orderItems, clientPosId, date, groupId);
         if (orderItemErrors.size()>0) {
             response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return orderItemErrors;
@@ -198,4 +201,11 @@ public class OrdersRestController {
         }
         return itemInfo;
     }
-}
+
+    @ExceptionHandler(ValidateOrderException.class)
+    void handleValidateOrderException(ValidateOrderException e, HttpServletResponse response) throws IOException {
+        /*ResourceBundleMessageSource messages = new ResourceBundleMessageSource();
+        messages.setBasename("locale/messages");*/
+        Locale locale = LocaleContextHolder.getLocale();
+        response.sendError(HttpStatus.BAD_REQUEST.value(),messages.getMessage("error.validateOrderMessage",new Object[] {e.getMessage()},locale));
+    }}

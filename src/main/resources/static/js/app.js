@@ -15,6 +15,14 @@ angular
 						templateUrl : 'js/order/order.html',
 						controller : 'order',
 						controllerAs : 'controller'
+					}).when('/order/:date', {
+						templateUrl : 'js/order/order.html',
+						controller : 'order',
+						controllerAs : 'controller'
+					}).when('/order/:date/:groupId', {
+						templateUrl : 'js/order/order.html',
+						controller : 'order',
+						controllerAs : 'controller'
 					}).when('/catalog', {
 						templateUrl : 'js/catalog/catalog.html',
 						controller : 'catalog',

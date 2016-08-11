@@ -9,10 +9,12 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -58,6 +60,16 @@ public class AppConfig  extends SpringBootServletInitializer {
                 .modules(new JSR310Module())
                 .build();
     }
+
+     @Bean
+     public MessageSource messageSource() {
+     final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+     messageSource.setBasename("classpath:messages");
+     messageSource.setUseCodeAsDefaultMessage(true);
+     messageSource.setDefaultEncoding("UTF-8");
+     messageSource.setCacheSeconds(0);
+     return messageSource;
+     }
 
     private Properties getHibernateProperties() {
         Properties prop = new Properties();

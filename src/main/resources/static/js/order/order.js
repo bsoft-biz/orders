@@ -1,19 +1,33 @@
 angular.module('order', ['ngResource','data']).
-controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', function($resource, $scope, $q, $http,  $filter, data) {
-    $scope.date = new Date();
-    $scope.date.setDate($scope.date.getDate()+1);
-    $scope.groups=data.getGroups();
-    $scope.group = 43;//= groups[0].id;
-    $scope.items=data.getItems();
+controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routeParams', '$location', 'data', function($resource, $scope, $q, $http,  $filter, $routeParams, $location, data) {
     $scope.fullOrderItems = {};
     $scope.orderStatus = {};
 
+    $scope.groups=data.getGroups();
+    $scope.group = $routeParams.groupId==undefined?42:Number($routeParams.groupId);//= groups[0].id;
+    console.log($routeParams.date);
+    if ($routeParams.date == undefined){
+        $scope.date = new Date();
+        $scope.date.setDate($scope.date.getDate()+1);
+    }
+    else 
+    {
+        var dateString = $routeParams.date.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+        $scope.date = new Date( dateString[3], dateString[2]-1, dateString[1] );
+        //$scope.date = new Date($routeParams.date);
+    }
+    console.log($scope.date);
+    $scope.items=data.getItems();
+
     $scope.loadOrder = function() {
         var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
+        console.log(frmtDate);
+        $location.path('/order/'+frmtDate+'/'+$scope.group);
+        //$location.path('/order/'+$scope.group);
         $scope.url="orders/orderitems?date="+frmtDate+"&group_id="+$scope.group;
         var FullOrderItems = $resource($scope.url);
         $scope.fullOrderItems = FullOrderItems.query();
-        $scope.orderStatus = $resource("orders/orderstatus?date="+frmtDate).get();
+        $scope.orderStatus = $resource("orders/orderstatus?date="+frmtDate+"&group_id="+$scope.group).get();
     };
     $scope.loadOrder();
 
@@ -24,7 +38,7 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', fun
 
     $scope.confirmOrder = function(){
         var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
-        $http.post("orders/confirmorder?date="+frmtDate).then(
+        $http.post("orders/confirmorder?date="+frmtDate+"&group_id="+$scope.group).then(
             function successCallback(response) {
                 $scope.orderStatus = response.data;
             }, function errorCallback(err) {
@@ -56,7 +70,7 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', fun
         return $http.post($scope.url, $scope.fullOrderItems).then(
             function successCallback(response) {
                 var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
-                $scope.orderStatus = $resource("orders/orderstatus?date="+frmtDate).get();
+                $scope.orderStatus = $resource("orders/orderstatus?date="+frmtDate+"&group_id="+$scope.group).get();
             }, function errorCallback(response) {
                 var err=response.data;
                 errCount = err.length;
@@ -73,7 +87,7 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', 'data', fun
                     }
                 } else {
                     // unknown error
-                    $scope[formName].$editables[0].setError('Ошибка сохранения заказа!');
+                    $scope[formName].$editables[0].setError('Ошибка сохранения заказа! '+err.message);
                 }
                 return "error";
             });

@@ -50,6 +50,11 @@ public class Order implements Serializable {
     @JsonView(View.OrderSummary.class)
     private OrderStatus status;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "order")
+    //@JsonManagedReference
+    @JsonIgnore
+    private List<OrderGroupStatus> orderGroupStatuses;
+
     public Order() {
         this.status = OrderStatus.INPUT;
     }
@@ -100,5 +105,13 @@ public class Order implements Serializable {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public List<OrderGroupStatus> getOrderGroupStatuses() {
+        return orderGroupStatuses;
+    }
+
+    public void setOrderGroupStatuses(List<OrderGroupStatus> orderGroupStatuses) {
+        this.orderGroupStatuses = orderGroupStatuses;
     }
 }

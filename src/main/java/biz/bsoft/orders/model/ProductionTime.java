@@ -9,7 +9,7 @@ import java.time.LocalTime;
  */
 @Entity
 @Table(name = "t_production_time")
-@NamedQuery(name = ProductionTime.GET_PROD_TIME, query = "select t from ProductionTime t where t.itemGroup=:p_group and (t.rye=:p_rye or t.rye is null)")
+@NamedQuery(name = ProductionTime.GET_PROD_TIME, query = "select t from ProductionTime t where t.itemGroup.id=:p_group")
 public class ProductionTime {
     public static final String GET_PROD_TIME = "GET_PROD_TIME";
     @Id

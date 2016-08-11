@@ -1,12 +1,15 @@
 <h1>Заявка</h1>
-<div>Дата: <a href="#" editable-date="date" onaftersave="loadOrder()">
-	{{ date | date:'dd.MM.yyyy' || 'empty' }}</a></div>
-<div>Группа продукции: <a href="#" editable-select="group" buttons="no" e-ng-options="g.id as g.groupName for g in groups" onaftersave="loadOrder()">
-	{{ showGroup() }}</a>
+<div class="pannel panel-danger">
+	<div class="panel-body">
+		<div>Дата: <a href="#" editable-date="date" onaftersave="loadOrder()">{{ date | date:'dd.MM.yyyy' || 'empty' }}</a></div>
+		<div>Группа продукции: <a href="#" editable-select="group" buttons="no" e-ng-options="g.id as g.groupName for g in groups" onaftersave="loadOrder()">{{ showGroup() }}</a></div>
+	</div>
+	<div ng-class="orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'?'panel-heading':'panel-body'">
+		<div>Статус заказа: {{orderStatus.status}}</div>
+		<div>Комментарий: {{orderStatus.commentText}}</div>
+		<button class="btn btn-primary" ng-show="orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'" ng-click="confirmOrder()">Подать заявку</button>
+	</div>
 </div>
-<div>Сатус заказа: {{orderStatus.status}}</div>
-<div>Комментарий: {{orderStatus.commentText}}</div>
-<button class="btn btn-primary" ng-show="orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'" ng-click="confirmOrder()">Подать заявку</button>
 <br>
 <br>
 <div>
@@ -47,7 +50,7 @@
 				</button>
 			</td>
 		</tr>
-		<tr ng-repeat="item in items | filter: {itemGroup: {id: group}} | orderBy:'ord'">
+		<tr ng-repeat="item in items | filter: {itemGroup: {id: group}} | orderBy:['ord','itemName']">
 			<td>{{item.itemName}}</td>
 			<td editable-text="getOrderItem(item.id).itemCount" e-form="countform" e-name="id{{item.id}}count">{{getOrderItem(item.id).itemCount}}</td>
 			<td editable-text="getOrderItem(item.id).itemCount2" e-form="count2form" e-name="id{{item.id}}count2">{{getOrderItem(item.id).itemCount2}}</td>
@@ -55,4 +58,5 @@
 	</table>
 	<br>
 	<details><summary>Заявка</summary> <pre>{{fullOrderItems | json}}</pre> </details>
+	<details><summary>items</summary> <pre>{{items | json}}</pre> </details>
 </div>
