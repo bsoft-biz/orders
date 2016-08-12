@@ -57,6 +57,12 @@
 		</tr>
 	</table>
 	<br>
-	<details><summary>Заявка</summary> <pre>{{fullOrderItems | json}}</pre> </details>
-	<details><summary>items</summary> <pre>{{items | json}}</pre> </details>
+	<div>
+		<details><summary>Заявка</summary> <pre>{{fullOrderItems | json}}</pre> </details>
+		<details>
+			<summary>Группы</summary>
+			<pre>{{groups | json}}</pre>
+		</details>
+		<details><summary>Позиции</summary> <pre>{{items | json}}</pre></details>
+	</div>
 </div>

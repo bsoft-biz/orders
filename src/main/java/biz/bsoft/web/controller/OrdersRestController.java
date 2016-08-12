@@ -13,6 +13,8 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +36,8 @@ public class OrdersRestController {
     UserDao userDao;
     @Autowired
     private MessageSource messages;
+    @Autowired
+    private JavaMailSender mailSender;
 
     private static final Logger logger =
             LoggerFactory.getLogger(OrdersRestController.class);
@@ -208,4 +212,12 @@ public class OrdersRestController {
         messages.setBasename("locale/messages");*/
         Locale locale = LocaleContextHolder.getLocale();
         response.sendError(HttpStatus.BAD_REQUEST.value(),messages.getMessage("error.validateOrderMessage",new Object[] {e.getMessage()},locale));
+
+        final SimpleMailMessage email = new SimpleMailMessage();
+        email.setSubject("Error");
+        email.setText(messages.getMessage("error.validateOrderMessage",new Object[] {e.getMessage()},locale));
+        email.setTo("babinslava@mail.ru");
+        //email.setFrom("@");
+        mailSender.send(email);
+
     }}

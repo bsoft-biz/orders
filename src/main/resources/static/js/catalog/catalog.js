@@ -1,5 +1,6 @@
 angular.module('catalog', ['data','me-lazyload'])
     .controller('catalog',['data','$scope','$filter', function(data,$scope,$filter) {
+        data.setTitle("Каталог продукции");
         $scope.items=data.getItems();
         $scope.groups=data.getGroups();
         $scope.group = 42;//= groups[0].id;

@@ -1,11 +1,12 @@
 angular.module('order', ['ngResource','data']).
 controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routeParams', '$location', 'data', function($resource, $scope, $q, $http,  $filter, $routeParams, $location, data) {
+    if ($scope.fullOrderItems==undefined)
+        console.log("!!undefined!!");
     $scope.fullOrderItems = {};
     $scope.orderStatus = {};
 
     $scope.groups=data.getGroups();
     $scope.group = $routeParams.groupId==undefined?42:Number($routeParams.groupId);//= groups[0].id;
-    console.log($routeParams.date);
     if ($routeParams.date == undefined){
         $scope.date = new Date();
         $scope.date.setDate($scope.date.getDate()+1);
@@ -14,22 +15,8 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routePara
     {
         var dateString = $routeParams.date.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
         $scope.date = new Date( dateString[3], dateString[2]-1, dateString[1] );
-        //$scope.date = new Date($routeParams.date);
     }
-    console.log($scope.date);
     $scope.items=data.getItems();
-
-    $scope.loadOrder = function() {
-        var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
-        console.log(frmtDate);
-        $location.path('/order/'+frmtDate+'/'+$scope.group);
-        //$location.path('/order/'+$scope.group);
-        $scope.url="orders/orderitems?date="+frmtDate+"&group_id="+$scope.group;
-        var FullOrderItems = $resource($scope.url);
-        $scope.fullOrderItems = FullOrderItems.query();
-        $scope.orderStatus = $resource("orders/orderstatus?date="+frmtDate+"&group_id="+$scope.group).get();
-    };
-    $scope.loadOrder();
 
     $scope.getItemName = function(idItem){
         var item = $filter('filter')($scope.items, {id: idItem});
@@ -92,4 +79,19 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routePara
                 return "error";
             });
     };
+
+    $scope.loadOrder = function() {
+        var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
+        $location.path('/order/'+frmtDate+'/'+$scope.group);
+        var title = "Заявка на "+frmtDate;
+        if (Array.isArray($scope.groups) && $scope.groups.length > 0)
+            title+=", "+$scope.showGroup();
+        data.setTitle(title);
+        $scope.url="orders/orderitems?date="+frmtDate+"&group_id="+$scope.group;
+        var FullOrderItems = $resource($scope.url);
+        $scope.fullOrderItems = FullOrderItems.query();
+        $scope.orderStatus = $resource("orders/orderstatus?date="+frmtDate+"&group_id="+$scope.group).get();
+    };
+
+    $scope.loadOrder();
 }]);

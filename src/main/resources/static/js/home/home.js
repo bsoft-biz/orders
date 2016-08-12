@@ -1,6 +1,7 @@
 angular.module('home', [])
-		.controller('home',['$http','$scope', function($http,$scope) {
-		userSettings = {};
+    .controller('home',['$http','$scope', 'data', function($http,$scope,data) {
+        data.setTitle("Заявка БС");
+        userSettings = {};
         $scope.userPassword = {old: "", new1:"", new2:""};
         var self = this;
 	$http.get('users/userSettings/').then(function(response) {

@@ -13,24 +13,6 @@
                 <img class="img-responsive" lazy-src="orders/items/{{item.id}}/thumb" alt="{{item.itemName}}">
                 {{item.itemName}}
             </a>
-
-            <!--p>{{item.itemName}}</p-->
         </div>
     </div>
-
-    <!--ul class="items">
-        <li ng-repeat="item in items  | limitTo:28"
-            class="thumbnail item-listing">
-            <a href="#/catalog/{{item.id}}" class="thumb"><img ng-src="/orders/items/{{item.id}}/thumb" alt="{{item.itemName}}"></a>
-            <a href="#/catalog/{{item.id}}">{{item.itemName}}</a>
-            <p>{{item.itemName}}</p>
-        </li>
-    </ul-->
-</div>
-<div>
-    <details>
-        <summary>Группы</summary>
-        <pre>{{groups | json}}</pre>
-    </details>
-    <details><summary>Позиции</summary> <pre>{{items | json}}</pre></details>
 </div>

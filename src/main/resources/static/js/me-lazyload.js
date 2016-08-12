@@ -1,5 +1,5 @@
 angular.module('me-lazyload', [])
-.directive('lazySrc', ['$window', '$document', function($window, $document){
+.directive('lazySrc', ['$window', '$document', '$route', function($window, $document, $route){
     var doc = $document[0],
         body = doc.body,
         win = $window,
@@ -22,6 +22,8 @@ angular.module('me-lazyload', [])
     }
 
     function isVisible(iElement){
+        if ($route.current.templateUrl!='js/catalog/catalog.html')
+            return false;
         var elem = iElement[0],
             elemRect = elem.getBoundingClientRect(),
             windowOffset = getWindowOffset(),

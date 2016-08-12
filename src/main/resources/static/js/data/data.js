@@ -5,6 +5,7 @@ angular.module('data', ['ngResource']).factory(
 
         var items={};
         var groups={};
+        var title="Заявки БС";
 
         var data = {
 
@@ -33,7 +34,11 @@ angular.module('data', ['ngResource']).factory(
             getItemInfo : function() {
                 console.log('some itemInfo loaded');
                 return $resource('orders/items/:itemId/info');
-            }
+            },
+            
+            getTitle: function() { return title; },
+            
+            setTitle: function(newTitle) { title = newTitle }
 
             };
 

@@ -1,7 +1,7 @@
 <!doctype html>
-<html>
+<html ng-app="orderApp" ng-controller="navigation as nav">
 <head>
-<title>Заявки БС</title>
+<title ng-bind="nav.title()">Заявки БС</title>
 	<!--link href="css/angular-bootstrap.css" rel="stylesheet"-->
 	<link href="css/app.css" rel="stylesheet">
 	<link href="css/bootstrap.css" rel="stylesheet">
@@ -13,8 +13,8 @@
 </style>
 </head>
 
-<body ng-app="orderApp" ng-cloak class="ng-cloak">
-	<div ng-controller="navigation as nav" class="container">
+<body ng-cloak class="ng-cloak">
+	<div class="container">
 		<ul class="nav nav-pills" role="tablist">
 			<li ng-class="{active:nav.tab('home')}"><a href="#/">Домашняя</a></li>
 			<li ng-class="{active:nav.tab('order')}"><a href="#/order">Заявка</a></li>

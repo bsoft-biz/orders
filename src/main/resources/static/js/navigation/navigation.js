@@ -1,7 +1,5 @@
-angular.module('navigation', ['ngRoute', 'auth']).controller(
-		'navigation',
-
-		function($route, auth) {
+angular.module('navigation', ['ngRoute', 'auth', 'data']).
+controller('navigation', function($route, auth, data) {
 			
 			var self = this;
 
@@ -13,7 +11,7 @@ angular.module('navigation', ['ngRoute', 'auth']).controller(
 
 			self.authenticated = function() {
 				return auth.authenticated;
-			}
+			};
 
 			self.login = function() {
 				auth.authenticate(self.credentials, function(authenticated) {
@@ -28,5 +26,9 @@ angular.module('navigation', ['ngRoute', 'auth']).controller(
 			};
 
 			self.logout = auth.clear;
+			
+			self.title = data.getTitle;
+			
+			data.setTitle("Заявка БС");
 
 		});
