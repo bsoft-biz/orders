@@ -1,7 +1,7 @@
 <!doctype html>
 <html ng-app="orderApp" ng-controller="navigation as nav">
 <head>
-<title ng-bind="nav.title()">Заявки БС</title>
+<title ng-bind="nav.title()">Заявка ТХК</title>
 	<!--link href="css/angular-bootstrap.css" rel="stylesheet"-->
 	<link href="css/app.css" rel="stylesheet">
 	<link href="css/bootstrap.css" rel="stylesheet">
@@ -16,7 +16,7 @@
 <body ng-cloak class="ng-cloak">
 	<div class="container">
 		<ul class="nav nav-pills" role="tablist">
-			<li ng-class="{active:nav.tab('home')}"><a href="#/">Домашняя</a></li>
+			<li ng-class="{active:nav.tab('home')||nav.tab('passwdreset')}"><a href="#/">Домашняя</a></li>
 			<li ng-class="{active:nav.tab('order')}"><a href="#/order">Заявка</a></li>
 			<li ng-class="{active:nav.tab('catalog')||nav.tab('catalog-detail')}"><a href="#/catalog">Каталог</a></li>
 			<li ng-class="{active:nav.tab('navigation')}" ng-show="!(nav.authenticated())"><a href="#/login">Вход</a></li>
@@ -43,6 +43,7 @@
 	<script src="js/home/home.js" type="text/javascript"></script>
 	<script src="js/order/order.js" type="text/javascript"></script>
 	<script src="js/navigation/navigation.js" type="text/javascript"></script>
+	<script src="js/passwdreset/passwdreset.js" type="text/javascript"></script>
 	<script src="js/catalog/catalog.js" type="text/javascript"></script>
 	<script src="js/catalog-detail/catalog-detail.js" type="text/javascript"></script>
 	<script src="js/data/data.js" type="text/javascript"></script>

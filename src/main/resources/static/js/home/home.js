@@ -1,6 +1,6 @@
 angular.module('home', [])
     .controller('home',['$http','$scope', 'data', function($http,$scope,data) {
-        data.setTitle("Заявка БС");
+        data.setTitle("Заявка ТХК");
         userSettings = {};
         $scope.userPassword = {old: "", new1:"", new2:""};
         var self = this;

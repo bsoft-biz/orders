@@ -7,7 +7,7 @@
 	<div ng-class="orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'?'panel-heading':'panel-body'">
 		<div>Статус заказа: {{orderStatus.status}}</div>
 		<div>Комментарий: {{orderStatus.commentText}}</div>
-		<button class="btn btn-primary" ng-show="orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'" ng-click="confirmOrder()">Подать заявку</button>
+		<button class="btn btn-primary" ng-show="(orderStatus.status=='INPUT'||orderStatus.status=='DECLINED')&&!count2form.$visible&&!countform.$visible" ng-click="confirmOrder()">Подать заявку</button>
 	</div>
 </div>
 <br>
@@ -26,11 +26,11 @@
 					<button type="submit" ng-disabled="countform.$waiting" class="btn btn-primary">
 						сохранить
 					</button>
-					<button type="button" ng-disabled="countform.$waiting" ng-click="countform.$cancel()" class="btn btn-default">
+					<button type="button" ng-disabled="countform.$waiting" ng-click="cancelColumn('countform')" class="btn btn-default">
 						отмена
 					</button>
 				</form>
-				<button class="btn btn-default" ng-show="!countform.$visible" ng-click="countform.$show()">
+				<button class="btn btn-default" ng-show="!countform.$visible&&(orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'||orderStatus.status==undefined)" ng-click="countform.$show()">
 					редактировать
 				</button>
 			</td>
@@ -41,28 +41,21 @@
 					<button type="submit" ng-disabled="count2form.$waiting" class="btn btn-primary">
 						сохранить
 					</button>
-					<button type="button" ng-disabled="count2form.$waiting" ng-click="count2form.$cancel()" class="btn btn-default">
+					<button type="button" ng-disabled="count2form.$waiting" ng-click="cancelColumn('count2form')" class="btn btn-default">
 						отмена
 					</button>
 				</form>
-				<button class="btn btn-default" ng-show="!count2form.$visible" ng-click="count2form.$show()">
+				<button class="btn btn-default" ng-show="!count2form.$visible&&(orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'||orderStatus.status==undefined)" ng-click="count2form.$show()">
 					редактировать
 				</button>
 			</td>
 		</tr>
 		<tr ng-repeat="item in items | filter: {itemGroup: {id: group}} | orderBy:['ord','itemName']">
 			<td>{{item.itemName}}</td>
-			<td editable-text="getOrderItem(item.id).itemCount" e-form="countform" e-name="id{{item.id}}count">{{getOrderItem(item.id).itemCount}}</td>
-			<td editable-text="getOrderItem(item.id).itemCount2" e-form="count2form" e-name="id{{item.id}}count2">{{getOrderItem(item.id).itemCount2}}</td>
+			<td> <span editable-text="getOrderItem(item.id).itemCount" e-form="countform" e-name="id{{item.id}}count">{{getOrderItem(item.id).itemCount}}</span></td>
+			<td> <span editable-text="getOrderItem(item.id).itemCount2" e-form="count2form" e-name="id{{item.id}}count2">{{getOrderItem(item.id).itemCount2}}</span></td>
 		</tr>
 	</table>
 	<br>
-	<div>
-		<details><summary>Заявка</summary> <pre>{{fullOrderItems | json}}</pre> </details>
-		<details>
-			<summary>Группы</summary>
-			<pre>{{groups | json}}</pre>
-		</details>
-		<details><summary>Позиции</summary> <pre>{{items | json}}</pre></details>
-	</div>
+
 </div>

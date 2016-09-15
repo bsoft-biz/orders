@@ -10,7 +10,7 @@ angular.module('auth', []).factory(
 						$location.path(auth.loginPath);
 					}
 				}					
-			}
+			};
 
 			var auth = {
 
@@ -47,7 +47,10 @@ angular.module('auth', []).factory(
 				},
 
 				clear : function() {
-					$location.path(auth.loginPath);
+					//clear url parameters
+					$location.url(auth.loginPath);
+					//$location.search('token', null)
+					//$location.path(auth.loginPath);
 					auth.authenticated = false;
 					$http.post(auth.logoutPath, {}).then(function() {
 						console.log("Logout succeeded");
@@ -66,15 +69,47 @@ angular.module('auth', []).factory(
 						if (authenticated) {
 							$location.path(auth.path);
 						}
-					})
+					});
 
 					// Guard route changes and switch to login page if unauthenticated
 					$rootScope.$on('$routeChangeStart', function() {
 						enter();
 					});
 
-				}
+				},
 
+				resetPassword : function(email,successCallback,errorCallback) {
+					$http.post('users/resetPassword?email='+email, {}).then(function(response) {
+						console.log("Reset password succeeded");
+						successCallback && successCallback(response);
+					}, function(response) {
+						console.log("Reset password failed");
+						errorCallback && errorCallback(response);
+					});
+				},
+
+				authWithResetPasswordToken : function(id,token,successCallback,errorCallback) {
+					$http.get('users/changePassword?id='+id+'&token='+token, {}).then(function(response) {
+						console.log("authWithResetPasswordToken succeeded");
+						auth.authenticate();
+						//auth.authenticated = true;
+						//$location.path(auth.homePath);
+						//successCallback && successCallback(response);
+					}, function(response) {
+						console.log("authWithResetPasswordToken failed");
+						errorCallback && errorCallback(response);
+					});
+				},
+
+				passwdresetWithResetPasswordToken : function(token,password,successCallback,errorCallback) {
+					$http.post('users/savePassword?token='+token+'&password='+password, {}).then(function(response) {
+						console.log("passwdresetWithResetPasswordToken succeeded");
+						auth.clear();
+					}, function(response) {
+						console.log("passwdresetWithResetPasswordToken failed");
+						errorCallback && errorCallback(response);
+					});
+				}
 			};
 
 			return auth;

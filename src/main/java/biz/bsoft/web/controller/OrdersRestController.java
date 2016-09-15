@@ -2,27 +2,21 @@ package biz.bsoft.web.controller;
 
 import biz.bsoft.orders.dao.OrderDao;
 import biz.bsoft.orders.model.*;
-import biz.bsoft.users.dao.UserDao;
+import biz.bsoft.users.dao.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by vbabin on 08.04.2016.
@@ -33,7 +27,7 @@ public class OrdersRestController {
     @Autowired
     OrderDao orderDao;
     @Autowired
-    UserDao userDao;
+    UserService userService;
     @Autowired
     private MessageSource messages;
     @Autowired
@@ -64,7 +58,7 @@ public class OrdersRestController {
 
     @RequestMapping(value = "/order")
     public Order getOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date) {
-        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
+        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         Order order = null;
         try {
             order = orderDao.findOrder(clientPosId, date);
@@ -77,7 +71,7 @@ public class OrdersRestController {
     @RequestMapping(value = "/orderstatus")
     public OrderGroupStatus getOrderStatus(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                            @RequestParam("group_id") Integer groupId) {
-        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
+        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         OrderGroupStatus orderGroupStatus = orderDao.getOrderGroupStatus(clientPosId,date,groupId);
         return orderGroupStatus;
     }
@@ -86,7 +80,7 @@ public class OrdersRestController {
     public OrderGroupStatus confirmOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                          @RequestParam("group_id") Integer groupId,
                                          HttpServletResponse response) {
-        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
+        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         OrderGroupStatus orderGroupStatus = orderDao.confirmOrder(clientPosId,date,groupId);
         return orderGroupStatus;
     }
@@ -94,7 +88,7 @@ public class OrdersRestController {
     //@RequestMapping(value = "/order", method = RequestMethod.POST)
     public String setOrder(@RequestBody Order order,
                            @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date) {
-        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
+        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         String result = null;
         try {
             orderDao.saveOrder(order);
@@ -132,7 +126,7 @@ public class OrdersRestController {
     @RequestMapping(value = "/orderitems")
     public List<OrderItem> getOrderItems(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                          @RequestParam("group_id") Integer groupId){
-        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
+        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         List<OrderItem> items = null;
         try {
             items = orderDao.getOrderItems(clientPosId, date, groupId);
@@ -147,7 +141,7 @@ public class OrdersRestController {
                                               @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                               @RequestParam("group_id") Integer groupId,
                                               HttpServletResponse response){
-        Integer clientPosId = userDao.getCurrentUserSettings().getClientPOS().getId();
+        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         //TODO need to check if all items from the group because you can delete all items from group and insert from other group
         List<OrderItemError> orderItemErrors = orderDao.validateItems(orderItems, clientPosId, date, groupId);
         if (orderItemErrors.size()>0) {
@@ -192,7 +186,10 @@ public class OrdersRestController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return itemPhotos.get(0).getPhotoSmall();
+        if (itemPhotos.size()>0)
+            return itemPhotos.get(0).getPhotoSmall();
+        else
+            return null;
     }
 
     @RequestMapping(value = "/items/{item_id}/info", method = RequestMethod.GET)
@@ -205,19 +202,4 @@ public class OrdersRestController {
         }
         return itemInfo;
     }
-
-    @ExceptionHandler(ValidateOrderException.class)
-    void handleValidateOrderException(ValidateOrderException e, HttpServletResponse response) throws IOException {
-        /*ResourceBundleMessageSource messages = new ResourceBundleMessageSource();
-        messages.setBasename("locale/messages");*/
-        Locale locale = LocaleContextHolder.getLocale();
-        response.sendError(HttpStatus.BAD_REQUEST.value(),messages.getMessage("error.validateOrderMessage",new Object[] {e.getMessage()},locale));
-
-        final SimpleMailMessage email = new SimpleMailMessage();
-        email.setSubject("Error");
-        email.setText(messages.getMessage("error.validateOrderMessage",new Object[] {e.getMessage()},locale));
-        email.setTo("babinslava@mail.ru");
-        //email.setFrom("@");
-        mailSender.send(email);
-
-    }}
+}

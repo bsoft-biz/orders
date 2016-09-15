@@ -24,8 +24,10 @@ import java.util.Set;
         private String password;
         private boolean enabled;
         private Set<UserRole> userRole = new HashSet<UserRole>(0);
+        private String email;
 
-        public User() {
+
+    public User() {
         }
 
         public User(String username, String password, boolean enabled) {
@@ -93,4 +95,11 @@ import java.util.Set;
             this.userRole = userRole;
         }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

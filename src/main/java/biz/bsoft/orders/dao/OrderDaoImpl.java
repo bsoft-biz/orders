@@ -1,7 +1,7 @@
 package biz.bsoft.orders.dao;
 
 import biz.bsoft.orders.model.*;
-import biz.bsoft.web.controller.ValidateOrderException;
+import biz.bsoft.web.errors.ValidateOrderException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;

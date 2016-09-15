@@ -1,13 +1,17 @@
 package biz.bsoft.web.controller;
 
 import biz.bsoft.orders.model.ClientPOS;
-import biz.bsoft.users.dao.UserDao;
+import biz.bsoft.security.SecurityUserService;
+import biz.bsoft.users.dao.UserService;
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
+import biz.bsoft.web.errors.UserNotFoundException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +19,7 @@ import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by vbabin on 27.03.2016.
@@ -29,11 +34,16 @@ public class UsersRestController {
             LoggerFactory.getLogger(UsersRestController.class);
 
     @Autowired
-    UserDao userDao;
+    UserService userService;
 
     @Autowired
     private SessionFactory sessionFactory;
 
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
+    private SecurityUserService securityUserService;
 
     @RequestMapping(value = "/list/", method = RequestMethod.GET)
     @Transactional
@@ -60,7 +70,7 @@ public class UsersRestController {
         //logger.info("REST ID=" + id);
         User user = null;
         try {
-            user = userDao.findByUserName(id);
+            user = userService.findByUsername(id);
             /*if (user!=null) {
                 logger.info("REST user=" + user.toString());
                 logger.info("REST user.roles=" + user.getUserRole().toString());
@@ -76,7 +86,7 @@ public class UsersRestController {
         logger.error("REST name=" + id);
         User user = null;
         try {
-            user = userDao.add(id);
+            user = userService.add(id);
             /*if (user!=null) {
                 logger.info("REST user=" + user.toString());
             }*/
@@ -88,7 +98,7 @@ public class UsersRestController {
 
     @RequestMapping(value = "/userSettings", method = RequestMethod.GET)
     public UserSettings getUserSettings() {
-        UserSettings userSettings = userDao.getCurrentUserSettings();
+        UserSettings userSettings = userService.getCurrentUserSettings();
         //logger.info("userSettings =" + userSettings);
         return userSettings;
     }
@@ -98,7 +108,7 @@ public class UsersRestController {
         //
         try {
             //logger.info("setUserSettings userSettings =" + userSettings);
-            UserSettings currentUserSettings = userDao.getCurrentUserSettings();
+            UserSettings currentUserSettings = userService.getCurrentUserSettings();
             //logger.info("setUserSettings currentUserSettings =" + currentUserSettings);
             ClientPOS currentClientPOS = currentUserSettings.getClientPOS();
             currentClientPOS.setPosName(userSettings.getClientPOS().getPosName());
@@ -106,7 +116,7 @@ public class UsersRestController {
             currentClientPOS.setPosPhone(userSettings.getClientPOS().getPosPhone());
             currentClientPOS.setManagerName(userSettings.getClientPOS().getManagerName());
             currentClientPOS.setManagerPhone(userSettings.getClientPOS().getManagerPhone());
-            userDao.setCurrentUserSettings(currentUserSettings);
+            userService.setCurrentUserSettings(currentUserSettings);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,13 +124,14 @@ public class UsersRestController {
         }
         return"";
     }
+
     @RequestMapping(value = "/userPassword", method = RequestMethod.POST)
     public String setUserPassword(@RequestParam("old")String oldPassword, @RequestParam("new")String newPassword) {
 //        logger.info("userPassword' old = " + oldPassword);
 //        logger.info("userPassword' new = " + newPassword);
-        userDao.setUserPassword(oldPassword, newPassword);
+        userService.setUserPassword(oldPassword, newPassword);
         /*try {
-            userDao.setUserPassword(oldPassword, newPassword);
+            userService.setUserPassword(oldPassword, newPassword);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,19 +141,37 @@ public class UsersRestController {
         return "";
     }
 
-/* Getting List of objects in Json format in Spring Restful Services */
-/*    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public @ResponseBody
-    List<User> getUser() {
-
-        List<User> userList = null;
-        try {
-            userList = userDao.getEntityList();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public void resetUserPassword(HttpServletRequest request, @RequestParam("email") String userEmail) {
+        final User user = userService.findUserByEmail(userEmail);
+        if (user == null) {
+            throw new UserNotFoundException();
         }
+        final String token = UUID.randomUUID().toString();
+        userService.createPasswordResetTokenForUser(user, token);
 
-        return userList;
-    }*/
+        String message = getAppUrl(request) + "/#/passwdreset?id=" + user.getUsername() + "&token=" + token;
+        final SimpleMailMessage email = new SimpleMailMessage();
+        email.setSubject("Password reset request");
+        email.setText(message);
+        email.setTo(user.getEmail());
+        //email.setFrom("@");
+        mailSender.send(email);
+    }
+
+    @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
+    public void changeUserPassword(HttpServletRequest request, @RequestParam("id") String userName, @RequestParam("token") String token) {
+        securityUserService.authByPasswordResetToken(userName, token);
+    }
+
+
+    @RequestMapping(value = "/savePassword", method = RequestMethod.POST)
+    public String savePassword(@RequestParam("token")String token, @RequestParam("password")String password) {
+        userService.saveUserPassword(token, password);
+        return "";
+    }
+
+    private String getAppUrl(HttpServletRequest request) {
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    }
 }

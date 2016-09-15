@@ -1,5 +1,5 @@
 angular
-		.module('orderApp', [ 'ngRoute', 'auth', 'home', 'order', 'navigation', 'catalog', 'catalog-detail',
+		.module('orderApp', [ 'ngRoute', 'auth', 'home', 'order', 'navigation', 'catalog', 'catalog-detail', 'passwdreset',
 		"xeditable" ])
 		.config(
 
@@ -35,8 +35,12 @@ angular
 						templateUrl : 'js/navigation/login.html',
 						controller : 'navigation',
 						controllerAs : 'controller'
+					}).when('/passwdreset', {
+						templateUrl : 'js/passwdreset/passwdreset.html',
+						controller : 'passwdreset',
+						controllerAs : 'controller'
 					}).otherwise('/');
-
+					
 					$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 				}).run(function(auth) {

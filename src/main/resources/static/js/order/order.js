@@ -1,7 +1,5 @@
 angular.module('order', ['ngResource','data']).
 controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routeParams', '$location', 'data', function($resource, $scope, $q, $http,  $filter, $routeParams, $location, data) {
-    if ($scope.fullOrderItems==undefined)
-        console.log("!!undefined!!");
     $scope.fullOrderItems = {};
     $scope.orderStatus = {};
 
@@ -79,6 +77,18 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routePara
                 return "error";
             });
     };
+
+    $scope.cancelColumn = function(formName) {
+        if($scope[formName].$submitted){
+            $scope.loadOrder();
+            //we need to cancel borh forms because of full order reloading
+            $scope.countform.$cancel();
+            $scope.count2form.$cancel();
+        }
+        else
+            $scope[formName].$cancel();
+    }
+
 
     $scope.loadOrder = function() {
         var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');

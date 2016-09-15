@@ -424,6 +424,8 @@ angular.module('xeditable').factory('editableController',
 
     /**
      * Whether to show ok/cancel buttons. Values: `right|no`.
+     *
+     * 
      * If set to `no` control automatically submitted when value changed.  
      * If control is part of form buttons will never be shown. 
      * 

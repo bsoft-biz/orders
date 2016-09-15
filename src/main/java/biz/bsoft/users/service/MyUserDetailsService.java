@@ -1,7 +1,6 @@
 package biz.bsoft.users.service;
 
-import biz.bsoft.users.dao.UserDao;
-//import biz.bsoft.users.model.User;
+import biz.bsoft.users.dao.UserRepository;
 import biz.bsoft.users.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,12 +23,12 @@ import java.util.Set;
 @Service("userDetailsService")
 public class MyUserDetailsService implements UserDetailsService{
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Transactional//(readOnly=true)
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        biz.bsoft.users.model.User user = userDao.findByUserName(s);
+        biz.bsoft.users.model.User user = userRepository.findByUsername(s);
         List<GrantedAuthority> authorities;
         authorities=buildUserAuthority(user.getUserRole());
         return buildUserForAuthentication(user,authorities);

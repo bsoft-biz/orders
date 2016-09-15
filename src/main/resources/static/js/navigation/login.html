@@ -3,12 +3,28 @@
 </div>
 <form role="form" ng-submit="controller.login()">
 	<div class="form-group">
-		<label for="username">Пользователь:</label> <input type="text"
-			class="form-control" id="username" name="username" ng-model="controller.credentials.username"/>
+		<label for="username">Пользователь:</label>
+		<input type="text" class="form-control" id="username" name="username" ng-model="controller.credentials.username"/>
 	</div>
 	<div class="form-group">
-		<label for="password">Пароль:</label> <input type="password"
-			class="form-control" id="password" name="password" ng-model="controller.credentials.password"/>
+		<label for="password">Пароль:</label>
+		<input type="password" class="form-control" id="password" name="password" ng-model="controller.credentials.password"/>
 	</div>
 	<button type="submit" class="btn btn-primary">Отправить</button>
+</form>
+<br>
+<hr>
+<form role="form" ng-submit="controller.resetPassword()">
+	<div>Забыли пароль?</div>
+	<div class="form-group">
+		<label for="email">Адрес e-mail:</label>
+		<input type="text" class="form-control" id="email" name="email" ng-model="controller.email"/>
+	</div>
+	<button type="submit" class="btn btn-default">Сбросить пароль</button>
+	<div class="alert alert-danger" ng-show="controller.errorResetPassword">
+		{{controller.errorResetPasswordMessage}}
+	</div>
+	<div class="alert alert-success" ng-show="controller.okResetPassword">
+		Вам выслан email для сброса пароля.
+	</div>
 </form>

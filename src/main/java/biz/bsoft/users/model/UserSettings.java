@@ -28,6 +28,8 @@ public class UserSettings {
     @JoinColumn(name = "username")
     private User user;
 
+    private String email;
+
     @OneToOne//(cascade = {CascadeType.REFRESH,CascadeType.MERGE, CascadeType.PERSIST})//, org.hibernate.annotations.CascadeType.SAVE_UPDATE
     @Cascade(CascadeType.SAVE_UPDATE)
     private ClientPOS clientPOS;
@@ -58,6 +60,14 @@ public class UserSettings {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public ClientPOS getClientPOS() {

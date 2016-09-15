@@ -1,9 +1,25 @@
 angular.module('navigation', ['ngRoute', 'auth', 'data']).
-controller('navigation', function($route, auth, data) {
-			
+	controller('navigation', ['$route', 'auth', 'data', '$routeParams', function($route, auth, data, $routeParams)
+		{
+
 			var self = this;
 
+			id=$routeParams.id;
+			token=$routeParams.token;
+			if (!(id==undefined||token==undefined)){
+				auth.authWithResetPasswordToken(id, token, null,
+					function errorCallback(response) {
+						self.okResetPassword=false;
+						self.errorResetPasswordMessage=response.data.message;
+						self.errorResetPassword=true;
+					})
+				// console.log("id="+id);
+				// console.log("token="+token);
+			}
+
 			self.credentials = {};
+
+			self.email = "";
 			
 			self.tab = function(route) {
 				return $route.current && route === $route.current.controller;
@@ -29,6 +45,18 @@ controller('navigation', function($route, auth, data) {
 			
 			self.title = data.getTitle;
 			
-			data.setTitle("Заявка БС");
+			data.setTitle("Заявка ТХК");
 
-		});
+			self.resetPassword = function() {
+				//auth.resetPassword(self.email);
+				auth.resetPassword(self.email,
+					function successCallback(response) {
+						self.errorResetPassword=false;
+						self.okResetPassword=true;
+					}, function errorCallback(response) {
+						self.okResetPassword=false;
+						self.errorResetPasswordMessage=response.data.message;
+						self.errorResetPassword=true;
+					})
+			};
+		}]);

@@ -1,4 +1,4 @@
-package biz.bsoft.web.controller;
+package biz.bsoft.web.errors;
 
 /**
  * Created by vbabin on 10.08.2016.
