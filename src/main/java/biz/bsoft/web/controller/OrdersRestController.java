@@ -142,7 +142,7 @@ public class OrdersRestController {
                                               @RequestParam("group_id") Integer groupId,
                                               HttpServletResponse response){
         Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
-        //TODO need to check if all items from the group because you can delete all items from group and insert from other group
+        //TODO need to check if all items are from the group because you can delete all items from group and insert from other group
         List<OrderItemError> orderItemErrors = orderDao.validateItems(orderItems, clientPosId, date, groupId);
         if (orderItemErrors.size()>0) {
             response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
