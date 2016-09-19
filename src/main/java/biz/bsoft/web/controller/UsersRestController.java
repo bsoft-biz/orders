@@ -5,6 +5,7 @@ import biz.bsoft.security.SecurityUserService;
 import biz.bsoft.users.dao.UserService;
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
+import biz.bsoft.util.MailUtil;
 import biz.bsoft.web.errors.UserNotFoundException;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -44,6 +45,9 @@ public class UsersRestController {
 
     @Autowired
     private SecurityUserService securityUserService;
+
+    @Autowired
+    MailUtil mailUtil;
 
     @RequestMapping(value = "/list/", method = RequestMethod.GET)
     @Transactional
@@ -150,13 +154,7 @@ public class UsersRestController {
         final String token = UUID.randomUUID().toString();
         userService.createPasswordResetTokenForUser(user, token);
 
-        String message = getAppUrl(request) + "/#/passwdreset?id=" + user.getUsername() + "&token=" + token;
-        final SimpleMailMessage email = new SimpleMailMessage();
-        email.setSubject("Password reset request");
-        email.setText(message);
-        email.setTo(user.getEmail());
-        //email.setFrom("@");
-        mailSender.send(email);
+        mailUtil.sendPasswordResetTokenEmail(request, userEmail, user.getUsername(), token);
     }
 
     @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
@@ -169,9 +167,5 @@ public class UsersRestController {
     public String savePassword(@RequestParam("token")String token, @RequestParam("password")String password) {
         userService.saveUserPassword(token, password);
         return "";
-    }
-
-    private String getAppUrl(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 }

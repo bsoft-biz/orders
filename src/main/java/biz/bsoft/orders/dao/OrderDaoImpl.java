@@ -1,6 +1,7 @@
 package biz.bsoft.orders.dao;
 
 import biz.bsoft.orders.model.*;
+import biz.bsoft.util.MailUtil;
 import biz.bsoft.web.errors.ValidateOrderException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -31,6 +32,8 @@ public class OrderDaoImpl implements OrderDao {
     private SessionFactory sessionFactory;
     @Autowired
     private MessageSource messages;
+    @Autowired
+    MailUtil mailUtil;
 
     private static final Logger logger =
             LoggerFactory.getLogger(OrderDaoImpl.class);
@@ -210,6 +213,8 @@ public class OrderDaoImpl implements OrderDao {
         }
         orderGroupStatus.setStatus(OrderStatus.CONFIRM);
         session.save(orderGroupStatus);
+        //send e-mail to operators
+        mailUtil.sendNotificationEmailConfirm(orderGroupStatus);
         return orderGroupStatus;
     }
 

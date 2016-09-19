@@ -22,6 +22,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -36,6 +37,7 @@ import java.util.Properties;
 @Configuration
 @ComponentScan({ "biz.bsoft.*" })
 @PropertySource("classpath:email.properties")
+@EnableAsync
 @Import({ SecurityConfig.class})//, ResourceConfig.class
 public class AppConfig  extends SpringBootServletInitializer {
     private final Logger logger =

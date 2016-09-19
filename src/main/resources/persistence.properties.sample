@@ -6,6 +6,6 @@ jdbc.pass=
 #init-db=false
 ################### Hibernate Configuration ##########################
 hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
-hibernate.show_sql=rue
+hibernate.show_sql=true
 hibernate.format_sql=true
 #hibernate.hbm2ddl.auto=create-drop

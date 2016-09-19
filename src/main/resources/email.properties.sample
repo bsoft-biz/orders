@@ -5,3 +5,4 @@ smtp.protocol=smtps
 smtp.username=mail@domain.com
 smtp.password=
 support.email=mail@domain.com
+operator.email=operator@domain.com

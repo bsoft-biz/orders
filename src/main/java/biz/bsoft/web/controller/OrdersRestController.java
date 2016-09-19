@@ -3,6 +3,7 @@ package biz.bsoft.web.controller;
 import biz.bsoft.orders.dao.OrderDao;
 import biz.bsoft.orders.model.*;
 import biz.bsoft.users.dao.UserService;
+import biz.bsoft.util.MailUtil;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +29,6 @@ public class OrdersRestController {
     OrderDao orderDao;
     @Autowired
     UserService userService;
-    @Autowired
-    private MessageSource messages;
-    @Autowired
-    private JavaMailSender mailSender;
 
     private static final Logger logger =
             LoggerFactory.getLogger(OrdersRestController.class);

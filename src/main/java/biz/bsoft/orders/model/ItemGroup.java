@@ -20,6 +20,14 @@ public class ItemGroup {
     private int id;
     private String groupName;
 
+    @Override
+    public String toString() {
+        return "ItemGroup{" +
+                "id=" + id +
+                ", groupName='" + groupName + '\'' +
+                '}';
+    }
+
     public int getId() {
         return id;
     }

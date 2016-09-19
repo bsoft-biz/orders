@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,21 +41,23 @@ public class Order implements Serializable {
     @JsonManagedReference
     private List<OrderItem> orderItems;
 
-    @JsonView(View.OrderSummary.class)
-    private String commentText;
-
-    @Column(name = "status_id")
-    @Enumerated()
-    @JsonView(View.OrderSummary.class)
-    private OrderStatus status;
-
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "order")
     //@JsonManagedReference
     @JsonIgnore
     private List<OrderGroupStatus> orderGroupStatuses;
 
     public Order() {
-        this.status = OrderStatus.INPUT;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderDate=" + orderDate +
+                ", clientPOS=" + clientPOS +
+                ", orderItems.size()=" + orderItems.size() +
+                ", orderGroupStatuses.size()=" + orderGroupStatuses.size() +
+                '}';
     }
 
     public LocalDate getOrderDate() {
@@ -89,22 +90,6 @@ public class Order implements Serializable {
 
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
-    }
-
-    public String getCommentText() {
-        return commentText;
-    }
-
-    public void setCommentText(String commentText) {
-        this.commentText = commentText;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
     }
 
     public List<OrderGroupStatus> getOrderGroupStatuses() {

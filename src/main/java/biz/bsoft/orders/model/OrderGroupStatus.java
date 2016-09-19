@@ -45,6 +45,17 @@ public class OrderGroupStatus {
         return order;
     }
 
+    @Override
+    public String toString() {
+        return "OrderGroupStatus{" +
+                "id=" + id +
+                ", order=" + order +
+                ", group=" + group +
+                ", status=" + status +
+                ", commentText='" + commentText + '\'' +
+                '}';
+    }
+
     public void setOrder(Order order) {
         this.order = order;
     }
