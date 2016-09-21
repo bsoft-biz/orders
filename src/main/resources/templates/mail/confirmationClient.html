@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Уведомление оператора об отправке новой заявки</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        table,th,td{
+            border-spacing: 0;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+<p>Уважаемый, <label th:text="${userName}">userName</label>!</p>
+<p>Вами была отправленна заявка на <b th:text="${orderDate}">01.01.2101</b> на <b th:text="${groupName}">groupName</b>.</p>
+<table>
+    <thead>
+    <tr>
+        <th>Наименование продукции</th>
+        <th>Первый завоз</th>
+        <th>Второй завоз</th>
+    </tr>
+    </thead>
+    <tbody th:remove="all-but-first">
+    <tr th:each="item : ${orderItems}" >
+        <td th:text="${item.getItem().getItemName()}">Батон фирменный</td>
+        <td th:text="${item.getItemCount()}">16</td>
+        <td th:text="${item.getItemCount2()}">0</td>
+    </tr>
+    <tr >
+        <td>Батон фирменный</td>
+        <td>16</td>
+        <td>0</td>
+    </tr>
+    </tbody>
+</table>
+
+<p>
+    <a href="https://tirhleb.com"><img src="../../images/logo.png" alt="ЗАО &quot;Тираспольский Хлебокомбинат&quot;" title="ЗАО &quot;Тираспольский Хлебокомбинат&quot;" th:src="'cid:logo.png'" /></a>
+</p>
+<p>
+    С уважением, <br />
+    <em>ЗАО "Тираспольский Хлебокомбинат"</em>
+</p>
+<p>
+    <a href="http://bsoft.biz"><img src="../../images/poweredbybs.png" alt="БизнесСофт" title="БизнесСофт" width="150" th:src="'cid:bsoft.biz.png'" /></a>
+</p>
+</body>
+</html>

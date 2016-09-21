@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Уведомление клиента о получении новой заявки</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p>Вы получили новую заявку от <b th:text="${posName}">PosName</b> на <b th:text="${orderDate}">01.01.2101</b> на <b th:text="${groupName}">groupName</b>.</p>
+<p>Вам нужно принять или отменить ее.</p>
+
+<p>
+    <a href="https://tirhleb.com"><img src="../../images/logo.png" alt="ЗАО &quot;Тираспольский Хлебокомбинат&quot;" title="ЗАО &quot;Тираспольский Хлебокомбинат&quot;" th:src="'cid:logo.png'" /></a>
+</p>
+<p>
+    С уважением, <br />
+    <em>ЗАО "Тираспольский Хлебокомбинат"</em>
+</p>
+<p>
+    <a href="http://bsoft.biz"><img src="../../images/poweredbybs.png" alt="БизнесСофт" title="БизнесСофт" width="150" th:src="'cid:bsoft.biz.png'" /></a>
+</p>
+</body>
+</html>

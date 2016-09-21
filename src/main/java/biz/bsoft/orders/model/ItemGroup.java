@@ -2,10 +2,7 @@ package biz.bsoft.orders.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by vbabin on 14.04.2016.
@@ -18,6 +15,7 @@ public class ItemGroup {
     @Id
     @JsonView(View.GroupsId.class)
     private int id;
+    @Column(name="groupname")
     private String groupName;
 
     @Override

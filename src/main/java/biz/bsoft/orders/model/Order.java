@@ -32,6 +32,7 @@ public class Order implements Serializable {
 
     @Convert(converter = LocalDateAttributeConverter.class)
     @JsonFormat(pattern="dd.MM.yyyy")
+    @Column(name = "orderdate")
     private LocalDate orderDate;
 
     @OneToOne()

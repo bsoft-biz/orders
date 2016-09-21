@@ -23,13 +23,16 @@ public class OrderItem {
     private Integer id;
 
     @JsonView(View.ItemsId.class)
+    @Column(name="itemcount")
     private Integer itemCount;
 
     @Basic
     @JsonView(View.ItemsId.class)
+    @Column(name="itemcount2")
     private Integer itemCount2;
 
     @OneToOne()
+    @JoinColumn(name="item_id")
     @JsonView(View.ItemsId.class)
     private Item item;
 

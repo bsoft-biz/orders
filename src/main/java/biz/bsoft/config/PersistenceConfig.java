@@ -24,7 +24,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @PropertySource({ "classpath:persistence.properties" })
-@EnableJpaRepositories(basePackages = "biz.bsoft.users.dao")
+@EnableJpaRepositories(basePackages = {"biz.bsoft.users.dao","biz.bsoft.orders.dao"})
 public class PersistenceConfig {
 
     @Autowired

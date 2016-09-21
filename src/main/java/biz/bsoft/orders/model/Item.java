@@ -22,6 +22,7 @@ public class Item implements Serializable {
     private Integer id;
     @Basic
     @JsonView(View.ItemsAll.class)
+    @Column(name="itemname")
     private String itemName;
     //@JsonIgnore
     @ManyToOne

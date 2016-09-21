@@ -15,18 +15,23 @@ public class ClientPOS {
     private Integer id;
 
     @Basic
+    @Column(name="posname")
     private String posName;
 
     @Basic
     @JsonIgnore
     private Integer extid;
 
+    @Column(name="posaddress")
     private String posAddress;
 
+    @Column(name="posphone")
     private String posPhone;
 
+    @Column(name="managername")
     private String managerName;
 
+    @Column(name="managerphone")
     private String managerPhone;
 
     @Column(name = "deny_count2")

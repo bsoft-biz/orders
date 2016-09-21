@@ -64,11 +64,12 @@ public class AppConfig  extends SpringBootServletInitializer {
      @Bean
      public MessageSource messageSource() {
      final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-     messageSource.setBasename("classpath:messages");
-     messageSource.setUseCodeAsDefaultMessage(true);
-     messageSource.setDefaultEncoding("UTF-8");
-     messageSource.setCacheSeconds(0);
-     return messageSource;
+         messageSource.setBasename("classpath:messages");
+         messageSource.setUseCodeAsDefaultMessage(true);
+         messageSource.setDefaultEncoding("UTF-8");
+         messageSource.setAlwaysUseMessageFormat(true);
+         messageSource.setCacheSeconds(0);
+         return messageSource;
      }
 
    /* @Bean

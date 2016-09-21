@@ -31,6 +31,7 @@ public class OrderGroupStatus {
     @Column(name = "status_id")
     @Enumerated
     private OrderStatus status;
+    @Column(name="commenttext")
     private String commentText;
 
     public Integer getId() {
