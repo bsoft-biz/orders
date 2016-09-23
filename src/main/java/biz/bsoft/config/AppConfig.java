@@ -92,6 +92,7 @@ public class AppConfig  extends SpringBootServletInitializer {
             mailSenderImpl.setProtocol(env.getRequiredProperty("smtp.protocol"));
             mailSenderImpl.setUsername(env.getRequiredProperty("smtp.username"));
             mailSenderImpl.setPassword(env.getRequiredProperty("smtp.password"));
+            mailSenderImpl.setDefaultEncoding("UTF-8");
         } catch (IllegalStateException ise) {
             logger.error("Could not resolve email.properties.s.  See email.properties.s.sample");
             throw ise;

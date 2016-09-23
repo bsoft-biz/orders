@@ -85,6 +85,7 @@ public class MailUtil {
         TemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setPrefix("templates/mail/");
         templateResolver.setTemplateMode("HTML5");
+        templateResolver.setCharacterEncoding("UTF-8");
         templateResolver.setOrder(1);
         return templateResolver;
     }
@@ -137,7 +138,7 @@ public class MailUtil {
         ctx.setVariable("orderDate", orderGroupStatus.getOrder().getOrderDate());
         ctx.setVariable("groupName", orderGroupStatus.getGroup().getGroupName());
         ctx.setVariable("orderItems", orderItems);
-        constructAndSendEmail(currentUserSettings.getEmail(), subject, ctx, "confirmationclient.html");
+        constructAndSendEmail(currentUserSettings.getEmail(), subject, ctx, "confirmationClient.html");
     }
 
     @Async
