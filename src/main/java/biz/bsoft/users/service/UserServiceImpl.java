@@ -1,12 +1,12 @@
-package biz.bsoft.users.dao;
+package biz.bsoft.users.service;
 
 import biz.bsoft.security.SecurityUserService;
+import biz.bsoft.users.dao.PasswordResetTokenRepository;
+import biz.bsoft.users.dao.UserRepository;
+import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.PasswordResetToken;
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -34,11 +32,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MessageSource messages;
 
-    @Autowired
-    private SessionFactory sessionFactory;
+//    @Autowired
+//    private SessionFactory sessionFactory;
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private UserSettingsRepository userSettingsRepository;
+
+    @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Autowired
     private SecurityUserService securityUserService;
@@ -48,21 +52,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
-        //return repository.findByUsername(username);
-        List<User> users= new ArrayList<>();
-        users = sessionFactory.getCurrentSession().createQuery("from User where username=:p_uname")
-                .setParameter("p_uname",username)
-                .list();
-//        Session session = sessionFactory.getCurrentSession();
-        //session.createQuery("from User").list();
-//        Query query = session.getNamedQuery("allUsers");
-        //logger.info("users' size = "+users.size());
-        if(users.size()>0){
-            return users.get(0);
-        }
-        else {
-            return null;
-        }
+        return repository.findByUsername(username);
+//        List<User> users= new ArrayList<>();
+//        users = sessionFactory.getCurrentSession().createQuery("from User where username=:p_uname")
+//                .setParameter("p_uname",username)
+//                .list();
+////        Session session = sessionFactory.getCurrentSession();
+//        //session.createQuery("from User").list();
+////        Query query = session.getNamedQuery("allUsers");
+//        //logger.info("users' size = "+users.size());
+//        if(users.size()>0){
+//            return users.get(0);
+//        }
+//        else {
+//            return null;
+//        }
 
     }
 
@@ -73,7 +77,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(username);
         user.setEnabled(true);
         //user.setUserRole();
-        sessionFactory.getCurrentSession().save(user);
+        //sessionFactory.getCurrentSession().save(user);
+        repository.save(user);
         return user;
     }
 
@@ -81,18 +86,19 @@ public class UserServiceImpl implements UserService {
     public UserSettings getCurrentUserSettings() { //@AuthenticationPrincipal User user;
         org.springframework.security.core.userdetails.User user =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userSettingsRepository.findByUser_Username(user.getUsername());
 
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.getNamedQuery(UserSettings.GET_USER_SETTINGS);
-        query.setParameter("p_username", user.getUsername());
-        UserSettings userSettings = (UserSettings) query.list().get(0);
-        return userSettings;
+//        Session session = sessionFactory.getCurrentSession();
+//        Query query = session.getNamedQuery(UserSettings.GET_USER_SETTINGS);
+//        query.setParameter("p_username", user.getUsername());
+//        UserSettings userSettings = (UserSettings) query.list().get(0);
+//        return userSettings;
     }
 
-    @Override
-    public void setCurrentUserSettings(UserSettings userSettings) {
-        sessionFactory.getCurrentSession().update(userSettings);
-    }
+//    @Override
+//    public void setCurrentUserSettings(UserSettings userSettings) {
+//        sessionFactory.getCurrentSession().update(userSettings);
+//    }
 
     @Override
     public void setUserPassword(String oldPassword, String newPassword) {
@@ -111,8 +117,8 @@ public class UserServiceImpl implements UserService {
         final User user = /*repository.*/findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         securityUserService.validatePasswordResetToken(user.getUsername(), token);
         user.setPassword(passwordEncoder.encode(password));
-        //repository.save(user);
-        sessionFactory.getCurrentSession().update(user);
+        //sessionFactory.getCurrentSession().update(user);
+        repository.save(user);
     }
 
     @Override
@@ -123,6 +129,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createPasswordResetTokenForUser(User user, String token) {
         PasswordResetToken passwordResetToken = new PasswordResetToken(user, token);
-        sessionFactory.getCurrentSession().save(passwordResetToken);
+        //sessionFactory.getCurrentSession().save(passwordResetToken);
+        passwordResetTokenRepository.save(passwordResetToken);
     }
 }

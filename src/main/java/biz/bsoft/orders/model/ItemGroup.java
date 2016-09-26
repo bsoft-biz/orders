@@ -15,7 +15,7 @@ public class ItemGroup {
     @Id
     @JsonView(View.GroupsId.class)
     private int id;
-    @Column(name="groupname")
+    //@Column(name="groupname")
     private String groupName;
 
     @Override

@@ -3,7 +3,6 @@ package biz.bsoft.orders.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,14 +16,14 @@ import java.util.List;
 @Table(name = "t_orders")
 @NamedQueries ({@NamedQuery(name = "FIND_ALL", query = "SELECT o FROM Order o"),
         @NamedQuery(name = Order.FIND_ALL, query = "select o as iOrder, i as iOrderItem, z as iItem, o.id as idOrder, i.itemCount as itemCount, i.itemCount2 as itemCount2, z.itemName as itemName " +
-                "from Order o inner join o.orderItems i on (o.orderDate=:p_date and o.clientPOS.id=:p_client_pos_id) right join i.item z"),
+                "from Order o inner join o.orderItems i on (o.orderDate=:p_date and o.clientPos.id=:p_client_pos_id) right join i.item z")/*,
         @NamedQuery(name=Order.FIND_FULL, query = "select new biz.bsoft.orders.model.FullOrderItem(i.id, z.id, i.itemCount, i.itemCount2) " +
-                "from Order o inner join o.orderItems i on (o.orderDate=:p_date and o.clientPOS.id=:p_client_pos_id ) right join i.item z " +
-                "where z.itemGroup.id=:p_group_id")})//and i.item.itemGroup.id=:p_group_id
+                "from Order o inner join o.orderItems i on (o.orderDate=:p_date and o.clientPos.id=:p_client_pos_id ) right join i.item z " +
+                "where z.itemGroup.id=:p_group_id")*/ })//and i.item.itemGroup.id=:p_group_id
 public class Order implements Serializable {
 
     public static final String FIND_ALL= "FindAllItemsOrder";
-    public static final String FIND_FULL= "FindFullOrderItems";
+    //public static final String FIND_FULL= "FindFullOrderItems";
 
     @GeneratedValue
     @Id
@@ -36,7 +35,7 @@ public class Order implements Serializable {
     private LocalDate orderDate;
 
     @OneToOne()
-    private ClientPOS clientPOS;
+    private ClientPOS clientPos;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "order")
     @JsonManagedReference
@@ -55,7 +54,7 @@ public class Order implements Serializable {
         return "Order{" +
                 "id=" + id +
                 ", orderDate=" + orderDate +
-                ", clientPOS=" + clientPOS +
+                ", clientPOS=" + clientPos +
                 ", orderItems.size()=" + orderItems.size() +
                 ", orderGroupStatuses.size()=" + orderGroupStatuses.size() +
                 '}';
@@ -65,12 +64,12 @@ public class Order implements Serializable {
         return orderDate;
     }
 
-    public ClientPOS getClientPOS() {
-        return clientPOS;
+    public ClientPOS getClientPos() {
+        return clientPos;
     }
 
-    public void setClientPOS(ClientPOS clientPOS) {
-        this.clientPOS = clientPOS;
+    public void setClientPos(ClientPOS clientPOS) {
+        this.clientPos = clientPOS;
     }
 
     public void setOrderDate(LocalDate orderDate) {

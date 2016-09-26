@@ -4,8 +4,9 @@ angular.module('data', ['ngResource']).factory(
     ['$resource', function($resource) {
 
         var items={};
+        var itemsInfo={};
         var groups={};
-        var title="Заявки БС";
+        var title="Заявки ТХК";
 
         var data = {
 
@@ -19,6 +20,16 @@ angular.module('data', ['ngResource']).factory(
                     console.log('items loaded');
                 }
                 return items;
+            },
+
+            getItemsInfo : function() {
+                if (Object.keys(itemsInfo).length === 0)
+                {
+                    var ItemsInfo = $resource('orders/items_info');
+                    itemsInfo = ItemsInfo.query();
+                    console.log('itemsInfo loaded');
+                }
+                return itemsInfo;
             },
 
             getGroups : function() {

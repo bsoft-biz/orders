@@ -30,15 +30,15 @@ public class PersistenceConfig {
     @Autowired
     private Environment env;
 
-    @Bean
-    public SessionFactory sessionFactory() {
-        LocalSessionFactoryBuilder builder =
-                new LocalSessionFactoryBuilder(dataSource());
-        builder.scanPackages("biz.bsoft.users.model","biz.bsoft.orders.model")
-                .addProperties(getHibernateProperties());
+//    @Bean
+//    public SessionFactory sessionFactory() {
+//        LocalSessionFactoryBuilder builder =
+//                new LocalSessionFactoryBuilder(dataSource());
+//        builder.scanPackages("biz.bsoft.users.model","biz.bsoft.orders.model")
+//                .addProperties(getHibernateProperties());
+//        return builder.buildSessionFactory();
+//    }
 
-        return builder.buildSessionFactory();
-    }
     private Properties getHibernateProperties() {
         Properties prop = new Properties();
         prop.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
@@ -71,10 +71,10 @@ public class PersistenceConfig {
         return ds;*/
     }
     //Create a transaction manager
-    @Bean
-    public HibernateTransactionManager txManager() {
-        return new HibernateTransactionManager(sessionFactory());
-    }
+//    @Bean
+//    public HibernateTransactionManager txManager() {
+//        return new HibernateTransactionManager(sessionFactory());
+//    }
 
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
@@ -82,21 +82,21 @@ public class PersistenceConfig {
     }
 
 
-//    @Bean
-//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-//        final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-//        em.setDataSource(dataSource());
-//        em.setPackagesToScan(new String[] { "org.baeldung.persistence.model" });
-//        final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-//        em.setJpaVendorAdapter(vendorAdapter);
-//        em.setJpaProperties(additionalProperties());
-//        return em;
-//    }
-//
-//    @Bean
-//    public JpaTransactionManager transactionManager() {
-//        final JpaTransactionManager transactionManager = new JpaTransactionManager();
-//        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-//        return transactionManager;
-//    }
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+        em.setPackagesToScan(new String[] { "biz.bsoft.users.model","biz.bsoft.orders.model" });
+        final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setJpaProperties(getHibernateProperties());
+        return em;
+    }
+
+    @Bean
+    public JpaTransactionManager transactionManager() {
+        final JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        return transactionManager;
+    }
 }

@@ -1,4 +1,4 @@
-package biz.bsoft.users.dao;
+package biz.bsoft.users.service;
 
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
@@ -10,7 +10,7 @@ public interface UserService {
     User findByUsername(String username);
     User add(String username);
     UserSettings getCurrentUserSettings();
-    void setCurrentUserSettings(UserSettings userSettings);
+//    void setCurrentUserSettings(UserSettings userSettings);
     void setUserPassword(String oldPassword, String newPassword);
     void saveUserPassword(String token, String password);
 

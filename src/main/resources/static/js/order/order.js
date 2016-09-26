@@ -15,6 +15,7 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routePara
         $scope.date = new Date( dateString[3], dateString[2]-1, dateString[1] );
     }
     $scope.items=data.getItems();
+    $scope.itemsInfo=data.getItemsInfo();
 
     $scope.getItemName = function(idItem){
         var item = $filter('filter')($scope.items, {id: idItem});
@@ -42,6 +43,11 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routePara
         else
             orderItem = orderItems[0];
         return orderItem;
+    };
+
+    $scope.getItemInfo = function(idItem){
+        var itemsInfo = $filter('filter')($scope.itemsInfo, {itemId: idItem});
+        return itemsInfo[0];
     };
 
     $scope.showGroup = function() {

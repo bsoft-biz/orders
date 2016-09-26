@@ -1,22 +1,20 @@
 package biz.bsoft.web.controller;
 
-import biz.bsoft.orders.dao.OrderDao;
+import biz.bsoft.orders.dao.ItemInfoRepository;
+import biz.bsoft.orders.dao.OrderRepository;
+import biz.bsoft.orders.service.OrderDao;
 import biz.bsoft.orders.model.*;
-import biz.bsoft.users.dao.UserService;
-import biz.bsoft.util.MailUtil;
+import biz.bsoft.users.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -29,27 +27,31 @@ public class OrdersRestController {
     OrderDao orderDao;
     @Autowired
     UserService userService;
-
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private ItemInfoRepository itemInfoRepository;
     private static final Logger logger =
             LoggerFactory.getLogger(OrdersRestController.class);
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Order getOrder(@PathVariable("id") Integer id) {
-        Order order = null;
-        LocalDateTime timePoint= LocalDateTime.now();
-        LocalDate today = timePoint.toLocalDate();
+        Order order = orderRepository.findOne(id);
+        //LocalDateTime timePoint= LocalDateTime.now();
+        //LocalDate today = timePoint.toLocalDate();
         //Date today= new Date();
         //today.setTime(0);
-        try {
-            //logger.info("Date = "+today.toString()+" id="+id);
-            order = orderDao.findOrder(id, today);
-            /*if (order!=null) {
-                logger.info("REST order = " + order.toString());
-                logger.info("REST order.OrderItems = " + order.getOrderItems().toString());
-            }*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            //logger.info("Date = "+today.toString()+" id="+id);
+//            order = orderRepository.findOne(id);
+//                    //orderDao.findOrder(id, today);
+//            /*if (order!=null) {
+//                logger.info("REST order = " + order.toString());
+//                logger.info("REST order.OrderItems = " + order.getOrderItems().toString());
+//            }*/
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         return order;
     }
 
@@ -58,7 +60,8 @@ public class OrdersRestController {
         Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         Order order = null;
         try {
-            order = orderDao.findOrder(clientPosId, date);
+            order = orderRepository.findOrderByClientPos_IdAndOrderDate(clientPosId,date);
+                    //orderDao.findOrder(clientPosId, date);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,19 +85,6 @@ public class OrdersRestController {
         return orderGroupStatus;
     }
 
-    //@RequestMapping(value = "/order", method = RequestMethod.POST)
-    public String setOrder(@RequestBody Order order,
-                           @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date) {
-        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
-        String result = null;
-        try {
-            orderDao.saveOrder(order);
-        } catch (Exception e) {
-            result = e.getMessage();
-            e.printStackTrace();
-        }
-        return result;
-    }
 
     @JsonView(View.ItemsAll.class)
     @RequestMapping(value = "/items")
@@ -106,6 +96,12 @@ public class OrdersRestController {
             e.printStackTrace();
         }
         return items;
+    }
+
+    @JsonView(View.ItemInfoShort.class)
+    @RequestMapping(value = "/items_info")
+    public List<ItemInfo> getAllItemInfo() {
+        return itemInfoRepository.findAll();
     }
 
     @RequestMapping(value = "/item_groups")

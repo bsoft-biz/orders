@@ -35,7 +35,7 @@ import java.util.Properties;
  */
 //@EnableWebMvc
 @Configuration
-@ComponentScan({ "biz.bsoft.*" })
+@ComponentScan({ "biz.bsoft.orders.service.*" })
 @PropertySource("classpath:email.properties")
 @EnableAsync
 @Import({ SecurityConfig.class})//, ResourceConfig.class

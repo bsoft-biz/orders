@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "t_orders_groups_statuses")
 //@NamedQuery(name = OrderGroupStatus.GET_ORDER_GROUP_STATUS, query = "select s from OrderGroupStatus s where s.order=:p_order and s.group.id=:p_group")
 @NamedQuery(name = OrderGroupStatus.GET_ORDER_GROUP_STATUS, query = "select s from OrderGroupStatus s " +
-        "where s.order.clientPOS.id=:p_client_pos and s.order.orderDate=:p_date and s.group.id=:p_group")
+        "where s.order.clientPos.id=:p_client_pos and s.order.orderDate=:p_date and s.group.id=:p_group")
 public class OrderGroupStatus {
     public static final String GET_ORDER_GROUP_STATUS="GET_ORDER_GROUP_STATUS";
     @Id

@@ -9,4 +9,5 @@ public class View {
     public interface ItemsAll extends ItemsId {}
     public interface Summary extends ItemsId {}
     public interface OrderSummary {}
+    public interface ItemInfoShort {}
 }

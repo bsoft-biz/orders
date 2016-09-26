@@ -11,9 +11,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "t_order_items")
 @NamedQueries({
-        @NamedQuery(name = "P", query = "delete from OrderItem oi where oi.order.clientPOS.id =:p_client_pos_id and oi.order.orderDate=:p_date  and oi.item.itemGroup.id=:p_group_id"),
+        @NamedQuery(name = "P", query = "delete from OrderItem oi where oi.order.clientPos.id =:p_client_pos_id and oi.order.orderDate=:p_date  and oi.item.itemGroup.id=:p_group_id"),
         @NamedQuery(name = OrderItem.DELETE_GROUP_ITEMS,query = "delete from OrderItem oi where oi.order=:p_order and oi.item in (select i from Item i where i.itemGroup.id=:p_group_id)"),
-        @NamedQuery(name = OrderItem.GET_GROUP_ITEMS,query = "select oi from OrderItem oi where oi.order.clientPOS.id =:p_client_pos_id and oi.order.orderDate=:p_date  and oi.item.itemGroup.id=:p_group_id")}
+        @NamedQuery(name = OrderItem.GET_GROUP_ITEMS,query = "select oi from OrderItem oi where oi.order.clientPos.id =:p_client_pos_id and oi.order.orderDate=:p_date  and oi.item.itemGroup.id=:p_group_id")}
 )
 public class OrderItem {
     public static final String DELETE_GROUP_ITEMS="DeleteGroupItems";

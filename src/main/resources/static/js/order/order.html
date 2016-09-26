@@ -16,8 +16,15 @@
 	<table class="table table-bordered table-hover table-condensed">
 		<tr style="font-weight: bold; white-space: nowrap">
 
-			<td style="width:70%">
+			<td style="width:50%">
 				Продукция
+			</td>
+			<td style="width:10%">
+				Вместимость
+				<br>Минимальное кол-во
+			</td>
+			<td style="width:10%">
+				Цена
 			</td>
 			<td style="width:15%">
 				Первый завоз
@@ -51,7 +58,9 @@
 			</td>
 		</tr>
 		<tr ng-repeat="item in items | filter: {itemGroup: {id: group}} | orderBy:['ord','itemName']">
-			<td>{{item.itemName}}</td>
+			<td><a href="{{getItemInfo(item.id).siteUrl}}" target="_blank" tabindex="-1">{{item.itemName}}</a></td>
+			<td>{{getItemInfo(item.id).capacity}} {{getItemInfo(item.id).minCount}}</td>
+			<td>{{getItemInfo(item.id).price}}</td>
 			<td> <span editable-text="getOrderItem(item.id).itemCount" e-form="countform" e-name="id{{item.id}}count">{{getOrderItem(item.id).itemCount}}</span></td>
 			<td> <span editable-text="getOrderItem(item.id).itemCount2" e-form="count2form" e-name="id{{item.id}}count2">{{getOrderItem(item.id).itemCount2}}</span></td>
 		</tr>

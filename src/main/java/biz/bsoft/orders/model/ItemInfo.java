@@ -1,5 +1,8 @@
 package biz.bsoft.orders.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 
 /**
@@ -30,11 +33,29 @@ public class ItemInfo {
     private String calories;
     private String description;
     @Column(name = "min_count")
+    @JsonView(View.ItemInfoShort.class)
     private Integer minCount;
+    @JsonView(View.ItemInfoShort.class)
     private Integer capacity;
     private Integer rye;
     @Column(name = "prod_days")
+    @JsonView(View.ItemInfoShort.class)
     private String prodDays;
+    @Column(name = "site_url")
+    @JsonView(View.ItemInfoShort.class)
+    private String siteUrl;
+    @JsonView(View.ItemInfoShort.class)
+    private Float price;
+
+    @JsonView(View.ItemInfoShort.class)
+    @JsonProperty("itemId")
+    public Integer getItemId(){
+        if (item != null){
+            return item.getId();
+        }
+        else
+            return null;
+    }
 
     public Integer getId() {
         return id;
@@ -178,5 +199,21 @@ public class ItemInfo {
 
     public void setProdDays(String prodDays) {
         this.prodDays = prodDays;
+    }
+
+    public String getSiteUrl() {
+        return siteUrl;
+    }
+
+    public void setSiteUrl(String siteUrl) {
+        this.siteUrl = siteUrl;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 }

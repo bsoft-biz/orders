@@ -1,6 +1,6 @@
-package biz.bsoft.util;
+package biz.bsoft.service;
 
-import biz.bsoft.orders.dao.OrderDaoImpl;
+import biz.bsoft.orders.service.OrderDaoImpl;
 import biz.bsoft.orders.dao.OrderItemRepository;
 import biz.bsoft.orders.model.OrderGroupStatus;
 import biz.bsoft.orders.model.OrderItem;
@@ -32,7 +32,7 @@ import java.util.Locale;
  * Created by vbabin on 16.09.2016.
  */
 @Component
-public class MailUtil {
+public class MailService {
     private static final Logger logger =
             LoggerFactory.getLogger(OrderDaoImpl.class);
 
@@ -116,11 +116,11 @@ public class MailUtil {
     @Async
     public void sendNotificationEmailConfirmOperator(OrderGroupStatus orderGroupStatus){
         Locale locale = new Locale(env.getProperty("email.notification.locale"));
-        String subject = messages.getMessage("email.notificationConfirmOperatorSubject", new Object[] {orderGroupStatus.getOrder().getClientPOS().getPosName(), orderGroupStatus.getOrder().getOrderDate(), orderGroupStatus.getGroup().getGroupName()},locale);
+        String subject = messages.getMessage("email.notificationConfirmOperatorSubject", new Object[] {orderGroupStatus.getOrder().getClientPos().getPosName(), orderGroupStatus.getOrder().getOrderDate(), orderGroupStatus.getGroup().getGroupName()},locale);
         //String body = messages.getMessage("email.newConfirmMessageBody", new Object[] {},locale);
 
         final Context ctx = new Context(locale);
-        ctx.setVariable("posName", orderGroupStatus.getOrder().getClientPOS().getPosName());
+        ctx.setVariable("posName", orderGroupStatus.getOrder().getClientPos().getPosName());
         ctx.setVariable("orderDate", orderGroupStatus.getOrder().getOrderDate());
         ctx.setVariable("groupName", orderGroupStatus.getGroup().getGroupName());
         constructAndSendEmail(env.getProperty("operator.email"), subject, ctx, "confirmationOperator.html");

@@ -2,24 +2,20 @@ package biz.bsoft.web.controller;
 
 import biz.bsoft.orders.model.ClientPOS;
 import biz.bsoft.security.SecurityUserService;
-import biz.bsoft.users.dao.UserService;
+import biz.bsoft.users.service.UserService;
+import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
-import biz.bsoft.util.MailUtil;
+import biz.bsoft.service.MailService;
 import biz.bsoft.web.errors.UserNotFoundException;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,8 +33,8 @@ public class UsersRestController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    //@Autowired
+    //private SessionFactory sessionFactory;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -47,21 +43,24 @@ public class UsersRestController {
     private SecurityUserService securityUserService;
 
     @Autowired
-    MailUtil mailUtil;
+    UserSettingsRepository userSettingsRepository;
 
-    @RequestMapping(value = "/list/", method = RequestMethod.GET)
-    @Transactional
-    public List<User> list() {
-        List<User> users= new ArrayList<>();
-        try {
-            sessionFactory.getCurrentSession().createQuery("from UserRole")
-                    .list();
-            //logger.info("users' size = "+users.size());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return users;
-    }
+    @Autowired
+    MailService mailService;
+
+//    @RequestMapping(value = "/list/", method = RequestMethod.GET)
+//    @Transactional
+//    public List<User> list() {
+//        List<User> users= new ArrayList<>();
+//        try {
+//            sessionFactory.getCurrentSession().createQuery("from UserRole")
+//                    .list();
+//            //logger.info("users' size = "+users.size());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return users;
+//    }
 
     @RequestMapping("/user")
     public Principal user(Principal user) {
@@ -120,7 +119,8 @@ public class UsersRestController {
             currentClientPOS.setPosPhone(userSettings.getClientPOS().getPosPhone());
             currentClientPOS.setManagerName(userSettings.getClientPOS().getManagerName());
             currentClientPOS.setManagerPhone(userSettings.getClientPOS().getManagerPhone());
-            userService.setCurrentUserSettings(currentUserSettings);
+            userSettingsRepository.save(currentUserSettings);
+            //userService.setCurrentUserSettings(currentUserSettings);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,7 +154,7 @@ public class UsersRestController {
         final String token = UUID.randomUUID().toString();
         userService.createPasswordResetTokenForUser(user, token);
 
-        mailUtil.sendPasswordResetTokenEmail(request, userEmail, user.getUsername(), token);
+        mailService.sendPasswordResetTokenEmail(request, userEmail, user.getUsername(), token);
     }
 
     @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
