@@ -1,8 +1,7 @@
 package biz.bsoft.users.model;
 
 import biz.bsoft.orders.model.ClientPOS;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -30,8 +29,8 @@ public class UserSettings {
 
     private String email;
 
-    @OneToOne//(cascade = {CascadeType.REFRESH,CascadeType.MERGE, CascadeType.PERSIST})//, org.hibernate.annotations.CascadeType.SAVE_UPDATE
-    @Cascade(CascadeType.SAVE_UPDATE)
+    @OneToOne(cascade = {CascadeType.REFRESH,CascadeType.MERGE, CascadeType.PERSIST})//, org.hibernate.annotations.CascadeType.SAVE_UPDATE
+    //@Cascade({CascadeType.REFRESH,CascadeType.MERGE, CascadeType.PERSIST})//{CascadeType.SAVE_UPDATE})
     private ClientPOS clientPOS;
 
     private String userGreeting;
