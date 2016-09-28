@@ -105,7 +105,7 @@ public class MailService {
             final String htmlContent = templateEngine.process(template, ctx);
             message.setText(htmlContent, true); // true = isHtml
             message.addInline("logo.png", new ClassPathResource("images/logo.png"), "image/png");
-            message.addInline("bsoft.biz.png", new ClassPathResource("images/poweredbybs.png"), "image/png");
+            message.addInline("bsoft.biz.png", new ClassPathResource("images/poweredbybs.jpg"), "image/jpegloca");
             mailSender.send(mimeMessage);
         }
         catch (MessagingException E){

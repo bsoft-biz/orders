@@ -229,7 +229,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Item> getAllItems() {
-        return itemRepository.findAll();
+        return (List) itemRepository.findAll();
 //        List<Item> items= new ArrayList<>();
 //        Session session = sessionFactory.getCurrentSession();
 //        Query query = session.getNamedQuery("GET_ALL_ITEMS");
@@ -245,7 +245,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<ItemGroup> getAllGroups() {
-        return itemGroupRepository.findAll();
+        return (List) itemGroupRepository.findAll();
 //        List<ItemGroup> itemGroups= new ArrayList<>();
 //        Session session = sessionFactory.getCurrentSession();
 //        Query query = session.getNamedQuery(ItemGroup.FIND_ALL);
@@ -305,6 +305,7 @@ public class OrderDaoImpl implements OrderDao {
             if (((orderItem.getItemCount()==null)?0:orderItem.getItemCount())
                             +((orderItem.getItemCount2()==null)?0:orderItem.getItemCount2())>0) {
                 orderItem.setOrder(order);
+                orderItemRepository. save(orderItem);
                 vOrderItems.add(orderItem);
             }
         }
@@ -316,6 +317,11 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public void deleteItemsFromOrder(Integer clientPosId, LocalDate date, Integer groupId) {
         orderItemRepository.deleteByOrder_ClientPos_IdAndOrder_OrderDateAndItem_ItemGroup_Id(clientPosId,date,groupId);
+        //Order order=repository.findOrderByClientPos_IdAndOrderDate(clientPosId,date);
+        //logger.info("order before delete "+order.toString());
+        //orderItemRepository.deleteByOrder(order);
+        //logger.info("order before delete "+order.toString());
+        //logger.info("items deleteed ="+orderItemRepository.deleteByOrderQuery(order));
 //        Order order = findOrder(clientPosId, date);
 //        Session session = sessionFactory.getCurrentSession();
 //        Query query = session.getNamedQuery(OrderItem.DELETE_GROUP_ITEMS);

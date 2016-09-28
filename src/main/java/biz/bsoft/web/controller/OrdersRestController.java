@@ -2,8 +2,8 @@ package biz.bsoft.web.controller;
 
 import biz.bsoft.orders.dao.ItemInfoRepository;
 import biz.bsoft.orders.dao.OrderRepository;
-import biz.bsoft.orders.service.OrderDao;
 import biz.bsoft.orders.model.*;
+import biz.bsoft.orders.service.OrderDao;
 import biz.bsoft.users.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
@@ -101,7 +101,7 @@ public class OrdersRestController {
     @JsonView(View.ItemInfoShort.class)
     @RequestMapping(value = "/items_info")
     public List<ItemInfo> getAllItemInfo() {
-        return itemInfoRepository.findAll();
+        return (List) itemInfoRepository.findAll();
     }
 
     @RequestMapping(value = "/item_groups")
@@ -143,7 +143,7 @@ public class OrdersRestController {
         }
         // delete old items in orders
         orderDao.deleteItemsFromOrder(clientPosId, date, groupId);
-        // add recived items in orders
+        // add received items in orders
         orderDao.addItemsToOrder(orderItems, clientPosId, date, groupId);
         return null;
     }
