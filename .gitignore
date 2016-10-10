@@ -1,0 +1,14 @@
+*.iml
+.mvn/
+.idea/
+out/
+target/
+src/main/resources/email.properties
+src/main/resources/persistence.properties
+phantomjsdriver.log
+src/main/resources/images/logo.png
+src/main/resources/images/bsoft.biz.png
+src/main/resources/hibernate.cfg.xml
+mvn*
+/bower_components
+/node_modules

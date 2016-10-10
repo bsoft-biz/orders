@@ -1,0 +1,27 @@
+{
+  "name": "orders",
+  "version": "0.0.9",
+  "description": "Client side AngularJS project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsoft-biz/orders.git"
+  },
+  "keywords": [
+    "orders"
+  ],
+  "author": "Slava Babin <vbabin@bsoft.biz>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/bsoft-biz/orders/issues"
+  },
+  "homepage": "https://github.com/bsoft-biz/orders#readme",
+  "devDependencies": {
+    "bower": "^1.7.9",
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0"
+  }
+}

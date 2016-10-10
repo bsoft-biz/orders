@@ -1,0 +1,29 @@
+{
+  "name": "orders",
+  "authors": [
+    "Slava Babin <vbabin@bsoft.biz>"
+  ],
+  "description": "Client side AngularJS project",
+  "main": "",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-translate": "^2.12.1",
+    "angular": "^1.5.8",
+    "angular-route": "^1.5.8",
+    "angular-resource": "^1.5.8",
+    "angular-xeditable": "^0.4.0",
+    "me-lazyload": "^0.0.5",
+    "bootstrap": "^3.3.7"
+  }
+}
