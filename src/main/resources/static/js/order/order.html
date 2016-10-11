@@ -5,7 +5,7 @@
 		<div>Группа продукции: <a href="#" editable-select="group" buttons="no" e-ng-options="g.id as g.groupName for g in groups" onaftersave="loadOrder()">{{ showGroup() }}</a></div>
 	</div>
 	<div ng-class="orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'?'panel-heading':'panel-body'">
-		<div>Статус заказа: {{orderStatus.status}}</div>
+		<div>Статус заявки: {{orderStatus.status}}</div>
 		<div>Комментарий: {{orderStatus.commentText}}</div>
 		<button class="btn btn-primary" ng-show="(orderStatus.status=='INPUT'||orderStatus.status=='DECLINED')&&!count2form.$visible&&!countform.$visible" ng-click="confirmOrder()">Подать заявку</button>
 	</div>

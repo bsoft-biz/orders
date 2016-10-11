@@ -1,5 +1,5 @@
 angular.module('me-lazyload', [])
-.directive('lazySrc', ['$window', '$document', '$route', function($window, $document, $route){
+.directive('lazySrc', ['$window', '$document', function($window, $document){
     var doc = $document[0],
         body = doc.body,
         win = $window,
@@ -8,7 +8,11 @@ angular.module('me-lazyload', [])
         elements = {};
 
     function getUid(el){
-        return el.__uid || (el.__uid = '' + ++uid);
+        var __uid = el.data("__uid");
+        if (! __uid) {
+            el.data("__uid", (__uid = '' + ++uid));
+        }
+        return __uid;
     }
 
     function getWindowOffset(){
@@ -22,8 +26,6 @@ angular.module('me-lazyload', [])
     }
 
     function isVisible(iElement){
-        if ($route.current.templateUrl!='js/catalog/catalog.html')
-            return false;
         var elem = iElement[0],
             elemRect = elem.getBoundingClientRect(),
             windowOffset = getWindowOffset(),
@@ -89,22 +91,36 @@ angular.module('me-lazyload', [])
     return {
         restrict: 'A',
         scope: {
-            lazySrc: '@'
+            lazySrc: '@',
+            animateVisible: '@',
+            animateSpeed: '@'
         },
         link: function($scope, iElement){
 
             iElement.bind('load', onLoad);
 
             $scope.$watch('lazySrc', function(){
+                var speed = "1s";
+                if ($scope.animateSpeed != null) {
+                    speed = $scope.animateSpeed;
+                }
                 if(isVisible(iElement)){
+                    if ($scope.animateVisible) {
+                        iElement.css({
+                            'background-color': '#fff',
+                            'opacity': 0,
+                            '-webkit-transition': 'opacity ' + speed,
+                            'transition': 'opacity ' + speed
+                        });
+                    }
                     iElement.attr('src', $scope.lazySrc);
                 }else{
                     var uid = getUid(iElement);
                     iElement.css({
                         'background-color': '#fff',
                         'opacity': 0,
-                        '-webkit-transition': 'opacity 1s',
-                        'transition': 'opacity 1s'
+                        '-webkit-transition': 'opacity ' + speed,
+                        'transition': 'opacity ' + speed
                     });
                     elements[uid] = {
                         iElement: iElement,
@@ -115,6 +131,10 @@ angular.module('me-lazyload', [])
 
             $scope.$on('$destroy', function(){
                 iElement.unbind('load');
+                var uid = getUid(iElement);
+                if(elements.hasOwnProperty(uid)){
+                    delete elements[uid];
+                }
             });
         }
     };
