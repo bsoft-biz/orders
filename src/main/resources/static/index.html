@@ -24,11 +24,11 @@
 <!--/LiveInternet-->
 <div class="container">
 		<ul class="nav nav-pills" role="tablist">
-			<li ng-class="{active:nav.tab('home')||nav.tab('passwdreset')}"><a href="#/">Домашняя</a></li>
-			<li ng-class="{active:nav.tab('order')}"><a href="#/order">Заявка</a></li>
-			<li ng-class="{active:nav.tab('catalog')||nav.tab('catalog-detail')}"><a href="#/catalog">Каталог</a></li>
-			<li ng-class="{active:nav.tab('navigation')}" ng-show="!(nav.authenticated())"><a href="#/login">Вход</a></li>
-			<li ng-show="nav.authenticated()"><a href="" ng-click="nav.logout()">Выход</a></li>
+			<li ng-class="{active:nav.tab('home')||nav.tab('passwdreset')}"><a href="#/" translate="MENU_HOME">Home</a></li>
+			<li ng-class="{active:nav.tab('order')}"><a href="#/order" translate="MENU_ORDER">Order</a></li>
+			<li ng-class="{active:nav.tab('catalog')||nav.tab('catalog-detail')}"><a href="#/catalog" translate="MENU_CATALOG">Catalog</a></li>
+			<li ng-class="{active:nav.tab('navigation')}" ng-show="!(nav.authenticated())"><a href="#/login" translate="MENU_LOGIN">Login</a></li>
+			<li ng-show="nav.authenticated()"><a href="" ng-click="nav.logout()" translate="MENU_LOGOUT">Logout</a></li>
 		</ul>
 	</div>
 	<div class="container">
@@ -44,7 +44,7 @@
 		<footer>
 			<div class="row">
 				<div class="col-lg-12">
-					<p>Все права защищены &copy; <a href="http://bsoft.biz" target="_blank">БизнесCофт</a> 2016</p>
+					<p><span translate="LABEL_FOOTER"></span><a href="http://bsoft.biz" target="_blank" translate="DEVELOPER_COMPANY">Business Software</a> 2016</p>
 				</div>
 			</div>
 		</footer>
@@ -52,6 +52,8 @@
 	<script src="js/angular.js" type="text/javascript"></script>
 	<script src="js/angular-route.js" type="text/javascript"></script>
 	<script src="js/angular-resource.js" type="text/javascript"></script>
+	<script src="js/angular-translate.js" type="text/javascript"></script>
+	<script src="js/angular-translate-loader-static-files.js" type="text/javascript"></script>
 	<script src="js/auth/auth.js" type="text/javascript"></script>
 	<script src="js/home/home.js" type="text/javascript"></script>
 	<script src="js/order/order.js" type="text/javascript"></script>

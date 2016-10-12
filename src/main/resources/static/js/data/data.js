@@ -1,12 +1,12 @@
 angular.module('data', ['ngResource']).factory(
     'data',
 
-    ['$resource', function($resource) {
+    ['$resource','$translate', function($resource, $translate) {
 
         var items={};
         var itemsInfo={};
         var groups={};
-        var title="Заявки ТХК";
+        var title;
 
         var data = {
 
@@ -49,8 +49,14 @@ angular.module('data', ['ngResource']).factory(
             
             getTitle: function() { return title; },
             
-            setTitle: function(newTitle) { title = newTitle }
-
+            setTitle: function(newTitleId, params) {
+                $translate(newTitleId, params).then(function (headline) {
+                    title = headline;
+                }, function (translationId) {
+                    title = translationId;
+                });
+            }
+            
             };
 
         return data;

@@ -15,7 +15,7 @@ mvn*
 .README.swp
 src/main/resources/static/css/bootstrap.css
 src/main/resources/static/css/xeditable.css
-src/main/resources/static/fonts/
+src/main/resources/static/fonts/*
 src/main/resources/static/js/angular-resource.js
 src/main/resources/static/js/angular-route.js
 src/main/resources/static/js/angular-translate.js

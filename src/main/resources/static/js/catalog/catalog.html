@@ -1,8 +1,8 @@
 <div>
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Каталог продукции</h1>
-            <div>Группа продукции: <a href="#" editable-select="group" buttons="no" e-ng-options="g.id as g.groupName for g in groups">
+            <h1 class="page-header" translate="CATALOG_LABEL">Product catalog</h1>
+            <div><span translate="ORDER_LABEL_GROUP">Product group</span> <a href="#" editable-select="group" buttons="no" e-ng-options="g.id as g.groupName for g in groups">
                 {{ showGroup() }}</a>
             </div>
             <br>

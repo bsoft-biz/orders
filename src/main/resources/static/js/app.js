@@ -1,9 +1,23 @@
 angular
 		.module('orderApp', [ 'ngRoute', 'auth', 'home', 'order', 'navigation', 'catalog', 'catalog-detail', 'passwdreset',
-		"xeditable" ])
+		"xeditable", 'pascalprecht.translate' ])
 		.config(
 
-				function($routeProvider, $httpProvider, $locationProvider) {
+				function($routeProvider, $httpProvider, $locationProvider, $translateProvider) {
+
+					$translateProvider
+						.useStaticFilesLoader({
+						prefix: 'js/locale/',
+						suffix: '.json'
+						})
+						.registerAvailableLanguageKeys(['ru', 'en'], {
+							'ru_*': 'ru',
+							'en_*': 'en'
+						})
+						// .preferredLanguage('ru');
+						// try to find out preferred language by yourself
+						.determinePreferredLanguage()
+						.fallbackLanguage('en');
 
 					//$locationProvider.html5Mode(true);
 

@@ -52,7 +52,7 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routePara
 
     $scope.showGroup = function() {
         var selected = $filter('filter')($scope.groups, {id: $scope.group});
-        return ($scope.group && selected.length) ? selected[0].groupName : 'Не задан';
+        return ($scope.group && selected.length) ? selected[0].groupName : '???';
     };
 
     $scope.saveColumn = function(formName) {
@@ -78,7 +78,11 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routePara
                     }
                 } else {
                     // unknown error
-                    $scope[formName].$editables[0].setError('Ошибка сохранения заказа! '+err.message);
+                    $translate("MSG_ERR_ORDER_SAVE", {message:err.message}).then(function (message) {
+                        $scope[formName].$editables[0].setError(message);
+                    }, function (translationId) {
+                        $scope[formName].$editables[0].setError(translationId+err.message);
+                    });
                 }
                 return "error";
             });
@@ -99,10 +103,10 @@ controller('order',['$resource', '$scope', '$q', '$http', '$filter', '$routePara
     $scope.loadOrder = function() {
         var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
         $location.path('/order/'+frmtDate+'/'+$scope.group);
-        var title = "Заявка на "+frmtDate;
         if (Array.isArray($scope.groups) && $scope.groups.length > 0)
-            title+=", "+$scope.showGroup();
-        data.setTitle(title);
+            data.setTitle("TITLE_ORDERS",{date:frmtDate, group:$scope.showGroup()});
+        else
+            data.setTitle("TITLE_ORDERS_SHORT",{date:frmtDate});
         $scope.url="orders/orderitems?date="+frmtDate+"&group_id="+$scope.group;
         var FullOrderItems = $resource($scope.url);
         $scope.fullOrderItems = FullOrderItems.query();

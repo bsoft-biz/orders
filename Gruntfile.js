@@ -15,6 +15,7 @@ module.exports = function(grunt) {
                         'angular-resource/angular-resource.js',
                         'angular-route/angular-route.js',
                         'angular-translate/angular-translate.js',
+                        'angular-translate-loader-static-files/angular-translate-loader-static-files.js',
                         'angular-xeditable/dist/js/xeditable.js',
                         'me-lazyload/me-lazyload.js']
                         , dest: 'src/main/resources/static/js', flatten: true},
@@ -25,8 +26,8 @@ module.exports = function(grunt) {
                         , dest: 'src/main/resources/static/css', flatten: true},
                     {expand: true
                         , cwd: 'bower_components/bootstrap/dist/fonts/'
-                        , src: ['glyphicons-halflings-regular.ttf',
-                        'glyphicons-halflings-regular.woff']
+                        , src: [//'glyphicons-halflings-regular.ttf',
+                        'glyphicons-halflings-regular.woff*']
                         , dest: 'src/main/resources/static/fonts', flatten: true}
                 ],
             }

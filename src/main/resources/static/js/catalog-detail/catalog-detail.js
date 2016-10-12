@@ -4,5 +4,5 @@ angular.module('catalog-detail', ['data'])
             //$scope.mainImageUrl = itemInfo.images[0];
             data.setTitle($scope.itemInfo.item.itemName);
         });
-        data.setTitle("Каталог продукции");
+        data.setTitle("CATALOG_LABEL");
     }]);

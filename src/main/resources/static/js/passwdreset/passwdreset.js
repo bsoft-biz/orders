@@ -1,6 +1,6 @@
 angular.module('passwdreset', [])
-    .controller('passwdreset',['data','$routeParams','$location', 'auth', function(data,$routeParams,$location,auth) {
-        data.setTitle("Сброс пароля");
+    .controller('passwdreset',['data','$routeParams','$location', 'auth','$translate', function(data,$routeParams,$location,auth,$translate) {
+        data.setTitle("HOME_LABEL_PASSWORD");
         var self = this;
         token=$routeParams.token;
         console.log(token);
@@ -9,7 +9,12 @@ angular.module('passwdreset', [])
         }
         self.reset = function () {
             if(self.password!=self.password2){
-                self.errorResetPasswordMessage="Пароли не совпадают!";
+                $translate('MSG_ERR_PASMATCH').then(function (message) {
+                    self.errorResetPasswordMessage = message;
+                }, function (translationId) {
+                    self.errorResetPasswordMessage = translationId;
+                });
+                //self.errorResetPasswordMessage=data.transalte("MSG_ERR_PASMATCH");
                 self.errorResetPassword=true;
                 return;
             }
@@ -22,7 +27,7 @@ angular.module('passwdreset', [])
                     function errorCallback(response) {
                         self.errorResetPasswordMessage=response.data.message;
                         self.errorResetPassword=true;
-                    })
+                    });
                 // console.log("id="+id);
                 // console.log("token="+token);
             }

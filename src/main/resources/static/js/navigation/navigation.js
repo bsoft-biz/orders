@@ -45,7 +45,7 @@ angular.module('navigation', ['ngRoute', 'auth', 'data']).
 			
 			self.title = data.getTitle;
 			
-			data.setTitle("Заявка ТХК");
+			data.setTitle("TITLE_HOME");
 
 			self.resetPassword = function() {
 				//auth.resetPassword(self.email);
