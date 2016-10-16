@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by vbabin on 16.08.2016.
  */
-public interface PasswordResetTokenRepository extends CrudRepository<PasswordResetToken, Long> {
+public interface PasswordResetTokenRepository extends CrudRepository<PasswordResetToken, Integer> {
     PasswordResetToken findByToken(String token);
 
     @Modifying
