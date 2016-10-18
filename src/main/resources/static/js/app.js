@@ -6,6 +6,7 @@ angular
 				function($routeProvider, $httpProvider, $locationProvider, $translateProvider) {
 
 					$translateProvider
+						.useSanitizeValueStrategy('escape')
 						.useStaticFilesLoader({
 						prefix: 'js/locale/',
 						suffix: '.json'
