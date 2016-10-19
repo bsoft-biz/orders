@@ -11,6 +11,8 @@
 ###To use oracle database you need to install oracle jdbc into your local maven repository
 
 ### Install fronted utils, package managers and load packages
-* `node install`
-* `bower install`
-* `grunt copy`
+```
+node install
+bower install
+grunt copy
+```
