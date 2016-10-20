@@ -22,3 +22,4 @@ src/main/resources/static/js/angular-translate.js
 src/main/resources/static/js/angular.js
 src/main/resources/static/js/me-lazyload.js
 src/main/resources/static/js/xeditable.js
+src/main/resources/static/js/angular-translate-loader-static-files.js
