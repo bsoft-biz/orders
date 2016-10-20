@@ -2,12 +2,12 @@
 <div>
 	<h2 translate="HOME_LABEL_DATA">Your data:</h2>
 	<h3 translate="HOME_LABEL_POS">Point of sale</h3>
-	<p><span translate="HOME_LABEL_POS_NAME">Name:</span> <a href="#" editable-text="controller.userSettings.clientPOS.posName" onaftersave="updateSettings()">{{ controller.userSettings.clientPOS.posName || "???" }}</a></p>
+	<p><span translate="HOME_LABEL_POS_NAME">Name:</span> {{controller.userSettings.clientPOS.posName}}</p>
 	<p><span translate="HOME_LABEL_POS_ADDRESS">Address:</span> <a href="#" editable-text="controller.userSettings.clientPOS.posAddress" onaftersave="updateSettings()">{{ controller.userSettings.clientPOS.posAddress || "???" }}</a></p>
 	<p><span translate="HOME_LABEL_POS_PHONE">Phone:</span> <a href="#" editable-text="controller.userSettings.clientPOS.posPhone" onaftersave="updateSettings()">{{ controller.userSettings.clientPOS.posPhone || "???" }}</a></p>
 	<h3 translate="HOME_LABEL_MANAGER">Your manager</h3>
-	<p><span translate="HOME_LABEL_MANAGER_NAME">Name:</span> {{ controller.userSettings.clientPOS.managerName || "?" }}</p>
-	<p><span translate="HOME_LABEL_MANAGER_PHONE">Phone:</span> {{ controller.userSettings.clientPOS.managerPhone || "?" }}</p>
+	<p><span translate="HOME_LABEL_MANAGER_NAME">Name:</span> {{controller.userSettings.clientPOS.managerName}}</p>
+	<p><span translate="HOME_LABEL_MANAGER_PHONE">Phone:</span> {{controller.userSettings.clientPOS.managerPhone}}</p>
 	<br>
 	<form editable-form name="editableForm" onaftersave="changePassword()">
 		<div ng-show="editableForm.$visible">
