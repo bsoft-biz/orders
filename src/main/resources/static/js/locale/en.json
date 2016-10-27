@@ -21,6 +21,7 @@
   "LOGIN_LABEL_RESET": "You have been sent an email for a password reset.",
   "CATALOG_LABEL": "Product catalog",
   "ORDER_LABEL":"Order",
+  "ORDER_LABEL_POS":"POS:",
   "ORDER_LABEL_DATE":"Date:",
   "ORDER_LABEL_GROUP":"Product group:",
   "ORDER_LABEL_STATUS":"Order status:",
@@ -50,7 +51,7 @@
   "HOME_LABEL_PASSWORD_NEW1":"Repeat new password:",
   "HOME_BUTTON_PASSWORD":"Change password",
   "TITLE_HOME":"Orders",
-  "TITLE_ORDERS":"Order on {{date}}, {{group}}",
+  "TITLE_ORDERS":"Order {{pos}} on {{date}}, {{group}}",
   "TITLE_ORDERS_SHORT":"Order on {{date}}",
   "MSG_ERR_PASMATCH":"Passwords do not match!",
   "MSG_ERR_ORDER_SAVE":"Error saving the order! {{message}}"

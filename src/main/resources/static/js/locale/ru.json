@@ -21,6 +21,7 @@
   "LOGIN_LABEL_RESET": "Вам выслан email для сброса пароля.",
   "CATALOG_LABEL": "Каталог продукции",
   "ORDER_LABEL":"Заявка",
+  "ORDER_LABEL_POS":"Торговая точка:",
   "ORDER_LABEL_DATE":"Дата:",
   "ORDER_LABEL_GROUP":"Группа продукции:",
   "ORDER_LABEL_STATUS":"Статус заявки:",
@@ -50,7 +51,7 @@
   "HOME_LABEL_PASSWORD_NEW1":"Повторите новый пароль:",
   "HOME_BUTTON_PASSWORD":"Изменить пароль",
   "TITLE_HOME":"Заявка ТХК",
-  "TITLE_ORDERS":"Заявка на {{date}}, {{group}}",
+  "TITLE_ORDERS":"Заявка {{pos}} на {{date}}, {{group}}",
   "TITLE_ORDERS_SHORT":"Заявка на {{date}}",
   "MSG_ERR_PASMATCH":"Пароли не совпадают!",
   "MSG_ERR_ORDER_SAVE":"Ошибка сохранения заказа! {{message}}"

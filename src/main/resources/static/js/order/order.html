@@ -1,6 +1,7 @@
 <h1 class="page-header" translate="ORDER_LABEL">Order</h1>
 <div class="pannel panel-danger">
 	<div class="panel-body">
+		<div><span translate="ORDER_LABEL_POS">POS</span> <a href="#" editable-select="pos" buttons="no" e-ng-options="p.id as p.posName for p in poses" onaftersave="loadOrder()">{{ showPos() }}</a></div>
 		<div><span translate="ORDER_LABEL_DATE">Date</span> <a href="#" editable-date="date" onaftersave="loadOrder()">{{ date | date:'dd.MM.yyyy' || 'empty' }}</a></div>
 		<div><span translate="ORDER_LABEL_GROUP">Product group</span> <a href="#" editable-select="group" buttons="no" e-ng-options="g.id as g.groupName for g in groups" onaftersave="loadOrder()">{{ showGroup() }}</a></div>
 	</div>

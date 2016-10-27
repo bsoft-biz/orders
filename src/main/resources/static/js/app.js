@@ -1,6 +1,6 @@
 angular
 		.module('orderApp', [ 'ngRoute', 'auth', 'home', 'order', 'navigation', 'catalog', 'catalog-detail', 'passwdreset',
-		"xeditable", 'pascalprecht.translate' ])
+		"xeditable", 'pascalprecht.translate'])
 		.config(
 
 				function($routeProvider, $httpProvider, $locationProvider, $translateProvider) {
@@ -25,19 +25,36 @@ angular
 					$routeProvider.when('/', {
 						templateUrl : 'js/home/home.html',
 						controller : 'home',
-						controllerAs : 'controller'
+						controllerAs : 'controller',
+                        resolve: {userSettingsPrep: userSettingsPrep}
 					}).when('/order', {
 						templateUrl : 'js/order/order.html',
 						controller : 'order',
-						controllerAs : 'controller'
-					}).when('/order/:date', {
+						controllerAs : 'controller',
+                        resolve: {userSettingsPrep: userSettingsPrep}
+                        /*}).when('/order/:date', {
 						templateUrl : 'js/order/order.html',
 						controller : 'order',
-						controllerAs : 'controller'
+						controllerAs : 'controller',
+						resolve: {userSettings: function($http) {
+							//return //$data.getUserSettingsPromise()
+							return $http.get('users/userSettings/');
+						}
+						}
 					}).when('/order/:date/:groupId', {
 						templateUrl : 'js/order/order.html',
 						controller : 'order',
-						controllerAs : 'controller'
+						controllerAs : 'controller',
+						resolve: {userSettings: function($http){
+							//return //$data.getUserSettingsPromise()
+							return $http.get('users/userSettings/');
+						}
+						}*/
+					}).when('/order/:posId/:date/:groupId', {
+						templateUrl : 'js/order/order.html',
+						controller : 'order',
+						controllerAs : 'controller',
+						resolve: {userSettingsPrep: userSettingsPrep}
 					}).when('/catalog', {
 						templateUrl : 'js/catalog/catalog.html',
 						controller : 'catalog',
@@ -68,3 +85,7 @@ angular
 	.run(function(editableOptions) {
 		editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 	});
+
+function userSettingsPrep(data){
+    return data.getUserSettingsPromise()
+}
