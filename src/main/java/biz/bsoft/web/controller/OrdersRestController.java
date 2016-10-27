@@ -34,15 +34,17 @@ public class OrdersRestController {
     private static final Logger logger =
             LoggerFactory.getLogger(OrdersRestController.class);
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Order getOrder(@PathVariable("id") Integer id) {
-        Order order = orderRepository.findOne(id);
-        return order;
-    }
+//    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+//    public Order getOrder(@PathVariable("id") Integer id) {
+//        Order order = orderRepository.findOne(id);
+//        return order;
+//    }
 
     @RequestMapping(value = "/order")
-    public Order getOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date) {
-        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+    public Order getOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
+                          @RequestParam(name = "pos", required = false) Integer clientPosId) {
+        if(clientPosId==null)
+            clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         Order order = null;
         try {
             order = orderRepository.findOrderByClientPos_IdAndOrderDate(clientPosId,date);
@@ -55,8 +57,10 @@ public class OrdersRestController {
 
     @RequestMapping(value = "/orderstatus")
     public OrderGroupStatus getOrderStatus(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
-                                           @RequestParam("group_id") Integer groupId) {
-        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+                                           @RequestParam("group_id") Integer groupId,
+                                           @RequestParam(name = "pos", required = false) Integer clientPosId) {
+        if(clientPosId==null)
+            clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         OrderGroupStatus orderGroupStatus = orderDao.getOrderGroupStatus(clientPosId,date,groupId);
         return orderGroupStatus;
     }
@@ -64,8 +68,9 @@ public class OrdersRestController {
     @RequestMapping(value = "/confirmorder", method = RequestMethod.POST)
     public OrderGroupStatus confirmOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                          @RequestParam("group_id") Integer groupId,
-                                         HttpServletResponse response) {
-        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+                                         @RequestParam(name = "pos", required = false) Integer clientPosId) {
+        if(clientPosId==null)
+            clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         OrderGroupStatus orderGroupStatus = orderDao.confirmOrder(clientPosId,date,groupId);
         return orderGroupStatus;
     }
@@ -103,8 +108,10 @@ public class OrdersRestController {
     @JsonView(View.ItemsId.class)
     @RequestMapping(value = "/orderitems")
     public List<OrderItem> getOrderItems(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
-                                         @RequestParam("group_id") Integer groupId){
-        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+                                         @RequestParam("group_id") Integer groupId,
+                                         @RequestParam(name = "pos", required = false) Integer clientPosId) {
+        if(clientPosId==null)
+            clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         List<OrderItem> items = null;
         try {
             items = orderDao.getOrderItems(clientPosId, date, groupId);
@@ -118,8 +125,10 @@ public class OrdersRestController {
     public List<OrderItemError> setOrderItems(@RequestBody List<OrderItem> orderItems,
                                               @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                               @RequestParam("group_id") Integer groupId,
-                                              HttpServletResponse response){
-        Integer clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+                                              @RequestParam(name = "pos", required = false) Integer clientPosId,
+                                              HttpServletResponse response) {
+        if(clientPosId==null)
+            clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
         //TODO need to check if all items are from the group because you can delete all items from group and insert from other group
         List<OrderItemError> orderItemErrors = orderDao.validateItems(orderItems, clientPosId, date, groupId);
         if (orderItemErrors.size()>0) {
