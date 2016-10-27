@@ -37,21 +37,6 @@ public class OrdersRestController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Order getOrder(@PathVariable("id") Integer id) {
         Order order = orderRepository.findOne(id);
-        //LocalDateTime timePoint= LocalDateTime.now();
-        //LocalDate today = timePoint.toLocalDate();
-        //Date today= new Date();
-        //today.setTime(0);
-//        try {
-//            //logger.info("Date = "+today.toString()+" id="+id);
-//            order = orderRepository.findOne(id);
-//                    //orderDao.findOrder(id, today);
-//            /*if (order!=null) {
-//                logger.info("REST order = " + order.toString());
-//                logger.info("REST order.OrderItems = " + order.getOrderItems().toString());
-//            }*/
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         return order;
     }
 
