@@ -28,7 +28,7 @@ import java.util.Properties;
 @ComponentScan({ "biz.bsoft.orders.service.*" })
 @PropertySource("classpath:email.properties")
 @EnableAsync
-@Import({ SecurityConfig.class})//, ResourceConfig.class
+@Import({ SecurityConfig.class})
 public class AppConfig  extends SpringBootServletInitializer {
     private final Logger logger =
             LoggerFactory.getLogger(getClass());
