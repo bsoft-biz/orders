@@ -1,13 +1,17 @@
 package biz.bsoft.web.controller;
 
 import biz.bsoft.orders.model.ClientPOS;
+import biz.bsoft.orders.model.View;
 import biz.bsoft.security.SecurityUserService;
+import biz.bsoft.users.dao.UserPosRepository;
+import biz.bsoft.users.model.UserPos;
 import biz.bsoft.users.service.UserService;
 import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.service.MailService;
 import biz.bsoft.web.errors.UserNotFoundException;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -46,53 +52,21 @@ public class UsersRestController {
     UserSettingsRepository userSettingsRepository;
 
     @Autowired
-    MailService mailService;
+    UserPosRepository userPosRepository;
 
-//    @RequestMapping(value = "/list/", method = RequestMethod.GET)
-//    @Transactional
-//    public List<User> list() {
-//        List<User> users= new ArrayList<>();
-//        try {
-//            sessionFactory.getCurrentSession().createQuery("from UserRole")
-//                    .list();
-//            //logger.info("users' size = "+users.size());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return users;
-//    }
+    @Autowired
+    MailService mailService;
 
     @RequestMapping("/user")
     public Principal user(Principal user) {
         return user;
     }
 
- /* Ger a single objct in Json form in Spring Rest Services */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public User getEmployee(@PathVariable("id") String id) {
-        //logger.info("REST ID=" + id);
         User user = null;
         try {
             user = userService.findByUsername(id);
-            /*if (user!=null) {
-                logger.info("REST user=" + user.toString());
-                logger.info("REST user.roles=" + user.getUserRole().toString());
-            }*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
-
-    @RequestMapping(value = "/add/{name}", method = RequestMethod.GET)
-    public User add(@PathVariable("name") String id) {
-        logger.error("REST name=" + id);
-        User user = null;
-        try {
-            user = userService.add(id);
-            /*if (user!=null) {
-                logger.info("REST user=" + user.toString());
-            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,19 +103,20 @@ public class UsersRestController {
         return"";
     }
 
+    @RequestMapping(value = "/userPoses", method = RequestMethod.GET)
+    @JsonView(View.Summary.class)
+    public List<ClientPOS> getUserPoses(Principal user){
+        logger.info(user.toString());
+        List<ClientPOS> clientPOSes = new ArrayList<>();
+        for (UserPos userPos:userPosRepository.findByUser_Username(user.getName())) {
+            clientPOSes.add(userPos.getClientPOS());
+        }
+        return clientPOSes;
+    }
+
     @RequestMapping(value = "/userPassword", method = RequestMethod.POST)
     public String setUserPassword(@RequestParam("old")String oldPassword, @RequestParam("new")String newPassword) {
-//        logger.info("userPassword' old = " + oldPassword);
-//        logger.info("userPassword' new = " + newPassword);
         userService.setUserPassword(oldPassword, newPassword);
-        /*try {
-            userService.setUserPassword(oldPassword, newPassword);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            //Ошибка смены пароля
-            return("{\"msg\": \""+e.getMessage()+"\"}");
-        }*/
         return "";
     }
 

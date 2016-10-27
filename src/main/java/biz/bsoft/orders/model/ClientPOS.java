@@ -1,6 +1,7 @@
 package biz.bsoft.orders.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 
@@ -10,10 +11,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "t_client_pos")
 public class ClientPOS {
+    @JsonView(View.Summary.class)
     @GeneratedValue
     @Id
     private Integer id;
 
+    @JsonView(View.Summary.class)
     @Basic
     @Column(name="posname")
     private String posName;
