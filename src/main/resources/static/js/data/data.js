@@ -70,7 +70,7 @@ function data($resource, $translate, $http) {
         },
 
         getItemInfo : function() {
-            console.log('some itemInfo loaded');
+            console.log('some itemInfo will be loaded');
             return $resource('orders/items/:itemId/info');
         },
 
@@ -83,9 +83,7 @@ function data($resource, $translate, $http) {
                 title = translationId;
             });
         }
-
     };
 
     return data;
-
 }
