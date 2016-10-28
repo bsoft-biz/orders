@@ -1,19 +1,14 @@
 angular.module('order', ['ngResource','data']).controller('order',order);
 
-order.$inject = ['$resource', '$scope', '$q', '$http', '$filter', '$routeParams', '$location', 'data', 'userSettingsPrep'];
+order.$inject = ['$resource', '$scope', '$q', '$http', '$filter', '$routeParams', '$location', 'data', '$translate', 'userSettingsPrep'];
 
-function order($resource, $scope, $q, $http,  $filter, $routeParams, $location, data, userSettingsPrep) {
+function order($resource, $scope, $q, $http,  $filter, $routeParams, $location, data, $translate, userSettingsPrep) {
     $scope.fullOrderItems = {};
     $scope.orderStatus = {};
 
-    console.log(userSettingsPrep);
-    //$scope.userSettings={clientPOS:{}};
     $scope.userSettings=data.getUserSettings();
-    //$scope.userSettings=userSettingsPrep.data;
     $scope.groups=data.getGroups();
     $scope.poses=data.getPoses();
-    console.log($scope.userSettings);
-    console.log($scope.userSettings.clientPOS.id);
     $scope.pos = $routeParams.posId==undefined?$scope.userSettings.clientPOS.id:Number($routeParams.posId);
     $scope.group = $routeParams.groupId==undefined?42:Number($routeParams.groupId);//= groups[0].id;
     if ($routeParams.date == undefined){
@@ -33,9 +28,17 @@ function order($resource, $scope, $q, $http,  $filter, $routeParams, $location, 
         return (item.length) ? item[0].itemName : "Не известно";
     };
 
+    function getOrderInfo(){
+        return {
+            pos:$scope.pos,
+            date:$filter('date')($scope.date, 'dd.MM.yyyy'),
+            group_id:$scope.group
+        };
+    };
+
     $scope.confirmOrder = function(){
-        var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
-        $http.post("orders/confirmorder?date="+frmtDate+"&group_id="+$scope.group).then(
+        var save = $resource('orders/confirmorder',getOrderInfo(),{}).save();
+        save.$promise.then(
             function successCallback(response) {
                 $scope.orderStatus = response.data;
             }, function errorCallback(err) {
@@ -47,7 +50,7 @@ function order($resource, $scope, $q, $http,  $filter, $routeParams, $location, 
     $scope.getOrderItem = function(idItem){
         var orderItems = $filter('filter')($scope.fullOrderItems, {item: {id: idItem}});
         if (orderItems.length === 0){
-            //console.log("create empty orderItem");
+            //create empty orderItem
             orderItem = {item: {id: idItem}};
             $scope.fullOrderItems.push(orderItem);
         }
@@ -72,23 +75,22 @@ function order($resource, $scope, $q, $http,  $filter, $routeParams, $location, 
     };
 
     $scope.saveColumn = function(formName) {
-        //console.log($scope.FullOrderItems);
         //here we can filter only not null rows or with id
-        return $http.post($scope.url, $scope.fullOrderItems).then(
+        var create = $resource("orders/orderitems",getOrderInfo(),{create: {method: "POST", isArray: true}}).create($scope.fullOrderItems);
+        return create.$promise.then(
             function successCallback(response) {
-                var frmtDate=$filter('date')($scope.date, 'dd.MM.yyyy');
-                $scope.orderStatus = $resource("orders/orderstatus?date="+frmtDate+"&group_id="+$scope.group).get();
+                $scope.orderStatus = $resource("orders/orderstatus",getOrderInfo(),{}).get();
             }, function errorCallback(response) {
+                console.log(response);
                 var err=response.data;
-                errCount = err.length;
+                var errCount = err.length;
                 if(Array.isArray(err) && errCount>0) {
                     // err like {id: "id", msg: "Server-side error for this production!"}
                     var formNumber ='';
                     if (formName === 'count2form')
                         formNumber = 2;
-                    if (err[0].id===0){
+                    if (err[0].id===0)
                         $scope[formName].$editables[0].setError(err[0].msg);
-                    }
                     for (var i=0; i < errCount; i++){
                         $scope[formName].$setError('id'+err[i].id+'count'+formNumber, err[i].msg);
                     }
@@ -113,7 +115,7 @@ function order($resource, $scope, $q, $http,  $filter, $routeParams, $location, 
         }
         else
             $scope[formName].$cancel();
-    }
+    };
 
 
     $scope.loadOrder = function() {
@@ -123,10 +125,8 @@ function order($resource, $scope, $q, $http,  $filter, $routeParams, $location, 
             data.setTitle("TITLE_ORDERS",{pos:$scope.showPos(), date:frmtDate, group:$scope.showGroup()});
         else
             data.setTitle("TITLE_ORDERS_SHORT",{date:frmtDate});
-        $scope.url="orders/orderitems?date="+frmtDate+"&group_id="+$scope.group;
-        var FullOrderItems = $resource($scope.url);
-        $scope.fullOrderItems = FullOrderItems.query();
-        $scope.orderStatus = $resource("orders/orderstatus?date="+frmtDate+"&group_id="+$scope.group).get();
+        $scope.fullOrderItems = $resource("orders/orderitems",getOrderInfo(),{}).query();
+        $scope.orderStatus = $resource("orders/orderstatus",getOrderInfo(),{}).get();
     };
 
     $scope.loadOrder();
