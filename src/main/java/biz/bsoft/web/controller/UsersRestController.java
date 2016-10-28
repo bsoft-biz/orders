@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by vbabin on 27.03.2016.
@@ -105,12 +103,15 @@ public class UsersRestController {
 
     @RequestMapping(value = "/userPoses", method = RequestMethod.GET)
     @JsonView(View.Summary.class)
-    public List<ClientPOS> getUserPoses(Principal user){
+    public Set<ClientPOS> getUserPoses(Principal user){
         logger.info(user.toString());
-        List<ClientPOS> clientPOSes = new ArrayList<>();
+        Set<ClientPOS> clientPOSes = new HashSet<>();
         for (UserPos userPos:userPosRepository.findByUser_Username(user.getName())) {
             clientPOSes.add(userPos.getClientPOS());
         }
+        ClientPOS defaultPos=userService.getCurrentUserSettings().getClientPOS();
+        if (!clientPOSes.contains(defaultPos))
+            clientPOSes.add(defaultPos);
         return clientPOSes;
     }
 
