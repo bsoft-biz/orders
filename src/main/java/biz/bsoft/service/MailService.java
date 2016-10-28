@@ -117,7 +117,6 @@ public class MailService {
     public void sendNotificationEmailConfirmOperator(OrderGroupStatus orderGroupStatus){
         Locale locale = new Locale(env.getProperty("email.notification.locale"));
         String subject = messages.getMessage("email.notificationConfirmOperatorSubject", new Object[] {orderGroupStatus.getOrder().getClientPos().getPosName(), orderGroupStatus.getOrder().getOrderDate(), orderGroupStatus.getGroup().getGroupName()},locale);
-        //String body = messages.getMessage("email.newConfirmMessageBody", new Object[] {},locale);
 
         final Context ctx = new Context(locale);
         ctx.setVariable("posName", orderGroupStatus.getOrder().getClientPos().getPosName());
@@ -129,12 +128,12 @@ public class MailService {
     @Async
     public void sendNotificationEmailConfirmClient(OrderGroupStatus orderGroupStatus, UserSettings currentUserSettings ){
         Locale locale = new Locale(env.getProperty("email.notification.locale"));
-        String subject = messages.getMessage("email.notificationConfirmClientSubject", new Object[] {orderGroupStatus.getOrder().getOrderDate(), orderGroupStatus.getGroup().getGroupName()},locale);
-        //String body = messages.getMessage("email.newConfirmMessageBody", new Object[] {},locale);
+        String subject = messages.getMessage("email.notificationConfirmClientSubject", new Object[] {orderGroupStatus.getOrder().getClientPos().getPosName(), orderGroupStatus.getOrder().getOrderDate(), orderGroupStatus.getGroup().getGroupName()},locale);
 
         List<OrderItem> orderItems = orderItemRepository.findByOrderAndItem_ItemGroup(orderGroupStatus.getOrder(),orderGroupStatus.getGroup());
         final Context ctx = new Context(locale);
         ctx.setVariable("userName", currentUserSettings.getUserGreeting());
+        ctx.setVariable("posName", orderGroupStatus.getOrder().getClientPos().getPosName());
         ctx.setVariable("orderDate", orderGroupStatus.getOrder().getOrderDate());
         ctx.setVariable("groupName", orderGroupStatus.getGroup().getGroupName());
         ctx.setVariable("orderItems", orderItems);

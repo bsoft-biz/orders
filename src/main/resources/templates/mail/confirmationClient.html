@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:remove="all">Уведомление оператора об отправке новой заявки</title>
+    <title th:remove="all">Уведомление клиента о получении новой заявки</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style>
         table,th,td{
@@ -13,7 +13,7 @@
 </head>
 <body>
 <p>Уважаемый, <label th:text="${userName}">userName</label>!</p>
-<p>Вами была отправленна заявка на <b th:text="${orderDate}">01.01.2101</b> на <b th:text="${groupName}">groupName</b>.</p>
+<p>Вами была отправленна заявка от <b th:text="${posName}">PosName</b> на <b th:text="${orderDate}">01.01.2101</b> на <b th:text="${groupName}">groupName</b>.</p>
 <table>
     <thead>
     <tr>
