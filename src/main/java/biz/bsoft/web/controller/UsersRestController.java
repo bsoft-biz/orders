@@ -3,13 +3,11 @@ package biz.bsoft.web.controller;
 import biz.bsoft.orders.model.ClientPOS;
 import biz.bsoft.orders.model.View;
 import biz.bsoft.security.SecurityUserService;
-import biz.bsoft.users.dao.UserPosRepository;
-import biz.bsoft.users.model.UserPos;
-import biz.bsoft.users.service.UserService;
+import biz.bsoft.service.MailService;
 import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
-import biz.bsoft.service.MailService;
+import biz.bsoft.users.service.UserService;
 import biz.bsoft.web.errors.UserNotFoundException;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
@@ -20,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by vbabin on 27.03.2016.
@@ -50,24 +49,10 @@ public class UsersRestController {
     UserSettingsRepository userSettingsRepository;
 
     @Autowired
-    UserPosRepository userPosRepository;
-
-    @Autowired
     MailService mailService;
 
     @RequestMapping("/user")
     public Principal user(Principal user) {
-        return user;
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public User getEmployee(@PathVariable("id") String id) {
-        User user = null;
-        try {
-            user = userService.findByUsername(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return user;
     }
 
@@ -104,14 +89,7 @@ public class UsersRestController {
     @RequestMapping(value = "/userPoses", method = RequestMethod.GET)
     @JsonView(View.Summary.class)
     public Set<ClientPOS> getUserPoses(Principal user){
-        logger.info(user.toString());
-        Set<ClientPOS> clientPOSes = new HashSet<>();
-        for (UserPos userPos:userPosRepository.findByUser_Username(user.getName())) {
-            clientPOSes.add(userPos.getClientPOS());
-        }
-        ClientPOS defaultPos=userService.getCurrentUserSettings().getClientPOS();
-        if (!clientPOSes.contains(defaultPos))
-            clientPOSes.add(defaultPos);
+        Set<ClientPOS> clientPOSes = userService.getUserPoses(user.getName());
         return clientPOSes;
     }
 

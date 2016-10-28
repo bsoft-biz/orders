@@ -1,12 +1,17 @@
 package biz.bsoft.users.service;
 
+import biz.bsoft.orders.dao.ClientPosRepository;
+import biz.bsoft.orders.model.ClientPOS;
 import biz.bsoft.security.SecurityUserService;
 import biz.bsoft.users.dao.PasswordResetTokenRepository;
+import biz.bsoft.users.dao.UserPosRepository;
 import biz.bsoft.users.dao.UserRepository;
 import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.PasswordResetToken;
 import biz.bsoft.users.model.User;
+import biz.bsoft.users.model.UserPos;
 import biz.bsoft.users.model.UserSettings;
+import biz.bsoft.web.errors.PosNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by vbabin on 27.03.2016.
@@ -40,6 +47,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
+
+    @Autowired
+    UserPosRepository userPosRepository;
+
+    @Autowired
+    ClientPosRepository clientPosRepository;
 
     @Autowired
     private SecurityUserService securityUserService;
@@ -98,5 +111,24 @@ public class UserServiceImpl implements UserService {
     public void createPasswordResetTokenForUser(User user, String token) {
         PasswordResetToken passwordResetToken = new PasswordResetToken(user, token);
         passwordResetTokenRepository.save(passwordResetToken);
+    }
+
+    @Override
+    public Set<ClientPOS> getUserPoses(String userName) {
+        Set<ClientPOS> clientPOSes = new HashSet<>();
+        for (UserPos userPos:userPosRepository.findByUser_Username(userName)) {
+            clientPOSes.add(userPos.getClientPOS());
+        }
+        ClientPOS defaultPos=getCurrentUserSettings().getClientPOS();
+        if (!clientPOSes.contains(defaultPos))
+            clientPOSes.add(defaultPos);
+        return clientPOSes;
+    }
+
+    @Override
+    public void checkUserPos(String userName, Integer PosId) {
+        ClientPOS clientPOS = clientPosRepository.findOne(PosId);
+        if(!getUserPoses(userName).contains(clientPOS))
+            throw new PosNotFoundException(PosId);
     }
 }

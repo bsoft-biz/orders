@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -42,9 +43,12 @@ public class OrdersRestController {
 
     @RequestMapping(value = "/order")
     public Order getOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
-                          @RequestParam(name = "pos", required = false) Integer clientPosId) {
+                          @RequestParam(name = "pos", required = false) Integer clientPosId,
+                          Principal user) {
         if(clientPosId==null)
             clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+        else
+            userService.checkUserPos(user.getName(), clientPosId);
         Order order = null;
         try {
             order = orderRepository.findOrderByClientPos_IdAndOrderDate(clientPosId,date);
@@ -58,9 +62,12 @@ public class OrdersRestController {
     @RequestMapping(value = "/orderstatus")
     public OrderGroupStatus getOrderStatus(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                            @RequestParam("group_id") Integer groupId,
-                                           @RequestParam(name = "pos", required = false) Integer clientPosId) {
+                                           @RequestParam(name = "pos", required = false) Integer clientPosId,
+                                           Principal user) {
         if(clientPosId==null)
             clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+        else
+            userService.checkUserPos(user.getName(), clientPosId);
         OrderGroupStatus orderGroupStatus = orderDao.getOrderGroupStatus(clientPosId,date,groupId);
         return orderGroupStatus;
     }
@@ -68,9 +75,12 @@ public class OrdersRestController {
     @RequestMapping(value = "/confirmorder", method = RequestMethod.POST)
     public OrderGroupStatus confirmOrder(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                          @RequestParam("group_id") Integer groupId,
-                                         @RequestParam(name = "pos", required = false) Integer clientPosId) {
+                                         @RequestParam(name = "pos", required = false) Integer clientPosId,
+                                         Principal user) {
         if(clientPosId==null)
             clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+        else
+            userService.checkUserPos(user.getName(), clientPosId);
         OrderGroupStatus orderGroupStatus = orderDao.confirmOrder(clientPosId,date,groupId);
         return orderGroupStatus;
     }
@@ -109,9 +119,12 @@ public class OrdersRestController {
     @RequestMapping(value = "/orderitems")
     public List<OrderItem> getOrderItems(@RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                          @RequestParam("group_id") Integer groupId,
-                                         @RequestParam(name = "pos", required = false) Integer clientPosId) {
+                                         @RequestParam(name = "pos", required = false) Integer clientPosId,
+                                         Principal user) {
         if(clientPosId==null)
             clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+        else
+            userService.checkUserPos(user.getName(), clientPosId);
         List<OrderItem> items = null;
         try {
             items = orderDao.getOrderItems(clientPosId, date, groupId);
@@ -126,9 +139,12 @@ public class OrdersRestController {
                                               @RequestParam("date") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                               @RequestParam("group_id") Integer groupId,
                                               @RequestParam(name = "pos", required = false) Integer clientPosId,
-                                              HttpServletResponse response) {
+                                              HttpServletResponse response,
+                                              Principal user) {
         if(clientPosId==null)
             clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+        else
+            userService.checkUserPos(user.getName(), clientPosId);
         //TODO need to check if all items are from the group because you can delete all items from group and insert from other group
         List<OrderItemError> orderItemErrors = orderDao.validateItems(orderItems, clientPosId, date, groupId);
         if (orderItemErrors.size()>0) {

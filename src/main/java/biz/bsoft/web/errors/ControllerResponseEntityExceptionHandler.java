@@ -38,4 +38,11 @@ public class ControllerResponseEntityExceptionHandler extends ResponseEntityExce
     void handleUserNotFound(UserNotFoundException e, HttpServletResponse response) throws IOException {
         Locale locale = LocaleContextHolder.getLocale();
         response.sendError(HttpStatus.NOT_FOUND.value(),messages.getMessage("error.userNotFound",null,locale));
-    }}
+    }
+
+    @ExceptionHandler({ PosNotFoundException.class })
+    void handlePosNotFound(PosNotFoundException e, HttpServletResponse response) throws IOException {
+        Locale locale = LocaleContextHolder.getLocale();
+        response.sendError(HttpStatus.BAD_REQUEST.value(),messages.getMessage("error.posNotFound",new Object[] {e.getUserPos()},locale));
+    }
+}
