@@ -9,6 +9,13 @@
 * provide settings for email and database
 
 ###To use oracle database you need to install oracle jdbc into your local maven repository
+#### 1. Get Oracle jdbc driver
+Download it from oracle.com or get it from `{ORACLE_HOME}\jdbc\lib\`
+
+#### 2. Install Oracle driver
+`mvn install:install-file -Dfile={Path/to/your/ojdbc.jar} -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.2 -Dpackaging=jar`
+
+[Wiki page] (https://github.com/bsoft-biz/orders/wiki/How-to-add-Oracle-JDBC-driver-in-your-Maven-local-repository)
 
 ### Install fronted utils, package managers and load packages
 ```
