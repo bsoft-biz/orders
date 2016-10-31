@@ -29,6 +29,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -46,9 +47,9 @@ public class OrdersApplicationTests extends AbstractTransactionalJUnit4SpringCon
 	private PasswordEncoder passwordEncoder;
 	private static final Logger logger =
 			LoggerFactory.getLogger(OrdersApplicationTests.class);
-	String email="test@gmail.com";
-	String userName="testUser";
-	String password=email;
+	private String email="test@gmail.com";
+	private String userName="testUser";
+	private String password=email;
 	@Before
 	public void givenUserAndVerificationToken() {
 		User user = new User();
@@ -56,12 +57,12 @@ public class OrdersApplicationTests extends AbstractTransactionalJUnit4SpringCon
 		user.setEmail(email);
 		user.setPassword(passwordEncoder.encode(password));
 		user.setEnabled(true);
-		//entityManager.persist(user);
+		entityManager.persist(user);
 
 		entityManager.flush();
 		entityManager.clear();
-		TestTransaction.flagForCommit();
-		TestTransaction.end();
+//		TestTransaction.flagForCommit();
+//		TestTransaction.end();
 	}
 
 	@After
@@ -80,7 +81,7 @@ public class OrdersApplicationTests extends AbstractTransactionalJUnit4SpringCon
 		ResponseEntity<String> userResponse =
 				restTemplateWithAuth.exchange(url, HttpMethod.GET, requestEntity, String.class);
 		String user = userResponse.getBody();
-		logger.info(user.toString());
+		logger.info(user);
 		assertThat("Status code is ok",userResponse.getStatusCode(),equalTo(HttpStatus.OK));
 		//--
 		url= "/orders/items";
@@ -93,7 +94,8 @@ public class OrdersApplicationTests extends AbstractTransactionalJUnit4SpringCon
 	@Test
 	public void testUserRepositoryCanFindUser(){
 		User user=userRepository.findByEmail(email);
-		logger.info(user.toString());
+		assertNotNull(user);
+		//logger.info(user.toString());
 		assertThat("Can decode password",passwordEncoder.matches(password,user.getPassword()));
 		assertEquals(userName, user.getUsername());
 		assertEquals(email, user.getEmail());
