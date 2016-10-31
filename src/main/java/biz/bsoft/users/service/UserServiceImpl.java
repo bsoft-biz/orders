@@ -116,9 +116,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<ClientPOS> getUserPoses(String userName) {
         Set<ClientPOS> clientPOSes = new HashSet<>();
-        for (UserPos userPos:userPosRepository.findByUser_Username(userName)) {
-            clientPOSes.add(userPos.getClientPOS());
-        }
+        userPosRepository.findByUser_Username(userName).stream().forEach(userPos -> clientPOSes.add(userPos.getClientPOS()));
         ClientPOS defaultPos=getCurrentUserSettings().getClientPOS();
         if (!clientPOSes.contains(defaultPos))
             clientPOSes.add(defaultPos);
