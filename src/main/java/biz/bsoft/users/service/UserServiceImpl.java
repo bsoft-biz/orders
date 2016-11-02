@@ -9,7 +9,6 @@ import biz.bsoft.users.dao.UserRepository;
 import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.PasswordResetToken;
 import biz.bsoft.users.model.User;
-import biz.bsoft.users.model.UserPos;
 import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.web.errors.PosNotFoundException;
 import org.slf4j.Logger;
@@ -25,6 +24,7 @@ import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by vbabin on 27.03.2016.
@@ -115,8 +115,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<ClientPOS> getUserPoses(String userName) {
-        Set<ClientPOS> clientPOSes = new HashSet<>();
-        userPosRepository.findByUser_Username(userName).stream().forEach(userPos -> clientPOSes.add(userPos.getClientPOS()));
+        HashSet<ClientPOS> clientPOSes = userPosRepository.findByUser_Username(userName).stream().map(userPos -> userPos.getClientPOS()).collect(Collectors.toCollection(HashSet<ClientPOS>::new));
         ClientPOS defaultPos=getCurrentUserSettings().getClientPOS();
         if (!clientPOSes.contains(defaultPos))
             clientPOSes.add(defaultPos);
