@@ -41,4 +41,11 @@ public class ItemGroup {
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
+
+    public ItemGroup() {
+    }
+
+    public ItemGroup(String groupName) {
+        this.groupName = groupName;
+    }
 }

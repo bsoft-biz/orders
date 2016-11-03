@@ -98,4 +98,12 @@ public class Item implements Serializable {
                 ", ord=" + ord +
                 '}';
     }
+
+    public Item() {
+    }
+
+    public Item(String itemName, ItemGroup itemGroup) {
+        this.itemName = itemName;
+        this.itemGroup = itemGroup;
+    }
 }
