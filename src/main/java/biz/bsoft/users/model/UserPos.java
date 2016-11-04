@@ -15,6 +15,7 @@ import javax.persistence.*;
 @Table(name = "t_user_poses")
 public class UserPos {
     @Id
+    @GeneratedValue
     private Integer id;
 
     @OneToOne
@@ -24,6 +25,14 @@ public class UserPos {
     @JsonView(View.Summary.class)
     @OneToOne
     private ClientPOS clientPOS;
+
+    public UserPos() {
+    }
+
+    public UserPos(User user, ClientPOS clientPOS) {
+        this.user = user;
+        this.clientPOS = clientPOS;
+    }
 
     public Integer getId() {
         return id;

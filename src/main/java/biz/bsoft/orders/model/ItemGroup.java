@@ -13,6 +13,7 @@ import javax.persistence.*;
 public class ItemGroup {
     public static final String FIND_ALL="GET_ALL_ITEMGROUPS";
     @Id
+    @GeneratedValue
     @JsonView(View.GroupsId.class)
     private int id;
     //@Column(name="groupname")

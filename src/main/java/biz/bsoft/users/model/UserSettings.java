@@ -35,6 +35,16 @@ public class UserSettings {
 
     private String userGreeting;
 
+    public UserSettings() {
+    }
+
+    public UserSettings(User user, String email, ClientPOS clientPOS, String userGreeting) {
+        this.user = user;
+        this.email = email;
+        this.clientPOS = clientPOS;
+        this.userGreeting = userGreeting;
+    }
+
     @Override
     public String toString() {
         return "UserSettings{" +

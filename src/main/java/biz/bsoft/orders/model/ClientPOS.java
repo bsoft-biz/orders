@@ -54,6 +54,23 @@ public class ClientPOS {
                 '}';
     }
 
+    public ClientPOS() {
+    }
+
+    public ClientPOS(String posName) {
+        this.posName = posName;
+    }
+
+    public ClientPOS(String posName, Integer extid, String posAddress, String posPhone, String managerName, String managerPhone, Integer denyCount2) {
+        this.posName = posName;
+        this.extid = extid;
+        this.posAddress = posAddress;
+        this.posPhone = posPhone;
+        this.managerName = managerName;
+        this.managerPhone = managerPhone;
+        this.denyCount2 = denyCount2;
+    }
+
     public Integer getId() {
         return id;
     }
