@@ -2,13 +2,10 @@ package biz.bsoft.orders.service;
 
 import biz.bsoft.orders.dao.*;
 import biz.bsoft.orders.model.*;
-import biz.bsoft.users.service.UserService;
-import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.service.MailService;
+import biz.bsoft.users.model.UserSettings;
+import biz.bsoft.users.service.UserService;
 import biz.bsoft.web.errors.ValidateOrderException;
-import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -29,8 +26,6 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @Repository
 @Transactional
 public class OrderDaoImpl implements OrderDao {
-//    @Autowired
-//    private SessionFactory sessionFactory;
     @Autowired
     private OrderRepository repository;
     @Autowired
@@ -56,37 +51,14 @@ public class OrderDaoImpl implements OrderDao {
     @Autowired
     UserService userService;
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(OrderDaoImpl.class);
-
-//    @Override
-//    public Order findOrder(Integer clientPosId, LocalDate date) {
-        //return repository.findOrderByClientPos_IdAndOrderDate(clientPosId, date);
-//        List<Order> orders= new ArrayList<>();
-//        Session session = sessionFactory.getCurrentSession();
-//        orders = session.createQuery("from Order ord where ord.clientPOS.id = :p_client_id and orderDate=:p_date")
-//                .setParameter("p_client_id",clientPosId).setParameter("p_date",date)
-//                .list();
-//        if(orders.size()>0){
-//            return orders.get(0);
-//        }
-//        else {
-//            return null;
-//        }
-//    }
-
-
+//    private static final Logger logger =
+//            LoggerFactory.getLogger(OrderDaoImpl.class);
 
     @Override
     public OrderGroupStatus getOrderGroupStatus(Integer clientPosId, LocalDate date, Integer groupId) {
 
         List<OrderGroupStatus> statuses;
         statuses = orderGroupStatusRepository.findByOrder_ClientPos_IdAndOrder_OrderDateAndGroup_Id(clientPosId, date, groupId);
-//        Session session = sessionFactory.getCurrentSession();
-//        Query query = session.getNamedQuery(OrderGroupStatus.GET_ORDER_GROUP_STATUS);
-//        query.setParameter("p_client_pos",clientPosId).setParameter("p_date",date).setParameter("p_group",groupId);
-//        //query.setParameter("p_order",order).setParameter("p_group",groupId);
-//        statuses = query.list();
         if(statuses.size()>0) {
             return statuses.get(0);
         }
@@ -95,26 +67,15 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
-    public OrderGroupStatus validateOrder(Integer clientPosId, LocalDate date, Integer groupId){
-        //ResourceBundleMessageSource messages = new ResourceBundleMessageSource();
-        //messages.setBasename("locale/messages");
+    private OrderGroupStatus validateOrder(Integer clientPosId, LocalDate date, Integer groupId){
         Locale locale = LocaleContextHolder.getLocale();
         String errMsg="";
-        //Session session = sessionFactory.getCurrentSession();
-        Query query;
         //checking the day - it is allowed to make orders only on next days
         if (date.compareTo(LocalDateTime.now().toLocalDate())<=0){
             errMsg += messages.getMessage("error.orderNewNextDays",null,locale);
         }
-        //ClientPOS clientPOS = (ClientPOS) session.load(ClientPOS.class, clientPosId);
-        OrderItemError orderItemError;
         // you can confirm only from INPUT and DECLINED
-        //Order order = findOrder(clientPosId, date);
         List<OrderGroupStatus> statuses;
-//        query = session.getNamedQuery(OrderGroupStatus.GET_ORDER_GROUP_STATUS);
-//        query.setParameter("p_client_pos",clientPosId).setParameter("p_date",date).setParameter("p_group",groupId);
-//        //query.setParameter("p_order",order).setParameter("p_group",groupId);
-//        statuses = query.list();
         statuses = orderGroupStatusRepository.findByOrder_ClientPos_IdAndOrder_OrderDateAndGroup_Id(clientPosId, date, groupId);
         OrderGroupStatus orderGroupStatus = null;
         OrderStatus orderStatus = null;
@@ -128,9 +89,6 @@ public class OrderDaoImpl implements OrderDao {
         }
         //checking time for group, only if you place order on tomorrow
         if (DAYS.between(LocalDateTime.now().toLocalDate(),date)==1){
-//            query = session.getNamedQuery(ProductionTime.GET_PROD_TIME);
-//            query.setParameter("p_group", groupId);
-//            List<ProductionTime> productionTimes = query.list();
             List<ProductionTime> productionTimes = productionTimeRepository.findByItemGroup_Id(groupId);
             if (productionTimes.size()>0) {
                 ProductionTime productionTime = productionTimes.get(0);
@@ -148,7 +106,7 @@ public class OrderDaoImpl implements OrderDao {
     public List<OrderItemError> validateItems(List<OrderItem> orderItems, Integer clientPosId, LocalDate date, Integer groupId) {
         List<OrderItemError> orderItemErrors = new ArrayList<>();
         OrderItemError orderItemError;
-        String errMsg="";
+        String errMsg;
         // validate order
         try {
             validateOrder(clientPosId, date, groupId);
@@ -162,12 +120,8 @@ public class OrderDaoImpl implements OrderDao {
         }
 
         // validate order items
-        /*ResourceBundleMessageSource messages = new ResourceBundleMessageSource();
-        messages.setBasename("locale/messages");*/
         Locale locale = LocaleContextHolder.getLocale();
-        //Session session = sessionFactory.getCurrentSession();
         ClientPOS clientPOS = clientPosRepository.findOne(clientPosId);
-                //(ClientPOS) session.load(ClientPOS.class, clientPosId);
 
         for (OrderItem  orderItem : orderItems) {
             errMsg = "";
@@ -175,7 +129,6 @@ public class OrderDaoImpl implements OrderDao {
             count = (orderItem.getItemCount()==null)?0:orderItem.getItemCount();
             count2 = (orderItem.getItemCount2()==null)?0:orderItem.getItemCount2();
             Item item = itemRepository.findOne(orderItem.getItem().getId());
-                    //(Item) session.load(Item.class, orderItem.getItem().getId());
             ItemInfo itemInfo = getItemInfo(item.getId());
             //checking if count2 is denied for the client
             if (clientPOS.getDenyCount2() != null && clientPOS.getDenyCount2() == 1 && count2 > 0)
@@ -209,17 +162,13 @@ public class OrderDaoImpl implements OrderDao {
     public OrderGroupStatus confirmOrder(Integer clientPosId, LocalDate date, Integer groupId) {
         OrderGroupStatus orderGroupStatus = validateOrder(clientPosId, date, groupId);
         Order order = repository.findOrderByClientPos_IdAndOrderDate(clientPosId, date);
-        //Session session = sessionFactory.getCurrentSession();
         if (orderGroupStatus == null){
             orderGroupStatus = new OrderGroupStatus();
             orderGroupStatus.setOrder(order);
             orderGroupStatus.setGroup(itemGroupRepository.findOne(groupId));
-                    //ItemGroup) session.load(ItemGroup.class, groupId));
         }
         orderGroupStatus.setStatus(OrderStatus.CONFIRM);
         orderGroupStatusRepository.save(orderGroupStatus);
-        //session.save(orderGroupStatus);
-        //send e-mail to operators
         mailService.sendNotificationEmailConfirmOperator(orderGroupStatus);
         UserSettings currentUserSettings = userService.getCurrentUserSettings();
         //send e-mail to client
@@ -230,43 +179,20 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Item> getAllItems() {
         return (List) itemRepository.findAll();
-//        List<Item> items= new ArrayList<>();
-//        Session session = sessionFactory.getCurrentSession();
-//        Query query = session.getNamedQuery("GET_ALL_ITEMS");
-//        items = query.list();
-//        return items;
-//        if(items.size()>0){
-//            return items;
-//        }
-//        else {
-//            return null;
-//        }
     }
 
     @Override
     public List<ItemGroup> getAllGroups() {
         return (List) itemGroupRepository.findAll();
-//        List<ItemGroup> itemGroups= new ArrayList<>();
-//        Session session = sessionFactory.getCurrentSession();
-//        Query query = session.getNamedQuery(ItemGroup.FIND_ALL);
-//        itemGroups = query.list();
-//        return itemGroups;
     }
 
     @Override
     public List<OrderItem> getOrderItems(Integer clientPosId, LocalDate date, Integer groupId) {
         return orderItemRepository.findByOrder_ClientPos_IdAndOrder_OrderDateAndItem_ItemGroup_Id(clientPosId, date, groupId);
-//        List<OrderItem> orderItems;
-//        Session session = sessionFactory.getCurrentSession();
-//        Query query = session.getNamedQuery(OrderItem.GET_GROUP_ITEMS);
-//        query.setParameter("p_client_pos_id",clientPosId).setParameter("p_date", date).setParameter("p_group_id",groupId);
-//        orderItems = query.list();
-//        return orderItems;
     }
 
     @Override
     public void addItemsToOrder(List<OrderItem> orderItems, Integer clientPosId, LocalDate date, Integer groupId) {
-        //Session session = sessionFactory.getCurrentSession();
         Order order = repository.findOrderByClientPos_IdAndOrderDate(clientPosId, date);
         if (order==null)
         {
@@ -274,15 +200,9 @@ public class OrderDaoImpl implements OrderDao {
             order.setOrderDate(date);
             order.setClientPos(clientPosRepository.findOne (clientPosId));//ClientPOS) session.load(ClientPOS.class, clientPosId));
             repository.save(order);
-            //session.save(order);
-            //session.flush();
         }
         List<OrderGroupStatus> statuses;
         statuses = orderGroupStatusRepository.findByOrder_ClientPos_IdAndOrder_OrderDateAndGroup_Id(clientPosId,date,groupId);
-//        Query query = session.getNamedQuery(OrderGroupStatus.GET_ORDER_GROUP_STATUS);
-//        query.setParameter("p_client_pos",clientPosId).setParameter("p_date",date).setParameter("p_group",groupId);
-//        //query.setParameter("p_order",order).setParameter("p_group",groupId);
-//        statuses = query.list();
         OrderGroupStatus orderGroupStatus;
         if(statuses.size()>0)
             orderGroupStatus = statuses.get(0);
@@ -294,11 +214,10 @@ public class OrderDaoImpl implements OrderDao {
         }
         orderGroupStatus.setStatus(OrderStatus.INPUT);
         orderGroupStatusRepository.save(orderGroupStatus);
-        //session.save(orderGroupStatus);
 
         List<OrderItem> vOrderItems = order.getOrderItems();
         if (vOrderItems == null){
-            vOrderItems = new ArrayList<OrderItem>();
+            vOrderItems = new ArrayList<>();
             order.setOrderItems(vOrderItems);
         }
         for(OrderItem orderItem:orderItems){
@@ -309,34 +228,18 @@ public class OrderDaoImpl implements OrderDao {
                 vOrderItems.add(orderItem);
             }
         }
-        //order.getOrderItems().addAll(orderItems);
         repository.save(order);
-        //session.save(order);
     }
 
     @Override
     public void deleteItemsFromOrder(Integer clientPosId, LocalDate date, Integer groupId) {
         orderItemRepository.deleteByOrder_ClientPos_IdAndOrder_OrderDateAndItem_ItemGroup_Id(clientPosId,date,groupId);
-        //Order order=repository.findOrderByClientPos_IdAndOrderDate(clientPosId,date);
-        //logger.info("order before delete "+order.toString());
-        //orderItemRepository.deleteByOrder(order);
-        //logger.info("order before delete "+order.toString());
-        //logger.info("items deleteed ="+orderItemRepository.deleteByOrderQuery(order));
-//        Order order = findOrder(clientPosId, date);
-//        Session session = sessionFactory.getCurrentSession();
-//        Query query = session.getNamedQuery(OrderItem.DELETE_GROUP_ITEMS);
-//        query.setParameter("p_group_id", groupId).setParameter("p_order",order);
-//        query.executeUpdate();
     }
 
     @Override
     public List<ItemPhoto> getItemPhotos(Integer ItemId) {
         List<ItemPhoto> itemPhotos;
         itemPhotos = itemPhotoRepository.findByItem_Id(ItemId);
-//        Session session = sessionFactory.getCurrentSession();
-//        Query query = session.getNamedQuery(ItemPhoto.GET_ITEM_PHOTOS);
-//        query.setParameter("p_item_id", ItemId);
-//        itemPhotos = query.list();
         return itemPhotos;
     }
 
@@ -344,10 +247,6 @@ public class OrderDaoImpl implements OrderDao {
     public ItemInfo getItemInfo(Integer ItemId) {
         List<ItemInfo> itemInfos;
         itemInfos = itemInfoRepository.findByItem_Id(ItemId);
-//        Session session = sessionFactory.getCurrentSession();
-//        Query query = session.getNamedQuery(ItemInfo.GET_ITEM_INFO);
-//        query.setParameter("p_item_id", ItemId);
-//        itemInfos = query.list();
         if (itemInfos.size() >0)
             return itemInfos.get(0);
         else
