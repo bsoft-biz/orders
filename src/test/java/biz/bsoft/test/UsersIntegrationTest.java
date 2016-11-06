@@ -1,4 +1,4 @@
-package biz.bsoft;
+package biz.bsoft.test;
 
 import biz.bsoft.orders.dao.ClientPosRepository;
 import biz.bsoft.orders.model.ClientPOS;
@@ -79,7 +79,7 @@ public class UsersIntegrationTest {
         userSettingsRepository.save(userSettings);
         clientPosRepository.save(Arrays.asList(pos1,pos2));
 
-        //UserPos userPos1 = new UserPos(user, pos1);
+        //UserPos userPos1 = new UserPos(user, pos);
         UserPos userPos2 = new UserPos(user, pos2);
         //we can save only one userPos but controller should return both of them
         userPosRepository.save(Arrays.asList(userPos2));

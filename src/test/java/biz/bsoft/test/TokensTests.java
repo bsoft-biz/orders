@@ -1,4 +1,4 @@
-package biz.bsoft;
+package biz.bsoft.test;
 
 import biz.bsoft.users.dao.PasswordResetTokenRepository;
 import biz.bsoft.users.dao.UserRepository;
@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
+@ActiveProfiles("test")
 public class TokensTests {
 
     @PersistenceContext
