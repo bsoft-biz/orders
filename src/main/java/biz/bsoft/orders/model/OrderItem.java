@@ -41,6 +41,15 @@ public class OrderItem {
     @JsonBackReference
     private Order order;
 
+    public OrderItem() {
+    }
+
+    public OrderItem(Item item, Integer itemCount, Integer itemCount2) {
+        this.item = item;
+        this.itemCount = itemCount;
+        this.itemCount2 = itemCount2;
+    }
+
     public Integer getId() {
         return id;
     }
