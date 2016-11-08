@@ -152,26 +152,19 @@ public class OrdersIntegrationTest {
                 given().auth().preemptive().basic(userName, userPassword).contentType(JSON).
                 when().get(PREFIX_URL + "/users/user").
                 then().log().all().extract().response();
-        String jsessionidId =  response.getSessionId();//loginResponse.cookie("JSESSIONID");
+        String jsessionidId =  response.getSessionId();//response.cookie("JSESSIONID");
 
         //2) get XSRF-TOKEN using new/real sessionId
         response =
                 given().
-//                auth().preemptive().basic(userName, userPassword).
-//                cookie("XSRF-TOKEN", loginResponse.cookie("XSRF-TOKEN")).
-//                cookie("JSESSIONID", jsessionidId).
-                sessionId(jsessionidId).
+                sessionId(jsessionidId).//cookie("JSESSIONID", jsessionidId).
                 contentType(JSON).
-//                header("X-XSRF-TOKEN", loginResponse.cookie("XSRF-TOKEN")).
                 when().get(PREFIX_URL + "/users/user").
                 then().log().all().extract().response();
 
         //3) post data using XSRF-TOKEN
         given().log().all().
-                //auth().preemptive().basic(userName, userPassword).
-                //cookie("XSRF-TOKEN", loginResponse.cookie("XSRF-TOKEN")).
-                //cookie("JSESSIONID", jsessionidId).
-                sessionId(jsessionidId).
+                sessionId(jsessionidId).//cookie("JSESSIONID", jsessionidId).
                 header("X-XSRF-TOKEN", response.cookie("XSRF-TOKEN")).
                 queryParam("pos",pos.getId()).
                 queryParam("date",date).
