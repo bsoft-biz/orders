@@ -2,7 +2,8 @@
  * Created by vbabin on 10.10.2016.
  */
 module.exports = function(grunt) {
-
+    var jsPath = 'src/main/resources/static/js';
+    
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -18,7 +19,7 @@ module.exports = function(grunt) {
                         'angular-translate-loader-static-files/angular-translate-loader-static-files.js',
                         'angular-xeditable/dist/js/xeditable.js',
                         'me-lazyload/me-lazyload.js']
-                        , dest: 'src/main/resources/static/js', flatten: true},
+                        , dest: jsPath, flatten: true},
                     {expand: true
                         , cwd: 'bower_components/'
                         , src: ['angular-xeditable/dist/css/xeditable.css',
@@ -29,8 +30,14 @@ module.exports = function(grunt) {
                         , src: [//'glyphicons-halflings-regular.ttf',
                         'glyphicons-halflings-regular.woff*']
                         , dest: 'src/main/resources/static/fonts', flatten: true}
-                ],
+                ]
             }
+        },
+        jshint:{
+            options: {
+                ignores:[jsPath+'/me-lazyload.js']
+            },
+            all: ['Gruntfile.js', jsPath+'/**/*.js']
         },
         // uglify: {
         //     options: {
@@ -44,6 +51,8 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    
     // Load the plugin that provides the "uglify" task.
     //grunt.loadNpmTasks('grunt-contrib-uglify');
 
