@@ -10,7 +10,7 @@ function createIframe() {
     i.height = "220px";
     document.getElementById("bannerContainer").appendChild(i).style.border = "none";
 
-};
+}
 
 if (window.addEventListener) window.addEventListener("load", createIframe, false);
 else if (window.attachEvent) window.attachEvent("onload", createIframe);

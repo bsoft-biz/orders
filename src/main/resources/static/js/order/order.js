@@ -9,9 +9,9 @@ function order($resource, $scope, $q, $http,  $filter, $routeParams, $location, 
     $scope.userSettings=data.getUserSettings();
     $scope.groups=data.getGroups();
     $scope.poses=data.getPoses();
-    $scope.pos = $routeParams.posId==undefined?$scope.userSettings.clientPOS.id:Number($routeParams.posId);
-    $scope.group = $routeParams.groupId==undefined?42:Number($routeParams.groupId);//= groups[0].id;
-    if ($routeParams.date == undefined){
+    $scope.pos = $routeParams.posId===undefined?$scope.userSettings.clientPOS.id:Number($routeParams.posId);
+    $scope.group = $routeParams.groupId===undefined?42:Number($routeParams.groupId);//= groups[0].id;
+    if ($routeParams.date ===undefined){
         $scope.date = new Date();
         $scope.date.setDate($scope.date.getDate()+1);
     }
@@ -34,7 +34,7 @@ function order($resource, $scope, $q, $http,  $filter, $routeParams, $location, 
             date:$filter('date')($scope.date, 'dd.MM.yyyy'),
             group_id:$scope.group
         };
-    };
+    }
 
     $scope.confirmOrder = function(){
         var save = $resource('orders/confirmorder',getOrderInfo(),{}).save();

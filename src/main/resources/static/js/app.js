@@ -32,24 +32,6 @@ angular
 						controller : 'order',
 						controllerAs : 'controller',
                         resolve: {userSettingsPrep: userSettingsPrep}
-                        /*}).when('/order/:date', {
-						templateUrl : 'js/order/order.html',
-						controller : 'order',
-						controllerAs : 'controller',
-						resolve: {userSettings: function($http) {
-							//return //$data.getUserSettingsPromise()
-							return $http.get('users/userSettings/');
-						}
-						}
-					}).when('/order/:date/:groupId', {
-						templateUrl : 'js/order/order.html',
-						controller : 'order',
-						controllerAs : 'controller',
-						resolve: {userSettings: function($http){
-							//return //$data.getUserSettingsPromise()
-							return $http.get('users/userSettings/');
-						}
-						}*/
 					}).when('/order/:posId/:date/:groupId', {
 						templateUrl : 'js/order/order.html',
 						controller : 'order',
@@ -77,8 +59,7 @@ angular
 
 				}).run(function(auth) {
 
-			// Initialize auth module with the home page and login/logout path
-			// respectively
+			// Initialize auth module with the home page and login/logout path respectively
 			auth.init('/', '/login', '/logout');
 
 		})
@@ -87,5 +68,5 @@ angular
 	});
 
 function userSettingsPrep(data){
-    return data.getUserSettingsPromise()
+    return data.getUserSettingsPromise();
 }

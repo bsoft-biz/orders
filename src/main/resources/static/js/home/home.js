@@ -35,6 +35,6 @@ function home($http,$scope,data,$translate,userSettingsPrep) {
         }
     };
     $scope.updateSettings = function(){
-        return $http.post('users/userSettings/',self.userSettings)
+        return $http.post('users/userSettings/',self.userSettings);
     };
 }

@@ -7,7 +7,7 @@ function passwdreset(data,$routeParams,$location,auth,$translate) {
     var self = this;
     token=$routeParams.token;
     console.log(token);
-    if (token==undefined) {
+    if (token===undefined) {
         $location.path(auth.homePath);
     }
     self.reset = function () {
@@ -25,7 +25,7 @@ function passwdreset(data,$routeParams,$location,auth,$translate) {
             self.errorResetPasswordMessage="";
             self.errorResetPassword=false;
         }
-        if (token!=undefined){
+        if (token!==undefined){
             auth.passwdresetWithResetPasswordToken(token, self.password, null,
                 function errorCallback(response) {
                     self.errorResetPasswordMessage=response.data.message;
@@ -35,5 +35,5 @@ function passwdreset(data,$routeParams,$location,auth,$translate) {
             // console.log("token="+token);
         }
         //console.log(self.password);
-    }
+    };
 }

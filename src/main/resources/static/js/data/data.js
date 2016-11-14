@@ -21,7 +21,7 @@ function data($resource, $translate, $http) {
                 return $http.get('users/userSettings/').then(function (response) {
                     userSettings=response.data;
                     console.log('userSettings is loaded');
-                })
+                });
             }
         },
 

@@ -9,13 +9,13 @@ function navigation($route, auth, data, $routeParams)
 
 	id=$routeParams.id;
 	token=$routeParams.token;
-	if (!(id==undefined||token==undefined)){
+	if (!(id===undefined||token===undefined)){
 		auth.authWithResetPasswordToken(id, token, null,
 			function errorCallback(response) {
 				self.okResetPassword=false;
 				self.errorResetPasswordMessage=response.data.message;
 				self.errorResetPassword=true;
-			})
+			});
 		// console.log("id="+id);
 		// console.log("token="+token);
 	}
@@ -35,13 +35,13 @@ function navigation($route, auth, data, $routeParams)
 	self.login = function() {
 		auth.authenticate(self.credentials, function(authenticated) {
 			if (authenticated) {
-				console.log("Login succeeded")
+				console.log("Login succeeded");
 				self.error = false;
 			} else {
-				console.log("Login failed")
+				console.log("Login failed");
 				self.error = true;
 			}
-		})
+		});
 	};
 
 	self.logout = auth.clear;
@@ -60,6 +60,6 @@ function navigation($route, auth, data, $routeParams)
 				self.okResetPassword=false;
 				self.errorResetPasswordMessage=response.data.message;
 				self.errorResetPassword=true;
-			})
+			});
 	};
 }

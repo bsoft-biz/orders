@@ -25,19 +25,13 @@ function auth($rootScope, $http, $location) {
 		authenticate : function(credentials, callback) {
 
 			var headers = credentials && credentials.username ? {
-				authorization : "Basic "
-				+ btoa(credentials.username + ":"
-					+ credentials.password)
+				authorization : "Basic " + btoa(credentials.username + ":" + credentials.password)
 			} : {};
 
 			$http.get('users/user', {
 				headers : headers
 			}).then(function(response) {
-				if (response.data.name) {
-					auth.authenticated = true;
-				} else {
-					auth.authenticated = false;
-				}
+				auth.authenticated = response.data.name;
 				callback && callback(auth.authenticated);
 				$location.path(auth.path==auth.loginPath ? auth.homePath : auth.path);
 			}, function() {
