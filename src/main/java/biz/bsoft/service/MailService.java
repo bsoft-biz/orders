@@ -34,7 +34,7 @@ import java.util.Locale;
 @Component
 public class MailService {
     private static final Logger logger =
-            LoggerFactory.getLogger(OrderDaoImpl.class);
+            LoggerFactory.getLogger(MailService.class);
 
     @Autowired
     private Environment env;
