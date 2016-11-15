@@ -23,3 +23,9 @@ node install
 bower install
 grunt copy
 ```
+
+
+##Testing
+```
+npm run protractor
+```
