@@ -2,7 +2,7 @@
  * Created by vbabin on 10.10.2016.
  */
 module.exports = function(grunt) {
-    var jsPath = 'src/main/resources/static/js';
+    var jsPath = 'src/main/resources/static/js/vendor';
     
     // Project configuration.
     grunt.initConfig({
@@ -35,7 +35,8 @@ module.exports = function(grunt) {
         },
         jshint:{
             options: {
-                ignores:[jsPath+'/angular.js',jsPath+'/angular-resource.js',jsPath+'/angular-route.js',jsPath+'/angular-translate.js',jsPath+'/angular-translate-loader-static-files.js',jsPath+'/xeditable.js',jsPath+'/me-lazyload.js']
+                ignores:[jsPath+'/*.js']
+                //ignores:[jsPath+'/angular.js',jsPath+'/angular-resource.js',jsPath+'/angular-route.js',jsPath+'/angular-translate.js',jsPath+'/angular-translate-loader-static-files.js',jsPath+'/xeditable.js',jsPath+'/me-lazyload.js']
             },
             all: ['Gruntfile.js', jsPath+'/**/*.js']
         }
