@@ -1,8 +1,8 @@
-angular.module('data', ['ngResource']).factory('data',data);
+angular.module('data', ['ngResource']).factory('data',DataFactory);
 
-data.$inject=['$resource','$translate','$http'];
+DataFactory.$inject=['$resource','$translate','$http'];
 
-function data($resource, $translate, $http) {
+function DataFactory($resource, $translate, $http) {
 
     var userSettings={};
     var items={};
