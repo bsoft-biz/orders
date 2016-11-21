@@ -1,4 +1,4 @@
-angular.module('catalog', ['data','me-lazyload']).controller('catalog',catalog);
+angular.module('OrdersApp').controller('catalog',catalog);
 
 catalog.$inject=['data','$scope','$filter'];
 

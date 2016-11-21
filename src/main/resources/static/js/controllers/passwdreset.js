@@ -1,4 +1,4 @@
-angular.module('passwdreset', []).controller('passwdreset',passwdreset);
+angular.module('OrdersApp').controller('passwdreset',passwdreset);
 
 passwdreset.$inject=['data', '$routeParams', '$location', 'auth', '$translate'];
 

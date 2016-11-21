@@ -1,6 +1,5 @@
 angular
-		.module('orderApp', [ 'ngRoute', 'auth', 'home', 'order', 'navigation', 'catalog', 'catalog-detail', 'passwdreset',
-		"xeditable", 'pascalprecht.translate'])
+		.module('OrdersApp', [ 'ngRoute', 'ngResource', 'me-lazyload', "xeditable", 'pascalprecht.translate'])
 		.config(
 
 				function($routeProvider, $httpProvider, $locationProvider, $translateProvider) {

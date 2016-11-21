@@ -1,4 +1,4 @@
-angular.module('catalog-detail', ['data']).controller('catalog-detail',catalogDetail);
+angular.module('OrdersApp').controller('catalog-detail',catalogDetail);
 
 catalogDetail.$inject=['data','$scope','$routeParams'];
 

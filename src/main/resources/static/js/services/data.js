@@ -1,4 +1,4 @@
-angular.module('data', ['ngResource']).factory('data',DataFactory);
+angular.module('OrdersApp').factory('data',DataFactory);
 
 DataFactory.$inject=['$resource','$translate','$http'];
 
