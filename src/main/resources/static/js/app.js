@@ -22,34 +22,34 @@ angular
 					//$locationProvider.html5Mode(true);
 
 					$routeProvider.when('/', {
-						templateUrl : 'js/home/home.html',
+						templateUrl : 'templates/home.html',
 						controller : 'home',
 						controllerAs : 'controller',
                         resolve: {userSettingsPrep: userSettingsPrep}
 					}).when('/order', {
-						templateUrl : 'js/order/order.html',
+						templateUrl : 'templates/order.html',
 						controller : 'order',
 						controllerAs : 'controller',
                         resolve: {userSettingsPrep: userSettingsPrep}
 					}).when('/order/:posId/:date/:groupId', {
-						templateUrl : 'js/order/order.html',
+						templateUrl : 'templates/order.html',
 						controller : 'order',
 						controllerAs : 'controller',
 						resolve: {userSettingsPrep: userSettingsPrep}
 					}).when('/catalog', {
-						templateUrl : 'js/catalog/catalog.html',
+						templateUrl : 'templates/catalog.html',
 						controller : 'catalog',
 						controllerAs : 'controller'
 					}).when('/catalog/:itemId', {
-						templateUrl : 'js/catalog-detail/catalog-detail.html',
+						templateUrl : 'templates/catalog-detail.html',
 						controller : 'catalog-detail',
 						controllerAs : 'controller'
 					}).when('/login', {
-						templateUrl : 'js/navigation/login.html',
+						templateUrl : 'templates/login.html',
 						controller : 'navigation',
 						controllerAs : 'controller'
 					}).when('/passwdreset', {
-						templateUrl : 'js/passwdreset/passwdreset.html',
+						templateUrl : 'templates/passwdreset.html',
 						controller : 'passwdreset',
 						controllerAs : 'controller'
 					}).otherwise('/');

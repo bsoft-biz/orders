@@ -1,0 +1,30 @@
+<div class="alert alert-danger" ng-show="controller.error" translate="LOGIN_LABEL_ERROR">
+	Login error. Please try again.
+</div>
+<form role="form" ng-submit="controller.login()">
+	<div class="form-group">
+		<label for="username" translate="LOGIN_LABEL_USER">User:</label>
+		<input type="text" class="form-control" id="username" name="username" ng-model="controller.credentials.username"/>
+	</div>
+	<div class="form-group">
+		<label for="password" translate="LOGIN_LABEL_PASSWORD">Password:</label>
+		<input type="password" class="form-control" id="password" name="password" ng-model="controller.credentials.password"/>
+	</div>
+	<button type="submit" class="btn btn-primary" translate="LOGIN_BUTTON_LOGIN">Login</button>
+</form>
+<br>
+<hr>
+<form role="form" ng-submit="controller.resetPassword()">
+	<div translate="LOGIN_LABEL_FORGOT">Forgot password?</div>
+	<div class="form-group">
+		<label for="email" translate="LOGIN_LABEL_EMAIL">E-mail address:</label>
+		<input type="text" class="form-control" id="email" name="email" ng-model="controller.email"/>
+	</div>
+	<button type="submit" class="btn btn-default"  translate="LOGIN_BUTTON_RESET">Reset password</button>
+	<div class="alert alert-danger" ng-show="controller.errorResetPassword">
+		{{controller.errorResetPasswordMessage}}
+	</div>
+	<div class="alert alert-success" ng-show="controller.okResetPassword" translate="LOGIN_LABEL_RESET">
+		You have been sent an email for a password reset.
+	</div>
+</form>

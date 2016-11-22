@@ -1,0 +1,44 @@
+<h1 class="page-header" translate="HOME_LABEL" translate-values="{ username: userSettings.userGreeting}">Welcome</h1>
+<div>
+	<h2 translate="HOME_LABEL_DATA">Your data:</h2>
+	<h3 translate="HOME_LABEL_POS">Point of sale</h3>
+	<p><span translate="HOME_LABEL_POS_NAME">Name:</span> {{userSettings.clientPOS.posName}}</p>
+	<p><span translate="HOME_LABEL_POS_ADDRESS">Address:</span> <a href="#" editable-text="userSettings.clientPOS.posAddress" onaftersave="updateSettings()">{{ userSettings.clientPOS.posAddress || "???" }}</a></p>
+	<p><span translate="HOME_LABEL_POS_PHONE">Phone:</span> <a href="#" editable-text="userSettings.clientPOS.posPhone" onaftersave="updateSettings()">{{ userSettings.clientPOS.posPhone || "???" }}</a></p>
+	<h3 translate="HOME_LABEL_MANAGER">Your manager</h3>
+	<p><span translate="HOME_LABEL_MANAGER_NAME">Name:</span> {{userSettings.clientPOS.managerName}}</p>
+	<p><span translate="HOME_LABEL_MANAGER_PHONE">Phone:</span> {{userSettings.clientPOS.managerPhone}}</p>
+	<br>
+	<form editable-form name="editableForm" onaftersave="changePassword()">
+		<div ng-show="editableForm.$visible">
+			<h3 translate="HOME_LABEL_PASSWORD">Change password</h3>
+			<div>
+				<div class="title" translate="HOME_LABEL_PASSWORD_OLD">Old password:</div>
+				<div editable-password="userPassword.old" e-name="old" e-required></div>
+			</div>
+			<div>
+				<div class="title" translate="HOME_LABEL_PASSWORD_NEW">New password:</div>
+				<div editable-password="userPassword.new1" e-name="new1" e-required></div>
+			</div>
+			<div>
+				<div class="title" translate="HOME_LABEL_PASSWORD_NEW1">Retype new password:</div>
+				<div editable-password="userPassword.new2" e-name="new2" onbeforesave="checkPassword($data)"e-required></div>
+			</div>
+		</div>
+		<div class="buttons">
+			<!-- button to show form -->
+			<button type="button" class="btn btn-default" ng-click="editableForm.$show()" ng-show="!editableForm.$visible" translate="HOME_BUTTON_PASSWORD">
+				Change password
+			</button>
+			<!-- buttons to submit / cancel form -->
+      		<span ng-show="editableForm.$visible">
+				<button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting" translate="BUTTON_SAVE">
+				Save
+				</button>
+				<button type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()" translate="BUTTON_CANCEL">
+				Cancel
+				</button>
+      		</span>
+		</div>
+	</form>
+</div>

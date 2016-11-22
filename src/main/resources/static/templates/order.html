@@ -1,0 +1,71 @@
+<h1 class="page-header" translate="ORDER_LABEL">Order</h1>
+<div class="pannel panel-danger">
+	<div class="panel-body">
+		<div><span translate="ORDER_LABEL_POS">POS</span> <a href="#" editable-select="pos" buttons="no" e-ng-options="p.id as p.posName for p in poses" onaftersave="loadOrder()">{{ showPos() }}</a></div>
+		<div><span translate="ORDER_LABEL_DATE">Date</span> <a href="#" editable-date="date" onaftersave="loadOrder()">{{ date | date:'dd.MM.yyyy' || 'empty' }}</a></div>
+		<div><span translate="ORDER_LABEL_GROUP">Product group</span> <a href="#" editable-select="group" buttons="no" e-ng-options="g.id as g.groupName for g in groups" onaftersave="loadOrder()">{{ showGroup() }}</a></div>
+	</div>
+	<div ng-class="orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'?'panel-heading':'panel-body'">
+		<div><span translate="ORDER_LABEL_STATUS">Order status</span>  {{orderStatus.status | translate}}</div>
+		<div><span translate="ORDER_LABEL_COMMENT">Comment</span>  {{orderStatus.commentText}}</div>
+		<button class="btn btn-primary" ng-show="(orderStatus.status=='INPUT'||orderStatus.status=='DECLINED')&&!count2form.$visible&&!countform.$visible" ng-click="confirmOrder()">Подать заявку</button>
+	</div>
+</div>
+<br>
+<br>
+<div>
+	<table class="table table-bordered table-hover table-condensed">
+		<tr style="font-weight: bold; white-space: nowrap">
+
+			<td style="width:50%" translate="ORDER_TH_PRODUCT">
+				Product
+			</td>
+			<td style="width:10%" translate="ORDER_TH_CAPACITY">
+				Capacity
+				<br> <span translate="ORDER_TH_MINCOUNT">Minimal count</span>
+			</td>
+			<td style="width:10%" translate="ORDER_TH_PRICE">
+				Price
+			</td>
+			<td style="width:15%">
+				<span translate="ORDER_TH_COUNT1">Count1</span>
+				<br>
+				<form editable-form name="countform" onaftersave="saveColumn('countform')" ng-show="countform.$visible">
+					<button type="submit" ng-disabled="countform.$waiting" class="btn btn-primary" translate="BUTTON_SAVE">
+						save
+					</button>
+					<button type="button" ng-disabled="countform.$waiting" ng-click="cancelColumn('countform')" class="btn btn-default" translate="BUTTON_CANCEL">
+						cancel
+					</button>
+				</form>
+				<button class="btn btn-default" ng-show="!countform.$visible&&(orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'||orderStatus.status==undefined)" ng-click="countform.$show()" translate="BUTTON_EDIT">
+					edit
+				</button>
+			</td>
+			<td style="width:15%">
+				<span translate="ORDER_TH_COUNT2">Count2</span>
+				<br>
+				<form editable-form name="count2form" onaftersave="saveColumn('count2form')" ng-show="count2form.$visible">
+					<button type="submit" ng-disabled="count2form.$waiting" class="btn btn-primary" translate="BUTTON_SAVE">
+						save
+					</button>
+					<button type="button" ng-disabled="count2form.$waiting" ng-click="cancelColumn('count2form')" class="btn btn-default" translate="BUTTON_CANCEL">
+						cancel
+					</button>
+				</form>
+				<button class="btn btn-default" ng-show="!count2form.$visible&&(orderStatus.status=='INPUT'||orderStatus.status=='DECLINED'||orderStatus.status==undefined)" ng-click="count2form.$show()" translate="BUTTON_EDIT">
+					edit
+				</button>
+			</td>
+		</tr>
+		<tr ng-repeat="item in items | filter: {itemGroup: {id: group}} | orderBy:['ord','itemName']">
+			<td><a href="{{getItemInfo(item.id).siteUrl}}" target="_blank" tabindex="-1">{{item.itemName}}</a></td>
+			<td>{{getItemInfo(item.id).capacity}} {{getItemInfo(item.id).minCount}}</td>
+			<td>{{getItemInfo(item.id).price}}</td>
+			<td> <span editable-text="getOrderItem(item.id).itemCount" e-form="countform" e-name="id{{item.id}}count">{{getOrderItem(item.id).itemCount}}</span></td>
+			<td> <span editable-text="getOrderItem(item.id).itemCount2" e-form="count2form" e-name="id{{item.id}}count2">{{getOrderItem(item.id).itemCount2}}</span></td>
+		</tr>
+	</table>
+	<br>
+
+</div>
