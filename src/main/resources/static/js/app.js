@@ -7,7 +7,7 @@ angular
 					$translateProvider
 						.useSanitizeValueStrategy('escape')
 						.useStaticFilesLoader({
-						prefix: 'js/locale/',
+						prefix: 'locale/',
 						suffix: '.json'
 						})
 						.registerAvailableLanguageKeys(['ru', 'en'], {
