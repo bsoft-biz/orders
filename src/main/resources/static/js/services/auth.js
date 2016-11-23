@@ -1,8 +1,8 @@
-angular.module('OrdersApp').factory('auth',auth);
+angular.module('OrdersApp').factory('auth',AuthFactory);
 
-auth.$inject=['$rootScope', '$http', '$location'];
+AuthFactory.$inject=['$rootScope', '$http', '$location'];
 
-function auth($rootScope, $http, $location) {
+function AuthFactory($rootScope, $http, $location) {
 
 	var enter = function() {
 		if ($location.path() != auth.loginPath) {
