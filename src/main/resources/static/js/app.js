@@ -46,7 +46,7 @@ angular
 						controllerAs : 'controller'
 					}).when('/login', {
 						templateUrl : 'templates/login.html',
-						controller : 'navigation',
+						controller : 'login',
 						controllerAs : 'controller'
 					}).when('/passwdreset', {
 						templateUrl : 'templates/passwdreset.html',
