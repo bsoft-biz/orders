@@ -52,6 +52,10 @@ angular
 						templateUrl : 'templates/passwdreset.html',
 						controller : 'passwdreset',
 						controllerAs : 'controller'
+					}).when('/registration', {
+						templateUrl : 'templates/registration.html',
+						controller : 'registration',
+						controllerAs : 'controller'
 					}).otherwise('/');
 					
 					$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

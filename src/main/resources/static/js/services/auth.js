@@ -7,7 +7,7 @@ function AuthFactory($rootScope, $http, $location) {
 	var enter = function() {
 		if ($location.path() != auth.loginPath) {
 			auth.path = $location.path();
-			if (!auth.authenticated) {
+			if (!auth.authenticated && auth.path!=auth.registerPath) {
 				$location.path(auth.loginPath);
 			}
 		}
@@ -19,6 +19,7 @@ function AuthFactory($rootScope, $http, $location) {
 
 		loginPath : '/login',
 		logoutPath : '/logout',
+		registerPath : '/registration',
 		homePath : '/',
 		path : $location.path(),
 
