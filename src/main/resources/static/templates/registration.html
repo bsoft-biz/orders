@@ -1,3 +1,44 @@
 <h1 class="page-header" translate="TITLE_REGISTRATION">User registration</h1>
-<div>
+<div >
+    <form action="/" method="POST" enctype="utf8">
+        <div class="form-group row" >
+            <label class="col-sm-3" translate="REGISTRATION_LABEL_FIRST">first</label>
+            <span class="col-sm-5"><input class="form-control" name="firstName" value="" required="required"/></span>
+            <span id="firstNameError" class="alert alert-danger col-sm-4" style="display:none"></span>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3" translate="REGISTRATION_LABEL_LAST">last</label>
+            <span class="col-sm-5"><input class="form-control" name="lastName" value="" required="required"/></span>
+            <span id="lastNameError" class="alert alert-danger col-sm-4" style="display:none"></span>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3" translate="REGISTRATION_LABEL_PHONE">phone</label>
+            <span class="col-sm-5"><input class="form-control" name="phone" value="" required="required"/></span>
+            <span id="phoneError" class="alert alert-danger col-sm-4" style="display:none"></span>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3" translate="REGISTRATION_LABEL_ADDRESS">address</label>
+            <span class="col-sm-5"><input class="form-control" name="address" value="" required="required"/></span>
+            <span id="addressError" class="alert alert-danger col-sm-4" style="display:none"></span>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3" translate="REGISTRATION_LABEL_EMAIL">email</label>
+            <span class="col-sm-5"><input type="email" class="form-control" name="email" value="" required="required"/></span>
+            <span id="emailError" class="alert alert-danger col-sm-4" style="display:none"></span>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3" translate="REGISTRATION_LABEL_PASSWORD">password</label>
+            <span class="col-sm-5"><input id="password" class="form-control" name="password" value="" type="password" required="required"/></span>
+            <span id="passwordError" class="alert alert-danger col-sm-4" style="display:none"></span>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3" translate="REGISTRATION_LABEL_CONFIRM">confirm</label>
+            <span class="col-sm-5"><input id="matchPassword" class="form-control" name="matchingPassword" value="" type="password" required="required"/></span>
+            <span id="globalError" class="alert alert-danger col-sm-4" style="display:none"></span>
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-primary" translate="REGISTRATION_BUTTON_SUBMIT">submit</button>
+    </form>
+    <br/>
+    <a href="#/login" translate="REGISTRATION_LINK_LOGIN">login</a>
 </div>
