@@ -1,13 +1,14 @@
 package biz.bsoft.web.controller;
 
 import biz.bsoft.orders.model.ClientPOS;
-import biz.bsoft.orders.model.View;
+import biz.bsoft.web.View;
 import biz.bsoft.security.SecurityUserService;
 import biz.bsoft.service.MailService;
 import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.users.service.UserService;
+import biz.bsoft.web.dto.UserDto;
 import biz.bsoft.web.errors.UserNotFoundException;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
@@ -21,12 +22,7 @@ import java.security.Principal;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * Created by vbabin on 27.03.2016.
- */
 @RestController
-//@CrossOrigin(origins = "*", maxAge=3600, allowedHeaders={"Authorization", "x-requested-with"})
-//@CrossOrigin(origins = "http://localhost:8000")//http://localhost:8000
 @RequestMapping("/users")
 public class UsersRestController {
 
@@ -35,9 +31,6 @@ public class UsersRestController {
 
     @Autowired
     UserService userService;
-
-    //@Autowired
-    //private SessionFactory sessionFactory;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -61,6 +54,11 @@ public class UsersRestController {
         UserSettings userSettings = userService.getCurrentUserSettings();
         //logger.info("userSettings =" + userSettings);
         return userSettings;
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public void setUserSettings(@RequestBody UserDto userDto) {
+        logger.info(userDto.toString());
     }
 
     @RequestMapping(value = "/userSettings", method = RequestMethod.POST)

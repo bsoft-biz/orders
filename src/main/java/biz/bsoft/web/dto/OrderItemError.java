@@ -1,4 +1,4 @@
-package biz.bsoft.orders.model;
+package biz.bsoft.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

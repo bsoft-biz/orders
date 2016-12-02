@@ -1,13 +1,11 @@
 package biz.bsoft.orders.model;
 
+import biz.bsoft.web.View;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by vbabin on 28.11.2015.

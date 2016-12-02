@@ -5,6 +5,7 @@ import biz.bsoft.orders.model.*;
 import biz.bsoft.service.MailService;
 import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.users.service.UserService;
+import biz.bsoft.web.dto.OrderItemError;
 import biz.bsoft.web.errors.ValidateOrderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

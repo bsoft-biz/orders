@@ -1,5 +1,6 @@
 package biz.bsoft.orders.model;
 
+import biz.bsoft.web.View;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 

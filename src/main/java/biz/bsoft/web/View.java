@@ -1,4 +1,4 @@
-package biz.bsoft.orders.model;
+package biz.bsoft.web;
 
 /**
  * Created by vbabin on 10.05.2016.

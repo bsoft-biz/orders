@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().and()
                 .authorizeRequests()
-                .antMatchers("/index.html", "/js/**", "/locale/*", "/css/*", "/fonts/*", "/templates/*", "/", "/users/resetPassword*", "/users/changePassword*").permitAll().anyRequest()
+                .antMatchers("/index.html", "/js/**", "/locale/*", "/css/*", "/fonts/*", "/templates/*", "/", "/users/register", "/users/resetPassword*", "/users/changePassword*").permitAll().anyRequest()
                 .authenticated()
                 .and()
                 .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)

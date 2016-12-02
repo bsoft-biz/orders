@@ -1,9 +1,7 @@
 package biz.bsoft.users.model;
 
 import biz.bsoft.orders.model.ClientPOS;
-import biz.bsoft.orders.model.View;
-import biz.bsoft.users.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import biz.bsoft.web.View;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
