@@ -3,6 +3,7 @@ package biz.bsoft.users.service;
 import biz.bsoft.orders.model.ClientPOS;
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
+import biz.bsoft.web.dto.UserDto;
 
 import java.util.Set;
 
@@ -11,7 +12,6 @@ import java.util.Set;
  */
 public interface UserService {
     User findByUsername(String username);
-    User add(String username);
     UserSettings getCurrentUserSettings();
     void setUserPassword(String oldPassword, String newPassword);
     void saveUserPassword(String token, String password);
@@ -23,4 +23,6 @@ public interface UserService {
     Set<ClientPOS> getUserPoses(String userName);
 
     void checkUserPos(String userName, Integer PosId);
+
+    User registerNewUser(UserDto userDto);
 }

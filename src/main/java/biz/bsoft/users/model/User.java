@@ -93,6 +93,7 @@ public class User {
         this.userRole = userRole;
     }
 
+    @Column(unique = true, nullable = false)
     public String getEmail() {
         return email;
     }
@@ -101,6 +102,7 @@ public class User {
         this.email = email;
     }
 
+    @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -109,6 +111,7 @@ public class User {
         this.firstName = firstName;
     }
 
+    @Column(name = "last_name")
     public String getLastName() {
         return lastName;
     }

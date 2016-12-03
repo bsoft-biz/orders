@@ -58,7 +58,7 @@ public class UsersRestController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public void setUserSettings(@RequestBody UserDto userDto) {
-        logger.info(userDto.toString());
+        userService.registerNewUser(userDto);
     }
 
     @RequestMapping(value = "/userSettings", method = RequestMethod.POST)

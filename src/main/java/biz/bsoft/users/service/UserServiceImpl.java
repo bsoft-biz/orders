@@ -10,6 +10,7 @@ import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.PasswordResetToken;
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
+import biz.bsoft.web.dto.UserDto;
 import biz.bsoft.web.errors.PosNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,17 +67,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User add(String username) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(username);
-        user.setEnabled(true);
-        //user.setUserRole();
-        repository.save(user);
-        return user;
-    }
-
-    @Override
     public UserSettings getCurrentUserSettings() { //@AuthenticationPrincipal User user;
         org.springframework.security.core.userdetails.User user =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -127,5 +117,22 @@ public class UserServiceImpl implements UserService {
         ClientPOS clientPOS = clientPosRepository.findOne(PosId);
         if(!getUserPoses(userName).contains(clientPOS))
             throw new PosNotFoundException(PosId);
+    }
+
+    @Override
+    public User registerNewUser(UserDto userDto) {
+        if (repository.findByEmail(userDto.getEmail()) != null)
+            throw new RuntimeException("The email address you have entered is already registered.");
+        if (repository.findByUsername(userDto.getUsername()) != null)
+            throw new RuntimeException("The login you have entered is already registered.");
+        User user = new User();
+        user.setEnabled(false);
+        user.setUsername(userDto.getUsername());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setEmail(userDto.getEmail());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        repository.save(user);
+        return user;
     }
 }
