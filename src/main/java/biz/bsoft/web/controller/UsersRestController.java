@@ -57,8 +57,12 @@ public class UsersRestController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public void setUserSettings(@RequestBody UserDto userDto) {
-        userService.registerNewUser(userDto);
+    public void register(HttpServletRequest request, @RequestBody UserDto userDto) {
+        User user = userService.registerNewUser(userDto);
+        final String token = UUID.randomUUID().toString();
+        userService.createVerificationTokenForUser(user, token);
+
+        mailService.sendPasswordResetTokenEmail(request, user.getEmail(), user.getUsername(), token);
     }
 
     @RequestMapping(value = "/userSettings", method = RequestMethod.POST)
@@ -105,7 +109,6 @@ public class UsersRestController {
         }
         final String token = UUID.randomUUID().toString();
         userService.createPasswordResetTokenForUser(user, token);
-
         mailService.sendPasswordResetTokenEmail(request, userEmail, user.getUsername(), token);
     }
 

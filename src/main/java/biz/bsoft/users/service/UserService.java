@@ -18,6 +18,8 @@ public interface UserService {
 
     User findUserByEmail(String email);
 
+    void createVerificationTokenForUser(User user, String token);
+
     void createPasswordResetTokenForUser(User user, String token);
 
     Set<ClientPOS> getUserPoses(String userName);
