@@ -65,6 +65,11 @@ public class UsersRestController {
         mailService.sendVerificationEmail(request, user.getEmail(), user.getUsername(), token);
     }
 
+    @RequestMapping(value = "/verify", method = RequestMethod.GET)
+    public void verify(@RequestParam("token") final String token) {
+        userService.validateVerificationToken(token);
+    }
+
     @RequestMapping(value = "/userSettings", method = RequestMethod.POST)
     public String setUserSettings(@RequestBody UserSettings userSettings) {
         //

@@ -21,14 +21,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Created by vbabin on 27.03.2016.
- */
 @Repository
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -143,5 +141,23 @@ public class UserServiceImpl implements UserService {
         user.setLastName(userDto.getLastName());
         repository.save(user);
         return user;
+    }
+
+    @Override
+    public void validateVerificationToken(String token) {
+        final VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        if (verificationToken == null) {
+            return;
+        }
+
+        final User user = verificationToken.getUser();
+        final Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+            verificationTokenRepository.delete(verificationToken);
+            return;
+        }
+
+        user.setEnabled(true);
+        repository.save(user);
     }
 }

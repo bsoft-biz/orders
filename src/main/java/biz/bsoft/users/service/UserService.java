@@ -27,4 +27,5 @@ public interface UserService {
     void checkUserPos(String userName, Integer PosId);
 
     User registerNewUser(UserDto userDto);
+    public void validateVerificationToken(String token);
 }

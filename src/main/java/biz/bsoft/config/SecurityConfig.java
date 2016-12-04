@@ -17,10 +17,6 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
-/**
- * Created by vbabin on 27.03.2016.
- */
-
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @EnableWebSecurity
@@ -39,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().and()
                 .authorizeRequests()
-                .antMatchers("/index.html", "/js/**", "/locale/*", "/css/*", "/fonts/*", "/templates/*", "/", "/users/register", "/users/resetPassword*", "/users/changePassword*").permitAll().anyRequest()
+                .antMatchers("/index.html", "/js/**", "/locale/*", "/css/*", "/fonts/*", "/templates/*", "/", "/users/register", "/users/verify", "/users/resetPassword*", "/users/changePassword*").permitAll().anyRequest()
                 .authenticated()
                 .and()
                 .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
