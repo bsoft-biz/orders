@@ -10,6 +10,7 @@ import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.users.model.VerificationToken;
 import biz.bsoft.web.dto.UserDto;
 import biz.bsoft.web.errors.PosNotFoundException;
+import biz.bsoft.web.errors.UserAlreadyExistException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,10 +129,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerNewUser(UserDto userDto) {
+        Locale locale = LocaleContextHolder.getLocale();
         if (repository.findByEmail(userDto.getEmail()) != null)
-            throw new RuntimeException("The email address you have entered is already registered.");
+            throw new UserAlreadyExistException(messages.getMessage("error.EmailAlreadyExist",null,locale));//""
         if (repository.findByUsername(userDto.getUsername()) != null)
-            throw new RuntimeException("The login you have entered is already registered.");
+            throw new UserAlreadyExistException(messages.getMessage("error.UsernameAlreadyExist",null,locale));//""
         User user = new User();
         user.setEnabled(false);
         user.setUsername(userDto.getUsername());

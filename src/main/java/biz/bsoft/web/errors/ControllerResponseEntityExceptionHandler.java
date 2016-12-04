@@ -45,4 +45,9 @@ public class ControllerResponseEntityExceptionHandler extends ResponseEntityExce
         Locale locale = LocaleContextHolder.getLocale();
         response.sendError(HttpStatus.BAD_REQUEST.value(),messages.getMessage("error.posNotFound",new Object[] {e.getUserPos()},locale));
     }
+
+    @ExceptionHandler({UserAlreadyExistException.class})
+    void handleUserAlreadyExistException(UserAlreadyExistException e, HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.BAD_REQUEST.value(),e.getMessage());
+    }
 }
