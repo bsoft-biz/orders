@@ -151,6 +151,17 @@ public class MailService {
         constructAndSendEmail(userEmail, subject, ctx, "passwordReset.html");
     }
 
+    @Async
+    public void sendVerificationEmail(HttpServletRequest request, String userEmail, String userName, String token){
+        //Locale locale = LocaleContextHolder.getLocale();
+        Locale locale = new Locale(env.getProperty("email.notification.locale"));
+        String subject = messages.getMessage("email.VerificationTitle", null, locale);
+        String url = getAppUrl(request) + "/#/verify?token=" + token;
+        final Context ctx = new Context(locale);
+        ctx.setVariable("url", url);
+        constructAndSendEmail(userEmail, subject, ctx, "verification.html");
+    }
+
     private String getAppUrl(HttpServletRequest request) {
         String url;
         if (request.isSecure())

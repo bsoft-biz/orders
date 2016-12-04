@@ -62,7 +62,7 @@ public class UsersRestController {
         final String token = UUID.randomUUID().toString();
         userService.createVerificationTokenForUser(user, token);
 
-        mailService.sendPasswordResetTokenEmail(request, user.getEmail(), user.getUsername(), token);
+        mailService.sendVerificationEmail(request, user.getEmail(), user.getUsername(), token);
     }
 
     @RequestMapping(value = "/userSettings", method = RequestMethod.POST)
