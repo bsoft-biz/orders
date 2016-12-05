@@ -13,6 +13,7 @@ import java.util.Set;
 public interface UserService {
     User findByUsername(String username);
     UserSettings getCurrentUserSettings();
+    User getCurrentUser();
     void setUserPassword(String oldPassword, String newPassword);
     void saveUserPassword(String token, String password);
 
@@ -27,5 +28,5 @@ public interface UserService {
     void checkUserPos(String userName, Integer PosId);
 
     User registerNewUser(UserDto userDto);
-    public void validateVerificationToken(String token);
+    void validateVerificationToken(String token);
 }

@@ -68,17 +68,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserSettings getCurrentUserSettings() { //@AuthenticationPrincipal User user;
+        logger.info(((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser().toString());
         org.springframework.security.core.userdetails.User user =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userSettingsRepository.findByUser_Username(user.getUsername());
     }
 
     @Override
+    public User getCurrentUser() {
+        return ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+    }
+
+    @Override
     public void setUserPassword(String oldPassword, String newPassword) {
         Locale locale = LocaleContextHolder.getLocale();
-        UserSettings userSettings = getCurrentUserSettings();
-        if(passwordEncoder.matches(oldPassword,userSettings.getUser().getPassword())){
-            getCurrentUserSettings().getUser().setPassword(passwordEncoder.encode(newPassword));
+        User user = getCurrentUser();
+        if(passwordEncoder.matches(oldPassword,user.getPassword())){
+            user.setPassword(passwordEncoder.encode(newPassword));
         }
         else
             throw new RuntimeException(messages.getMessage("error.userWrongOldPassword",null,locale));
@@ -112,7 +118,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<ClientPOS> getUserPoses(String userName) {
         HashSet<ClientPOS> clientPOSes = userPosRepository.findByUser_Username(userName).stream().map(userPos -> userPos.getClientPOS()).collect(Collectors.toCollection(HashSet<ClientPOS>::new));
-        ClientPOS defaultPos=getCurrentUserSettings().getClientPOS();
+        ClientPOS defaultPos=getCurrentUser().getClientPOS();
         if (!clientPOSes.contains(defaultPos))
             clientPOSes.add(defaultPos);
         return clientPOSes;
@@ -120,8 +126,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void checkUserPos(String userName, Integer PosId) {
-        ClientPOS clientPOS = clientPosRepository.findOne(PosId);
-        if(!getUserPoses(userName).contains(clientPOS))
+        Set<Integer> clientPOSes = getUserPoses(userName).stream().map(clientPOS -> clientPOS.getId()).collect(Collectors.toCollection(HashSet<Integer>::new));
+        if(!clientPOSes.contains(PosId))
             throw new PosNotFoundException(PosId);
     }
 

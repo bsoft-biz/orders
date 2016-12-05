@@ -50,10 +50,11 @@ public class UsersRestController {
     }
 
     @RequestMapping(value = "/userSettings", method = RequestMethod.GET)
-    public UserSettings getUserSettings() {
-        UserSettings userSettings = userService.getCurrentUserSettings();
+    public User getUserSettings() {
+        /*UserSettings userSettings = userService.getCurrentUserSettings();
         //logger.info("userSettings =" + userSettings);
-        return userSettings;
+        return userSettings;*/
+        return userService.getCurrentUser();
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

@@ -3,6 +3,7 @@ package biz.bsoft.orders.service;
 import biz.bsoft.orders.dao.*;
 import biz.bsoft.orders.model.*;
 import biz.bsoft.service.MailService;
+import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.users.service.UserService;
 import biz.bsoft.web.dto.OrderItemError;
@@ -171,9 +172,9 @@ public class OrderDaoImpl implements OrderDao {
         orderGroupStatus.setStatus(OrderStatus.CONFIRM);
         orderGroupStatusRepository.save(orderGroupStatus);
         mailService.sendNotificationEmailConfirmOperator(orderGroupStatus);
-        UserSettings currentUserSettings = userService.getCurrentUserSettings();
+        User currentUser = userService.getCurrentUser();
         //send e-mail to client
-        mailService.sendNotificationEmailConfirmClient(orderGroupStatus,currentUserSettings);
+        mailService.sendNotificationEmailConfirmClient(orderGroupStatus,currentUser);
         return orderGroupStatus;
     }
 

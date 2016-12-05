@@ -39,6 +39,11 @@ public class User {
         this.userRole = userRole;
     }
 
+    @Transient
+    public String getUserGreeting(){
+        return firstName+' '+lastName;
+    }
+
     @Override
     public String toString() {
         return "User{" +

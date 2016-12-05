@@ -31,15 +31,7 @@ public class MyUserDetailsService implements UserDetailsService{
         User user = userRepository.findByUsername(s);
         List<GrantedAuthority> authorities;
         authorities=buildUserAuthority(user.getUserRole());
-        return buildUserForAuthentication(user,authorities);
-    }
-    // Converts User user to
-    // org.springframework.security.core.userdetails.User
-    private org.springframework.security.core.userdetails.User buildUserForAuthentication(User user,
-                                            List<GrantedAuthority> authorities) {
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                user.isEnabled(), true, true, true, authorities);
+        return new UserPrincipal(user, authorities);
     }
 
     private List<GrantedAuthority> buildUserAuthority(Set<UserRole> userRoles) {

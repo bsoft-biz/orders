@@ -1,10 +1,9 @@
 package biz.bsoft.service;
 
-import biz.bsoft.orders.service.OrderDaoImpl;
 import biz.bsoft.orders.dao.OrderItemRepository;
 import biz.bsoft.orders.model.OrderGroupStatus;
 import biz.bsoft.orders.model.OrderItem;
-import biz.bsoft.users.model.UserSettings;
+import biz.bsoft.users.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,18 +125,18 @@ public class MailService {
     }
 
     @Async
-    public void sendNotificationEmailConfirmClient(OrderGroupStatus orderGroupStatus, UserSettings currentUserSettings ){
+    public void sendNotificationEmailConfirmClient(OrderGroupStatus orderGroupStatus, User user){
         Locale locale = new Locale(env.getProperty("email.notification.locale"));
         String subject = messages.getMessage("email.notificationConfirmClientSubject", new Object[] {orderGroupStatus.getOrder().getClientPos().getPosName(), orderGroupStatus.getOrder().getOrderDate(), orderGroupStatus.getGroup().getGroupName()},locale);
 
         List<OrderItem> orderItems = orderItemRepository.findByOrderAndItem_ItemGroup(orderGroupStatus.getOrder(),orderGroupStatus.getGroup());
         final Context ctx = new Context(locale);
-        ctx.setVariable("userName", currentUserSettings.getUserGreeting());
+        ctx.setVariable("userName", user.getUserGreeting());
         ctx.setVariable("posName", orderGroupStatus.getOrder().getClientPos().getPosName());
         ctx.setVariable("orderDate", orderGroupStatus.getOrder().getOrderDate());
         ctx.setVariable("groupName", orderGroupStatus.getGroup().getGroupName());
         ctx.setVariable("orderItems", orderItems);
-        constructAndSendEmail(currentUserSettings.getEmail(), subject, ctx, "confirmationClient.html");
+        constructAndSendEmail(user.getEmail(), subject, ctx, "confirmationClient.html");
     }
 
     @Async

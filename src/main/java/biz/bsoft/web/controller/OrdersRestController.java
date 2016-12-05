@@ -48,7 +48,7 @@ public class OrdersRestController {
                           @RequestParam(name = "pos", required = false) Integer clientPosId,
                           Principal user) {
         if(clientPosId==null)
-            clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+            clientPosId = userService.getCurrentUser().getClientPOS().getId();
         else
             userService.checkUserPos(user.getName(), clientPosId);
         Order order = null;
@@ -67,7 +67,7 @@ public class OrdersRestController {
                                            @RequestParam(name = "pos", required = false) Integer clientPosId,
                                            Principal user) {
         if(clientPosId==null)
-            clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+            clientPosId = userService.getCurrentUser().getClientPOS().getId();
         else
             userService.checkUserPos(user.getName(), clientPosId);
         OrderGroupStatus orderGroupStatus = orderDao.getOrderGroupStatus(clientPosId,date,groupId);
@@ -80,7 +80,7 @@ public class OrdersRestController {
                                          @RequestParam(name = "pos", required = false) Integer clientPosId,
                                          Principal user) {
         if(clientPosId==null)
-            clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+            clientPosId = userService.getCurrentUser().getClientPOS().getId();
         else
             userService.checkUserPos(user.getName(), clientPosId);
         OrderGroupStatus orderGroupStatus = orderDao.confirmOrder(clientPosId,date,groupId);
@@ -124,7 +124,7 @@ public class OrdersRestController {
                                          @RequestParam(name = "pos", required = false) Integer clientPosId,
                                          Principal user) {
         if(clientPosId==null)
-            clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+            clientPosId = userService.getCurrentUser().getClientPOS().getId();
         else
             userService.checkUserPos(user.getName(), clientPosId);
         List<OrderItem> items = null;
@@ -144,7 +144,7 @@ public class OrdersRestController {
                                               HttpServletResponse response,
                                               Principal user) {
         if(clientPosId==null)
-            clientPosId = userService.getCurrentUserSettings().getClientPOS().getId();
+            clientPosId = userService.getCurrentUser().getClientPOS().getId();
         else
             userService.checkUserPos(user.getName(), clientPosId);
         //TODO need to check if all items are from the group because you can delete all items from group and insert from other group
