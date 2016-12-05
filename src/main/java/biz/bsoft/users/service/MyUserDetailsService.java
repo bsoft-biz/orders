@@ -2,10 +2,10 @@ package biz.bsoft.users.service;
 
 import biz.bsoft.users.dao.UserRepository;
 import biz.bsoft.users.model.UserRole;
+import biz.bsoft.users.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,17 +28,17 @@ public class MyUserDetailsService implements UserDetailsService{
     @Transactional//(readOnly=true)
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        biz.bsoft.users.model.User user = userRepository.findByUsername(s);
+        User user = userRepository.findByUsername(s);
         List<GrantedAuthority> authorities;
         authorities=buildUserAuthority(user.getUserRole());
         return buildUserForAuthentication(user,authorities);
     }
     // Converts User user to
     // org.springframework.security.core.userdetails.User
-    private User buildUserForAuthentication(biz.bsoft.users.model.User user,
+    private org.springframework.security.core.userdetails.User buildUserForAuthentication(User user,
                                             List<GrantedAuthority> authorities) {
 
-        return new User(user.getUsername(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 user.isEnabled(), true, true, true, authorities);
     }
 
