@@ -26,15 +26,19 @@ public class ClientPOS {
     @JsonIgnore
     private Integer extid;
 
+    @JsonView(View.Summary.class)
     @Column(name="posaddress")
     private String posAddress;
 
+    @JsonView(View.Summary.class)
     @Column(name="posphone")
     private String posPhone;
 
+    @JsonView(View.Summary.class)
     @Column(name="managername")
     private String managerName;
 
+    @JsonView(View.Summary.class)
     @Column(name="managerphone")
     private String managerPhone;
 

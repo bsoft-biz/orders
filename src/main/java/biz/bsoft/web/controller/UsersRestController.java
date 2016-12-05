@@ -51,9 +51,6 @@ public class UsersRestController {
 
     @RequestMapping(value = "/userSettings", method = RequestMethod.GET)
     public User getUserSettings() {
-        /*UserSettings userSettings = userService.getCurrentUserSettings();
-        //logger.info("userSettings =" + userSettings);
-        return userSettings;*/
         return userService.getCurrentUser();
     }
 
@@ -71,9 +68,21 @@ public class UsersRestController {
         userService.validateVerificationToken(token);
     }
 
+    @RequestMapping(value = "/pos", method = RequestMethod.POST)
+    public String setPos(@RequestBody ClientPOS clientPOS) {
+        try {
+            userService.updatePos(clientPOS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return(e.getMessage());
+        }
+        return"";
+    }
+
     @RequestMapping(value = "/userSettings", method = RequestMethod.POST)
     public String setUserSettings(@RequestBody UserSettings userSettings) {
-        //
+        // TODO update first and last name and default values - Pos, product group
+        // TODO get rid of user settings class
         try {
             //logger.info("setUserSettings userSettings =" + userSettings);
             UserSettings currentUserSettings = userService.getCurrentUserSettings();

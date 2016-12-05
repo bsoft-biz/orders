@@ -29,4 +29,6 @@ public interface UserService {
 
     User registerNewUser(UserDto userDto);
     void validateVerificationToken(String token);
+
+    void updatePos(ClientPOS clientPOS);
 }
