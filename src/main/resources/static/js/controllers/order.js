@@ -6,9 +6,9 @@ function order($resource, $scope, $q, $http,  $filter, $routeParams, $location, 
     $scope.fullOrderItems = {};
     $scope.orderStatus = {};
 
-    $scope.userSettings=data.getUserSettings();
-    $scope.groups=data.getGroups();
-    $scope.poses=data.getPoses();
+    $scope.userSettings = data.getUserSettings();
+    $scope.groups = data.getGroups();
+    $scope.poses = data.getPoses();
     $scope.pos = $routeParams.posId===undefined?$scope.userSettings.clientPOS.id:Number($routeParams.posId);
     $scope.group = $routeParams.groupId===undefined?42:Number($routeParams.groupId);//= groups[0].id;
     if ($routeParams.date ===undefined){
