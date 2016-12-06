@@ -31,4 +31,6 @@ public interface UserService {
     void validateVerificationToken(String token);
 
     void updatePos(ClientPOS clientPOS);
+
+    void updateUser(UserDto userDto);
 }

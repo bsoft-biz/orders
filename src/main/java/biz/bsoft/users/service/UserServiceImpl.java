@@ -176,4 +176,12 @@ public class UserServiceImpl implements UserService {
         savedClientPOS.setPosPhone(clientPOS.getPosPhone());
         clientPosRepository.save(savedClientPOS);
     }
+
+    @Override
+    public void updateUser(UserDto userDto) {
+        User user = getCurrentUser();
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        repository.save(user);
+    }
 }

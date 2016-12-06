@@ -80,22 +80,11 @@ public class UsersRestController {
     }
 
     @RequestMapping(value = "/userSettings", method = RequestMethod.POST)
-    public String setUserSettings(@RequestBody UserSettings userSettings) {
-        // TODO update first and last name and default values - Pos, product group
+    public String setUserSettings(@RequestBody UserDto userDto) {
+        // TODO default values - Pos, product group
         // TODO get rid of user settings class
         try {
-            //logger.info("setUserSettings userSettings =" + userSettings);
-            UserSettings currentUserSettings = userService.getCurrentUserSettings();
-            //logger.info("setUserSettings currentUserSettings =" + currentUserSettings);
-            ClientPOS currentClientPOS = currentUserSettings.getClientPOS();
-            currentClientPOS.setPosName(userSettings.getClientPOS().getPosName());
-            currentClientPOS.setPosAddress(userSettings.getClientPOS().getPosAddress());
-            currentClientPOS.setPosPhone(userSettings.getClientPOS().getPosPhone());
-            currentClientPOS.setManagerName(userSettings.getClientPOS().getManagerName());
-            currentClientPOS.setManagerPhone(userSettings.getClientPOS().getManagerPhone());
-            userSettingsRepository.save(currentUserSettings);
-            //userService.setCurrentUserSettings(currentUserSettings);
-
+            userService.updateUser(userDto);
         } catch (Exception e) {
             e.printStackTrace();
             return(e.getMessage());
