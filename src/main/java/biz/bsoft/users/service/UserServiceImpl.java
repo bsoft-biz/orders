@@ -3,10 +3,12 @@ package biz.bsoft.users.service;
 import biz.bsoft.orders.dao.ClientPosRepository;
 import biz.bsoft.orders.model.ClientPOS;
 import biz.bsoft.security.SecurityUserService;
-import biz.bsoft.users.dao.*;
+import biz.bsoft.users.dao.PasswordResetTokenRepository;
+import biz.bsoft.users.dao.UserPosRepository;
+import biz.bsoft.users.dao.UserRepository;
+import biz.bsoft.users.dao.VerificationTokenRepository;
 import biz.bsoft.users.model.PasswordResetToken;
 import biz.bsoft.users.model.User;
-import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.users.model.VerificationToken;
 import biz.bsoft.web.dto.UserDto;
 import biz.bsoft.web.errors.PosNotFoundException;
@@ -41,9 +43,6 @@ public class UserServiceImpl implements UserService {
     private UserRepository repository;
 
     @Autowired
-    private UserSettingsRepository userSettingsRepository;
-
-    @Autowired
     private VerificationTokenRepository verificationTokenRepository;
 
     @Autowired
@@ -64,14 +63,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String username) {
         return repository.findByUsername(username);
-    }
-
-    @Override
-    public UserSettings getCurrentUserSettings() { //@AuthenticationPrincipal User user;
-        logger.info(((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser().toString());
-        org.springframework.security.core.userdetails.User user =
-                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userSettingsRepository.findByUser_Username(user.getUsername());
     }
 
     @Override

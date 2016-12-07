@@ -4,10 +4,8 @@ import biz.bsoft.orders.dao.ClientPosRepository;
 import biz.bsoft.orders.model.ClientPOS;
 import biz.bsoft.users.dao.UserPosRepository;
 import biz.bsoft.users.dao.UserRepository;
-import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.User;
 import biz.bsoft.users.model.UserPos;
-import biz.bsoft.users.model.UserSettings;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.specification.RequestSpecification;
 import org.hamcrest.Matchers;
@@ -23,9 +21,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 
-/**
- * Created by vbabin on 04.11.2016.
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -41,9 +36,6 @@ public class UsersIntegrationTest {
     private UserPosRepository userPosRepository;
 
     @Autowired
-    private UserSettingsRepository userSettingsRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @LocalServerPort
@@ -55,6 +47,12 @@ public class UsersIntegrationTest {
 
     @Before
     public void init() {
+        userPosRepository.deleteAll();
+        clientPosRepository.deleteAll();
+
+        ClientPOS pos1 = new ClientPOS("Pos1");
+        ClientPOS pos2 = new ClientPOS("Pos2");
+
         User user = userRepository.findByEmail(email);
         if (user == null) {
             user = new User();
@@ -62,21 +60,12 @@ public class UsersIntegrationTest {
             user.setPassword(passwordEncoder.encode("test"));
             user.setEmail(email);
             user.setEnabled(true);
+            user.setClientPOS(pos1);
         } else {
             user.setPassword(passwordEncoder.encode("test"));
         }
         userRepository.save(user);
 
-        userPosRepository.deleteAll();
-        userSettingsRepository.deleteAll();
-        clientPosRepository.deleteAll();
-
-        ClientPOS pos1 = new ClientPOS("Pos1");
-        ClientPOS pos2 = new ClientPOS("Pos2");
-
-        UserSettings userSettings =new UserSettings(user, email, pos1, "Mr. Brown");
-
-        userSettingsRepository.save(userSettings);
         clientPosRepository.save(Arrays.asList(pos1,pos2));
 
         //UserPos userPos1 = new UserPos(user, pos);
@@ -97,7 +86,7 @@ public class UsersIntegrationTest {
     @Test
     public void canFetchUserSettings() {
         final RequestSpecification request = RestAssured.given().auth().basic("testUser", "test");
-        request.when().get(PREFIX_URL + "/users/userSettings").then().assertThat().statusCode(200).body("email", Matchers.equalTo(email));
+        request.when().get(PREFIX_URL + "/users/user").then().assertThat().statusCode(200).body("email", Matchers.equalTo(email));
     }
 
     @Test

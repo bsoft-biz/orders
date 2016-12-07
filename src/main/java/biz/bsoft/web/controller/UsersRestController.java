@@ -1,13 +1,11 @@
 package biz.bsoft.web.controller;
 
 import biz.bsoft.orders.model.ClientPOS;
-import biz.bsoft.web.View;
 import biz.bsoft.security.SecurityUserService;
 import biz.bsoft.service.MailService;
-import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.User;
-import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.users.service.UserService;
+import biz.bsoft.web.View;
 import biz.bsoft.web.dto.UserDto;
 import biz.bsoft.web.errors.UserNotFoundException;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -37,9 +35,6 @@ public class UsersRestController {
 
     @Autowired
     private SecurityUserService securityUserService;
-
-    @Autowired
-    UserSettingsRepository userSettingsRepository;
 
     @Autowired
     MailService mailService;

@@ -2,17 +2,12 @@ package biz.bsoft.users.service;
 
 import biz.bsoft.orders.model.ClientPOS;
 import biz.bsoft.users.model.User;
-import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.web.dto.UserDto;
 
 import java.util.Set;
 
-/**
- * Created by vbabin on 27.03.2016.
- */
 public interface UserService {
     User findByUsername(String username);
-    UserSettings getCurrentUserSettings();
     User getCurrentUser();
     void setUserPassword(String oldPassword, String newPassword);
     void saveUserPassword(String token, String password);

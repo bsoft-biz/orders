@@ -6,9 +6,7 @@ import biz.bsoft.orders.model.Item;
 import biz.bsoft.orders.model.ItemGroup;
 import biz.bsoft.orders.model.OrderItem;
 import biz.bsoft.users.dao.UserRepository;
-import biz.bsoft.users.dao.UserSettingsRepository;
 import biz.bsoft.users.model.User;
-import biz.bsoft.users.model.UserSettings;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
@@ -32,9 +30,6 @@ import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.hasItems;
 
-/**
- * Created by vbabin on 02.11.2016.
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -58,10 +53,6 @@ public class OrdersIntegrationTest {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-
-    @Autowired
-    private UserSettingsRepository userSettingsRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -80,6 +71,12 @@ public class OrdersIntegrationTest {
 
     @Before
     public void init() {
+        orderItemRepository.deleteAll();
+        orderRepository.deleteAll();
+        clientPosRepository.deleteAll();
+
+        pos = new ClientPOS("Pos1");
+        ClientPOS pos2 = new ClientPOS("Pos2");
         User user = userRepository.findByEmail(email);
         if (user == null) {
             user = new User();
@@ -87,22 +84,12 @@ public class OrdersIntegrationTest {
             user.setPassword(passwordEncoder.encode(userPassword));
             user.setEmail(email);
             user.setEnabled(true);
+            user.setClientPOS(pos);
         } else {
             user.setPassword(passwordEncoder.encode(userPassword));
         }
         userRepository.save(user);
 
-        userSettingsRepository.deleteAll();
-        orderItemRepository.deleteAll();
-        orderRepository.deleteAll();
-        clientPosRepository.deleteAll();
-
-        pos = new ClientPOS("Pos1");
-        ClientPOS pos2 = new ClientPOS("Pos2");
-
-        UserSettings userSettings =new UserSettings(user, email, pos, "Mr. Brown");
-
-        userSettingsRepository.save(userSettings);
         clientPosRepository.save(Arrays.asList(pos,pos2));
 
         

@@ -4,7 +4,6 @@ import biz.bsoft.orders.dao.*;
 import biz.bsoft.orders.model.*;
 import biz.bsoft.service.MailService;
 import biz.bsoft.users.model.User;
-import biz.bsoft.users.model.UserSettings;
 import biz.bsoft.users.service.UserService;
 import biz.bsoft.web.dto.OrderItemError;
 import biz.bsoft.web.errors.ValidateOrderException;
