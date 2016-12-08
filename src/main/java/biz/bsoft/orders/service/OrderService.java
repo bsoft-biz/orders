@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by vbabin on 08.04.2016.
  */
-public interface OrderDao {
+public interface OrderService {
     //Order findOrder(Integer clientPosId, LocalDate date);
     OrderGroupStatus confirmOrder(Integer clientPosId, LocalDate date, Integer groupId);
     OrderGroupStatus getOrderGroupStatus(Integer clientPosId, LocalDate date, Integer groupId);

@@ -3,7 +3,7 @@ package biz.bsoft.web.controller;
 import biz.bsoft.orders.dao.ItemInfoRepository;
 import biz.bsoft.orders.dao.OrderRepository;
 import biz.bsoft.orders.model.*;
-import biz.bsoft.orders.service.OrderDao;
+import biz.bsoft.orders.service.OrderService;
 import biz.bsoft.users.service.UserService;
 import biz.bsoft.web.View;
 import biz.bsoft.web.dto.OrderItemError;
@@ -27,7 +27,7 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrdersRestController {
     @Autowired
-    OrderDao orderDao;
+    OrderService orderService;
     @Autowired
     UserService userService;
     @Autowired
@@ -54,7 +54,7 @@ public class OrdersRestController {
         Order order = null;
         try {
             order = orderRepository.findOrderByClientPos_IdAndOrderDate(clientPosId,date);
-                    //orderDao.findOrder(clientPosId, date);
+                    //orderService.findOrder(clientPosId, date);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,7 +70,7 @@ public class OrdersRestController {
             clientPosId = userService.getCurrentUser().getClientPOS().getId();
         else
             userService.checkUserPos(user.getName(), clientPosId);
-        OrderGroupStatus orderGroupStatus = orderDao.getOrderGroupStatus(clientPosId,date,groupId);
+        OrderGroupStatus orderGroupStatus = orderService.getOrderGroupStatus(clientPosId,date,groupId);
         return orderGroupStatus;
     }
 
@@ -83,7 +83,7 @@ public class OrdersRestController {
             clientPosId = userService.getCurrentUser().getClientPOS().getId();
         else
             userService.checkUserPos(user.getName(), clientPosId);
-        OrderGroupStatus orderGroupStatus = orderDao.confirmOrder(clientPosId,date,groupId);
+        OrderGroupStatus orderGroupStatus = orderService.confirmOrder(clientPosId,date,groupId);
         return orderGroupStatus;
     }
 
@@ -93,7 +93,7 @@ public class OrdersRestController {
     public List<Item> getAllItems() {
         List<Item> items = null;
         try {
-            items = orderDao.getAllItems();
+            items = orderService.getAllItems();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,7 +110,7 @@ public class OrdersRestController {
     public List<ItemGroup> getAllItemGroups() {
         List<ItemGroup> itemGroups = null;
         try {
-            itemGroups = orderDao.getAllGroups();
+            itemGroups = orderService.getAllGroups();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,7 +129,7 @@ public class OrdersRestController {
             userService.checkUserPos(user.getName(), clientPosId);
         List<OrderItem> items = null;
         try {
-            items = orderDao.getOrderItems(clientPosId, date, groupId);
+            items = orderService.getOrderItems(clientPosId, date, groupId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,15 +148,15 @@ public class OrdersRestController {
         else
             userService.checkUserPos(user.getName(), clientPosId);
         //TODO need to check if all items are from the group because you can delete all items from group and insert from other group
-        List<OrderItemError> orderItemErrors = orderDao.validateItems(orderItems, clientPosId, date, groupId);
+        List<OrderItemError> orderItemErrors = orderService.validateItems(orderItems, clientPosId, date, groupId);
         if (orderItemErrors.size()>0) {
             response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return orderItemErrors;
         }
         // delete old items in orders
-        orderDao.deleteItemsFromOrder(clientPosId, date, groupId);
+        orderService.deleteItemsFromOrder(clientPosId, date, groupId);
         // add received items in orders
-        orderDao.addItemsToOrder(orderItems, clientPosId, date, groupId);
+        orderService.addItemsToOrder(orderItems, clientPosId, date, groupId);
         return null;
     }
 
@@ -164,7 +164,7 @@ public class OrdersRestController {
     public List<ItemPhoto> getItemPhotos(@RequestParam("item_id") Integer itemId) {
         List<ItemPhoto> itemPhotos = null;
         try {
-            itemPhotos = orderDao.getItemPhotos(itemId);
+            itemPhotos = orderService.getItemPhotos(itemId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,7 +175,7 @@ public class OrdersRestController {
     public List<ItemPhoto> getItemPhotosPath(@PathVariable("item_id") Integer itemId) {
         List<ItemPhoto> itemPhotos = null;
         try {
-            itemPhotos = orderDao.getItemPhotos(itemId);
+            itemPhotos = orderService.getItemPhotos(itemId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -187,7 +187,7 @@ public class OrdersRestController {
     public byte[] getItemThumbPhoto(@PathVariable("item_id") Integer itemId) {
         List<ItemPhoto> itemPhotos = null;
         try {
-            itemPhotos = orderDao.getItemPhotos(itemId);
+            itemPhotos = orderService.getItemPhotos(itemId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -201,7 +201,7 @@ public class OrdersRestController {
     public ItemInfo getItemInfo(@PathVariable("item_id") Integer itemId) {
         ItemInfo itemInfo = null;
         try {
-            itemInfo = orderDao.getItemInfo(itemId);
+            itemInfo = orderService.getItemInfo(itemId);
         } catch (Exception e) {
             e.printStackTrace();
         }

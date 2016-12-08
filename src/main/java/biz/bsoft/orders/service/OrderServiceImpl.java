@@ -26,7 +26,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
  */
 @Repository
 @Transactional
-public class OrderDaoImpl implements OrderDao {
+public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository repository;
     @Autowired
