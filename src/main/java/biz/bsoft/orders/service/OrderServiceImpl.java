@@ -21,9 +21,6 @@ import java.util.Locale;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-/**
- * Created by vbabin on 08.04.2016.
- */
 @Repository
 @Transactional
 public class OrderServiceImpl implements OrderService {
