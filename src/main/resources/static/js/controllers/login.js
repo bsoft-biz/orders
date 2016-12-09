@@ -10,7 +10,7 @@ function login(auth, data, $routeParams)
 	var self = this;
 
 	id=$routeParams.id;
-	token=$routeParams.token;
+	var token=$routeParams.token;
 	if (!(id===undefined||token===undefined)){
 		auth.authWithResetPasswordToken(id, token, null,
 			function errorCallback(response) {

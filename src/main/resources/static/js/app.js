@@ -56,6 +56,10 @@ angular
 						templateUrl : 'templates/registration.html',
 						controller : 'registration',
 						controllerAs : 'controller'
+					}).when('/verify', {
+						templateUrl : 'templates/verify.html',
+						controller : 'verify',
+						controllerAs : 'controller'
 					}).otherwise('/');
 					
 					$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
