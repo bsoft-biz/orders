@@ -60,10 +60,13 @@
   "REGISTRATION_LABEL_CONFIRM":"Подтверждение пароля:",
   "REGISTRATION_BUTTON_SUBMIT":"Зарегистрироваться",
   "REGISTRATION_LINK_LOGIN":"На страницу входа",
+  "VERIFY_LINK_LOGIN":"На страницу входа",
+  "VERIFY_LINK_REGISTRATION":"На страницу регистрации",
   "TITLE_HOME":"Заявка ТХК",
   "TITLE_ORDERS":"Заявка {{pos}} на {{date}}, {{group}}",
   "TITLE_ORDERS_SHORT":"Заявка на {{date}}",
   "TITLE_REGISTRATION":"Регистрация пользователя",
+  "TITLE_VERIFY":"Проверка почты",
   "MSG_ERR_PASMATCH":"Пароли не совпадают!",
   "MSG_ERR_ORDER_SAVE":"Ошибка сохранения заказа! {{message}}"
 }

@@ -60,10 +60,13 @@
   "REGISTRATION_LABEL_CONFIRM":"Confirm password:",
   "REGISTRATION_BUTTON_SUBMIT":"Submit",
   "REGISTRATION_LINK_LOGIN":"Back to login",
+  "VERIFY_LINK_LOGIN":"Back to login",
+  "VERIFY_LINK_REGISTRATION":"Back to registration page",
   "TITLE_HOME":"Orders",
   "TITLE_ORDERS":"Order {{pos}} on {{date}}, {{group}}",
   "TITLE_ORDERS_SHORT":"Order on {{date}}",
   "TITLE_REGISTRATION":"User registration",
+  "TITLE_VERIFY":"E-mail verification",
   "MSG_ERR_PASMATCH":"Passwords do not match!",
   "MSG_ERR_ORDER_SAVE":"Error saving the order! {{message}}"
 }
