@@ -15,6 +15,7 @@ public class User {
     private String username;
     private String password;
     private boolean enabled;
+    private boolean locked;
     private Set<UserRole> userRole = new HashSet<UserRole>(0);
     private String email;
     private String firstName;
@@ -86,6 +87,15 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Column(name = "locked", nullable = false)
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")

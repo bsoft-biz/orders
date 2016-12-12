@@ -131,6 +131,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException(messages.getMessage("error.UsernameAlreadyExist",null,locale));//""
         User user = new User();
         user.setEnabled(false);
+        user.setLocked(true);
         user.setUsername(userDto.getUsername());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEmail(userDto.getEmail());

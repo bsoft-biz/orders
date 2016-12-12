@@ -10,7 +10,7 @@ public class UserPrincipal extends org.springframework.security.core.userdetails
     private User user;
 
     public UserPrincipal(User user, Collection<? extends GrantedAuthority> authorities) {
-        super(user.getUsername(), user.getPassword(), user.isEnabled(),  true, true, true, authorities);
+        super(user.getUsername(), user.getPassword(), user.isEnabled(), true, true, !user.isLocked(), authorities);
         this.user = user;
     }
 
