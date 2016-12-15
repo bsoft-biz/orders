@@ -48,22 +48,19 @@ public class UsersIntegrationTest {
     @Before
     public void init() {
         userPosRepository.deleteAll();
+        userRepository.deleteAll();
         clientPosRepository.deleteAll();
 
         ClientPOS pos1 = new ClientPOS("Pos1");
         ClientPOS pos2 = new ClientPOS("Pos2");
 
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            user = new User();
-            user.setUsername("testUser");
-            user.setPassword(passwordEncoder.encode("test"));
-            user.setEmail(email);
-            user.setEnabled(true);
-            user.setClientPOS(pos1);
-        } else {
-            user.setPassword(passwordEncoder.encode("test"));
-        }
+        User user;
+        user = new User();
+        user.setUsername("testUser");
+        user.setPassword(passwordEncoder.encode("test"));
+        user.setEmail(email);
+        user.setEnabled(true);
+        user.setClientPOS(pos1);
         userRepository.save(user);
 
         clientPosRepository.save(Arrays.asList(pos1,pos2));
@@ -86,7 +83,7 @@ public class UsersIntegrationTest {
     @Test
     public void canFetchUserSettings() {
         final RequestSpecification request = RestAssured.given().auth().basic("testUser", "test");
-        request.when().get(PREFIX_URL + "/users/user").then().assertThat().statusCode(200).body("email", Matchers.equalTo(email));
+        request.when().get(PREFIX_URL + "/users/user").then().log().all().assertThat().statusCode(200).body("name", Matchers.equalTo("testUser"));
     }
 
     @Test
