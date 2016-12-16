@@ -71,28 +71,24 @@ public class OrdersIntegrationTest {
 
     @Before
     public void init() {
+        userRepository.deleteAll();
         orderItemRepository.deleteAll();
         orderRepository.deleteAll();
         clientPosRepository.deleteAll();
 
         pos = new ClientPOS("Pos1");
         ClientPOS pos2 = new ClientPOS("Pos2");
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            user = new User();
-            user.setUsername(userName);
-            user.setPassword(passwordEncoder.encode(userPassword));
-            user.setEmail(email);
-            user.setEnabled(true);
-            user.setClientPOS(pos);
-        } else {
-            user.setPassword(passwordEncoder.encode(userPassword));
-        }
-        userRepository.save(user);
-
         clientPosRepository.save(Arrays.asList(pos,pos2));
 
-        
+        User user;
+        user = new User();
+        user.setUsername(userName);
+        user.setPassword(passwordEncoder.encode(userPassword));
+        user.setEmail(email);
+        user.setEnabled(true);
+        user.setClientPOS(pos);
+        userRepository.save(user);
+
         itemRepository.deleteAll();
         itemGroupRepository.deleteAll();
 
