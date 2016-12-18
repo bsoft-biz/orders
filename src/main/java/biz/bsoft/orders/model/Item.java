@@ -33,6 +33,7 @@ public class Item implements Serializable {
     @Basic
     @JsonView(View.ItemsAll.class)
     private Integer ord;
+    boolean archive;
     /*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
     @JsonManagedReference
     @JsonIgnore
@@ -79,6 +80,14 @@ public class Item implements Serializable {
         this.ord = ord;
     }
 
+    public boolean isArchive() {
+        return archive;
+    }
+
+    public void setArchive(boolean archive) {
+        this.archive = archive;
+    }
+
 //    public List<ItemPhoto> getItemPhotos() {
 //        return itemPhotos;
 //    }
@@ -92,8 +101,10 @@ public class Item implements Serializable {
         return "Item{" +
                 "id=" + id +
                 ", itemName='" + itemName + '\'' +
+                ", itemGroup=" + itemGroup +
                 ", extid=" + extid +
                 ", ord=" + ord +
+                ", archive=" + archive +
                 '}';
     }
 

@@ -176,7 +176,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Item> getAllItems() {
-        return (List) itemRepository.findAll();
+        return (List) itemRepository.findByArchive(false);
     }
 
     @Override
