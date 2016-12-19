@@ -25,12 +25,12 @@ public class OrderItem {
 
     @JsonView(View.ItemsId.class)
     @Column(name="itemcount")
-    private Integer itemCount;
+    private float itemCount;
 
     @Basic
     @JsonView(View.ItemsId.class)
     @Column(name="itemcount2")
-    private Integer itemCount2;
+    private float itemCount2;
 
     @OneToOne()
     @JoinColumn(name="item_id")
@@ -45,7 +45,7 @@ public class OrderItem {
     public OrderItem() {
     }
 
-    public OrderItem(Item item, Integer itemCount, Integer itemCount2) {
+    public OrderItem(Item item, float itemCount, float itemCount2) {
         this.item = item;
         this.itemCount = itemCount;
         this.itemCount2 = itemCount2;
@@ -59,19 +59,19 @@ public class OrderItem {
         this.id = id;
     }
 
-    public Integer getItemCount() {
+    public float getItemCount() {
         return itemCount;
     }
 
-    public void setItemCount(Integer itemCount) {
+    public void setItemCount(float itemCount) {
         this.itemCount = itemCount;
     }
 
-    public Integer getItemCount2() {
+    public float getItemCount2() {
         return itemCount2;
     }
 
-    public void setItemCount2(Integer itemCount2) {
+    public void setItemCount2(float itemCount2) {
         this.itemCount2 = itemCount2;
     }
 

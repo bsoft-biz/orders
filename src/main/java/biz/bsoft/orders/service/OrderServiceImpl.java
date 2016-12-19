@@ -123,9 +123,9 @@ public class OrderServiceImpl implements OrderService {
 
         for (OrderItem  orderItem : orderItems) {
             errMsg = "";
-            Integer count, count2;
-            count = (orderItem.getItemCount()==null)?0:orderItem.getItemCount();
-            count2 = (orderItem.getItemCount2()==null)?0:orderItem.getItemCount2();
+            float count, count2;
+            count = (Float.isNaN(orderItem.getItemCount()))?0:orderItem.getItemCount();
+            count2 = (Float.isNaN(orderItem.getItemCount2()))?0:orderItem.getItemCount2();
             Item item = itemRepository.findOne(orderItem.getItem().getId());
             ItemInfo itemInfo = getItemInfo(item.getId());
             //checking if count2 is denied for the client
@@ -219,8 +219,8 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderItems(vOrderItems);
         }
         for(OrderItem orderItem:orderItems){
-            if (((orderItem.getItemCount()==null)?0:orderItem.getItemCount())
-                            +((orderItem.getItemCount2()==null)?0:orderItem.getItemCount2())>0) {
+            if (((Float.isNaN(orderItem.getItemCount()))?0:orderItem.getItemCount())
+                            +((Float.isNaN(orderItem.getItemCount2()))?0:orderItem.getItemCount2())>0) {
                 orderItem.setOrder(order);
                 orderItemRepository. save(orderItem);
                 vOrderItems.add(orderItem);
