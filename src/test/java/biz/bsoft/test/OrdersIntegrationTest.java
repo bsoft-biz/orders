@@ -103,9 +103,9 @@ public class OrdersIntegrationTest {
         itemRepository.save(Arrays.asList(cake,tart,bread));
 
         OrderItem orderItemCake, orderItemTart, orderItemBread;
-        orderItemCake = new OrderItem(cake,1,2);
-        orderItemTart = new OrderItem(tart,0,22);
-        orderItemBread = new OrderItem(bread,10,0);
+        orderItemCake = new OrderItem(cake,1f,2f);
+        orderItemTart = new OrderItem(tart,0f,22f);
+        orderItemBread = new OrderItem(bread,10f,0f);
         orderItems= Arrays.asList(orderItemBread,orderItemCake,orderItemTart);
 
         RestAssured.port = port;
