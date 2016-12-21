@@ -11,9 +11,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "t_items_info")
-@NamedQuery(name = ItemInfo.GET_ITEM_INFO, query = "select i from ItemInfo i where i.item.id = :p_item_id")
 public class ItemInfo {
-    public static final String GET_ITEM_INFO = "GET_ITEM_INFO";
     @Id
     @GeneratedValue
     private Integer id;
@@ -47,6 +45,7 @@ public class ItemInfo {
     private String siteUrl;
     @JsonView(View.ItemInfoShort.class)
     private Float price;
+    private Boolean whole;
 
     @JsonView(View.ItemInfoShort.class)
     @JsonProperty("itemId")
@@ -216,5 +215,13 @@ public class ItemInfo {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    public Boolean getWhole() {
+        return whole;
+    }
+
+    public void setWhole(Boolean whole) {
+        this.whole = whole;
     }
 }

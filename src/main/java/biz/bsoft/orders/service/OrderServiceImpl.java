@@ -138,6 +138,9 @@ public class OrderServiceImpl implements OrderService {
                 //checking if you need exact count for box
                 if ((itemInfo.getCapacity() != null) && (itemInfo.getCapacity() != 0) && (count % itemInfo.getCapacity() > 0 || count2 % itemInfo.getCapacity() > 0))
                     errMsg += messages.getMessage("error.orderProdCapacity",new Object[] {itemInfo.getCapacity()},locale);
+                //checking if you need whole numbers for item count
+                if ((itemInfo.getWhole() != null) && (itemInfo.getWhole() == true) && (count % 1f > 0 || count2 % 1f > 0))
+                    errMsg += messages.getMessage("error.orderProdWhole",null,locale);
                 //checking if product is produced in this day
                 if ((count + count2 > 0) && itemInfo.getProdDays() != null && itemInfo.getProdDays().length() > 0 &&
                         !(itemInfo.getProdDays().contains(Integer.toString(date.getDayOfWeek().getValue()))))
