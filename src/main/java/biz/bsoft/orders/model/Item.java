@@ -33,7 +33,7 @@ public class Item implements Serializable {
     @Basic
     @JsonView(View.ItemsAll.class)
     private Integer ord;
-    boolean archive;
+    Boolean archive;
     /*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
     @JsonManagedReference
     @JsonIgnore
@@ -80,11 +80,11 @@ public class Item implements Serializable {
         this.ord = ord;
     }
 
-    public boolean isArchive() {
+    public Boolean isArchive() {
         return archive;
     }
 
-    public void setArchive(boolean archive) {
+    public void setArchive(Boolean archive) {
         this.archive = archive;
     }
 
