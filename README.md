@@ -18,7 +18,7 @@ Download it from oracle.com or get it from `{ORACLE_HOME}\jdbc\lib\`
 [Wiki page] (https://github.com/bsoft-biz/orders/wiki/How-to-add-Oracle-JDBC-driver-in-your-Maven-local-repository)
 
 ### Install fronted utils, package managers and load packages
-Install node.js, then run:
+[Install node.js] (https://nodejs.org/en/download/), then run:
 ```
 npm install
 npm install -g grunt-cli
