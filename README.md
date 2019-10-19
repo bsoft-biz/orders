@@ -1,14 +1,14 @@
 <a href="http://bsoft.biz/">![Business Software, Ltd](src/main/resources/poweredby.png)</a>
-#Orders application
+# Orders application
 
-##How to use
+## How to use
 
-###Before using you must rename and configure these files:
+### Before using you must rename and configure these files:
 * persistence.properties.sample to persistence.properties
 * email.properties.sample to email.properties
 * provide settings for email and database
 
-###To use oracle database you need to install oracle jdbc into your local maven repository
+### To use oracle database you need to install oracle jdbc into your local maven repository
 #### Get Oracle jdbc driver
 Download it from oracle.com or get it from `{ORACLE_HOME}\jdbc\lib\`
 
@@ -26,7 +26,7 @@ grunt copy
 ```
 
 
-##Testing
+## Testing
 ```
 npm run protractor
 ```
